@@ -1,5 +1,7 @@
-﻿using SignalRGameSetup.Logic;
+﻿using SignalRGameSetup.Helpers.Setup;
+using SignalRGameSetup.Logic;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SignalRGameSetup.Models.Setup
 {
@@ -12,6 +14,13 @@ namespace SignalRGameSetup.Models.Setup
         public List<Player> Players { get; } // You must use the AddPlayer() method to add players
         public List<Watcher> Watchers { get; } // You must use the AddWatcher() method to add watchers
 
+        public GameSetup()
+        {
+            // Generate random game code to allow users to join
+            GameCode = SetupHelper.GenerateGameCode();
+            Players = new List<Player>();
+            Watchers = new List<Watcher>();
+        }
 
 
         /// <summary>
@@ -41,6 +50,33 @@ namespace SignalRGameSetup.Models.Setup
         }
 
         /// <summary>
+        /// This will remove a player from the list of players.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <returns>Returns true or false based on whether a player was successfully removed.</returns>
+        public bool RemovePlayer(string connectionId)
+        {
+
+            if (connectionId == null)
+            {
+                return false;
+            }
+
+            // find the user in the list
+            Player player = Players.Where(p => p.ConnectionId == connectionId).FirstOrDefault();
+
+            // if it's null, it's unsuccessful so return false
+            if (player == null)
+            {
+                return false;
+            }
+
+            Players.Remove(player);
+
+            return true;
+        }
+
+        /// <summary>
         /// This will add a watcher if the maximum number of watchers has not been reached and if the name and connectionId are not null.
         /// </summary>
         /// <param name="name"></param>
@@ -62,6 +98,33 @@ namespace SignalRGameSetup.Models.Setup
             };
 
             Watchers.Add(watcher);
+
+            return true;
+        }
+
+        /// <summary>
+        /// This will remove a watcher from the list of watchers.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <returns>Returns true or false based on whether a watcher was successfully removed.</returns>
+        public bool RemoveWatcher(string connectionId)
+        {
+
+            if (connectionId == null)
+            {
+                return false;
+            }
+
+            // find the user in the list
+            Watcher watcher = Watchers.Where(w => w.ConnectionId == connectionId).FirstOrDefault();
+
+            // if it's null, it's unsuccessful so return false
+            if (watcher == null)
+            {
+                return false;
+            }
+
+            Watchers.Remove(watcher);
 
             return true;
         }

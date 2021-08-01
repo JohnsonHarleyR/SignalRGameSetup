@@ -45,6 +45,12 @@ namespace SignalRGameSetup.Helpers.Setup
             return gameCode;
         }
 
+
+        /// <summary>
+        /// Check the database as to whether a given game code is not already in use.
+        /// </summary>
+        /// <param name="gameCode"></param>
+        /// <returns>Returns true if a game code is not taken, false if it is.</returns>
         public static bool GameCodeAvailable(string gameCode)
         {
 
