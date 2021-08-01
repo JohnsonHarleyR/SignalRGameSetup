@@ -3,7 +3,9 @@
     public enum ActionType
     {
         CreateGame,
-        JoinGame
+        JoinGame,
+        ChoosePlayer,
+        ChooseWatcher
     }
 
     public enum ParticipantType
