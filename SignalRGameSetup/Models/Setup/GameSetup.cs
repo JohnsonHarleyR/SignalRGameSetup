@@ -1,4 +1,6 @@
-﻿using SignalRGameSetup.Helpers.Setup;
+﻿using Newtonsoft.Json;
+using SignalRGameSetup.Database.Dtos;
+using SignalRGameSetup.Helpers.Setup;
 using SignalRGameSetup.Logic;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,7 @@ namespace SignalRGameSetup.Models.Setup
         public string GameCode { get; set; } // Code that gets generated in order to join a game - used as primary key in DB
         public List<Player> Players { get; } // You must use the AddPlayer() method to add players
         public List<Watcher> Watchers { get; } // You must use the AddWatcher() method to add watchers
+        public bool AllowAudience { get; set; }
 
         public GameSetup()
         {
@@ -20,6 +23,23 @@ namespace SignalRGameSetup.Models.Setup
             GameCode = SetupHelper.GenerateGameCode();
             Players = new List<Player>();
             Watchers = new List<Watcher>();
+        }
+
+        public GameSetup(bool allowAudience)
+        {
+            // Generate random game code to allow users to join
+            GameCode = SetupHelper.GenerateGameCode();
+            Players = new List<Player>();
+            Watchers = new List<Watcher>();
+            AllowAudience = allowAudience;
+        }
+
+        public GameSetup(GameSetupDto setupDto)
+        {
+            GameCode = setupDto.GameCode;
+            Players = JsonConvert.DeserializeObject<List<Player>>(setupDto.Players);
+            Watchers = JsonConvert.DeserializeObject<List<Watcher>>(setupDto.Watchers);
+            AllowAudience = AllowAudience;
         }
 
 
