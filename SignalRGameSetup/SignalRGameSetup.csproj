@@ -126,11 +126,13 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
     <Compile Include="Database\Repositories\SetupRepository.cs" />
+    <Compile Include="Enums\Setup\ActionEnums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Setup\SetupHelper.cs" />
     <Compile Include="Logic\GameInformation.cs" />
+    <Compile Include="Models\GameViewModel.cs" />
     <Compile Include="Models\Setup\GameSetup.cs" />
     <Compile Include="Models\Setup\Interfaces\IParticipant.cs" />
     <Compile Include="Models\Setup\Player.cs" />
