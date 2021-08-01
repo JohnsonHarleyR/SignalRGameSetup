@@ -62,7 +62,14 @@ namespace SignalRGameSetup.Helpers.Setup
                 return false;
             }
 
-            // TODO search database for code to see if it is taken
+            SetupRepository repository = new SetupRepository();
+            GameSetupDto setupDto = repository.GetSetupByGameCode(gameCode);
+
+            if (setupDto != null)
+            {
+                return false;
+            }
+
             return true;
         }
 
