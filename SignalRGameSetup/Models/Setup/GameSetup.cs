@@ -49,20 +49,14 @@ namespace SignalRGameSetup.Models.Setup
         /// <param name="name"></param>
         /// <param name="connectionId"></param>
         /// <returns>Returns true or false based on whether a player was successfully added.</returns>
-        public bool AddPlayer(string name, string connectionId)
+        public bool AddPlayer(Player player)
         {
 
-            if (Players.Count >= GameInformation.MaximumPlayers ||
-                name == null || connectionId == null)
+            if (Players.Count >= GameInformation.MaximumPlayers || player == null ||
+                player.Name == null || player.ConnectionId == null)
             {
                 return false;
             }
-
-            Player player = new Player()
-            {
-                Name = name,
-                ConnectionId = connectionId
-            };
 
             Players.Add(player);
 

@@ -1,4 +1,7 @@
-﻿using SignalRGameSetup.Logic;
+﻿using SignalRGameSetup.Database.Dtos;
+using SignalRGameSetup.Database.Repositories;
+using SignalRGameSetup.Logic;
+using SignalRGameSetup.Models.Setup;
 using System;
 
 namespace SignalRGameSetup.Helpers.Setup
@@ -61,6 +64,37 @@ namespace SignalRGameSetup.Helpers.Setup
 
             // TODO search database for code to see if it is taken
             return true;
+        }
+
+        public static GameSetup NewGameSetup(Player player, bool allowAudience)
+        {
+            SetupRepository repository = new SetupRepository();
+
+            GameSetup setup = new GameSetup(allowAudience);
+            setup.AddPlayer(player);
+
+            repository.AddGameSetup(new GameSetupDto(setup));
+
+            return setup;
+        }
+
+        public static void UpdateGameSetup(GameSetup setup)
+        {
+            SetupRepository repository = new SetupRepository();
+            repository.UpdateGameSetup(new GameSetupDto(setup));
+        }
+
+        public static GameSetup GetSetupByGameCode(string gameCode)
+        {
+            SetupRepository repository = new SetupRepository();
+            GameSetup setup = new GameSetup(repository.GetSetupByGameCode(gameCode));
+            return setup;
+        }
+
+        public static void DeleteGameSetup(string gameCode)
+        {
+            SetupRepository repository = new SetupRepository();
+            repository.DeleteGameSetup(gameCode);
         }
 
     }

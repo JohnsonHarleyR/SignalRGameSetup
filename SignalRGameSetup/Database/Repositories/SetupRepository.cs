@@ -31,7 +31,7 @@ namespace SignalRGameSetup.Database.Repositories
             return setups;
         }
 
-        public GameSetupDto GetSetupByGameCode(int gameCode)
+        public GameSetupDto GetSetupByGameCode(string gameCode)
         {
             GameSetupDto setup;
 
