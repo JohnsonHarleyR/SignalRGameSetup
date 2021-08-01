@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SignalRGameSetup.Logic;
+using System;
 
 namespace SignalRGameSetup.Helpers.Setup
 {
@@ -16,12 +17,42 @@ namespace SignalRGameSetup.Helpers.Setup
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
             int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
+            string gameCode = "";
 
+            do
+            {
+                for (int i = 0; i < GameInformation.GameCodeLength; i++)
+                {
+                    // first decide whether to generate a letter or number
+                    int decision = random.Next(0, 2);
+                    string newCharacter;
+                    // grab random character
+                    if (decision == 0)
+                    {
+                        newCharacter = letters[random.Next(0, letters.Length)];
+                    }
+                    else
+                    {
+                        newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
+                    }
+                    // add it to the code
+                    gameCode += newCharacter;
+                }
 
+            } while (!GameCodeAvailable(gameCode));
+
+            // once an available code has been generated, return it
+            return gameCode;
         }
 
         public static bool GameCodeAvailable(string gameCode)
         {
+
+            if (gameCode == null || gameCode.Length < GameInformation.GameCodeLength)
+            {
+                return false;
+            }
+
             // TODO search database for code to see if it is taken
             return true;
         }
