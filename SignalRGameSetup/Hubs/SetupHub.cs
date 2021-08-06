@@ -19,9 +19,41 @@ namespace SignalRGameSetup.Hubs
             {
                 SetupHelper.AddGameSetup(newSetup);
                 Groups.Add(Context.ConnectionId, newSetup.GameCode);
-                Clients.Caller.enterNewRoom(newSetup);
+                Clients.Caller.enterRoom(newSetup);
             }
 
         }
+
+        public void ExistingRoom(ExistingRoom fetchInfo)
+        {
+            // Generate a new game to set up
+            GameSetup newSetup = SetupHelper.GetSetupByGameCode(fetchInfo.GameCode);
+
+            // if setup is not null, add the setup to a database to reference later
+            if (newSetup != null)
+            {
+                Groups.Add(Context.ConnectionId, newSetup.GameCode);
+                Clients.Caller.enterExistingRoom(newSetup);
+            }
+
+        }
+
+        public void JoinAsPlayer(JoinAsParticipant info)
+        {
+            GameSetup setup = info.Setup;
+
+            // create a new participant and add the their information
+            Player participant = new Player(info.Name, Context.ConnectionId, setup.GameCode);
+
+            // add to list
+            setup.Players.Add(participant);
+
+            // update database
+            SetupHelper.UpdateGameSetup(setup);
+
+            // return new game setup
+            Clients.All.enterRoom(setup);
+        }
+
     }
 }

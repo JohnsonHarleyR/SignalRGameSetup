@@ -45,6 +45,7 @@ namespace SignalRGameSetup.Helpers.Setup
         {
             SetupRepository repository = new SetupRepository();
             GameSetup setup = new GameSetup(repository.GetSetupByGameCode(gameCode));
+            setup.CalculateAvailable(); // update how many players and watchers are available
             return setup;
         }
 

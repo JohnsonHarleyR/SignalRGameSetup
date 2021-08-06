@@ -16,11 +16,24 @@
 
             // functions that happen when receiving from hub
             // creating and entering a new room
-            connection.client.enterNewRoom = function (setup) {
+            connection.client.enterRoom = function (setup) {
                 console.log('received');
                 console.log(setup);
                 gameSetup = setup;
                 console.log(gameSetup);
+                enterWaitRoom();
+            };
+
+            // callback method
+            connection.client.enterExistingRoom = function (setup) {
+                gameSetup = setup;
+                getJoinRoomOptions();
+                /*        enterWaitRoom();*/
+            };
+
+            // callback method
+            connection.client.joinRoom = function (setup) {
+                gameSetup = setup;
                 enterWaitRoom();
             };
 
@@ -70,6 +83,8 @@
             <input type="button" id="createRoomBtn" value="Create Room" /><br />
             <input type="button" id="joinRoomBtn" value="Join Room" />
         </p>
+
+
         <div id="allowAudienceModal" class="modal">
             <span class="close">&times;</span>
             <p>Allow others to watch?</p>
@@ -77,11 +92,35 @@
             <input type="button" id="noAudienceBtn" value="No" />
         </div>
 
+        <div id="gameCodeModal" class="modal">
+            <div id="initialGameCodeModalDisplay">
+                <span class="close">&times;</span>
+                <p>Game Room Code:</p>
+                <input type="text" id="gameCodeInput" />
+                <input type="button" id="submitGameCodeBtn" value="Enter Room" />
+            </div>
+            <div id="joinOptionsDisplay">
+                <input type="button" id="joinAsPlayerBtn" value="Join as Player" />
+                <input type="button" id="joinAsWatcherBtn" value="Join as Watcher" />
+                <span id="noSpaceAvailable">Sorry, this game room is full!</span>
+            </div>
+            
+        </div>
+
     </div>
 
     <div id="waitRoom">
 
         <h2>Here is the code to join the room: <b id="roomCode"></b></h2>
+
+        <div id="waitParticipantContainer">
+            <div id="waitRoomPlayers">
+                <h3>Players</h3>
+            </div>
+            <div id="waitRoomWatchers">
+                <h3>Watchers</h3>
+            </div>
+        </div>
 
 
     </div>

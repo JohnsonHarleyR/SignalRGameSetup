@@ -11,6 +11,10 @@
     display: none;
 }
 
+#waitParticipantContainer {
+    display: inline-flex;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */

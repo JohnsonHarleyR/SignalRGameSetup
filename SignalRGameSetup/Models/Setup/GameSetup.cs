@@ -17,6 +17,9 @@ namespace SignalRGameSetup.Models.Setup
         public List<Watcher> Watchers { get; } // You must use the AddWatcher() method to add watchers
         public bool AllowAudience { get; set; }
 
+        public int PlayersAvailableToJoin { get; set; } // how many players are still available to join
+        public int WatchersAvailableToJoin { get; set; } // how many players are still available to join
+
         public GameSetup()
         {
             // Generate random game code to allow users to join
@@ -41,6 +44,9 @@ namespace SignalRGameSetup.Models.Setup
             Players = JsonConvert.DeserializeObject<List<Player>>(setupDto.Players);
             Watchers = JsonConvert.DeserializeObject<List<Watcher>>(setupDto.Watchers);
             AllowAudience = AllowAudience;
+
+            // update how many are available
+            CalculateAvailable();
         }
 
 
@@ -60,6 +66,9 @@ namespace SignalRGameSetup.Models.Setup
             }
 
             Players.Add(player);
+
+            // update how many are available
+            CalculateAvailable();
 
             return true;
         }
@@ -88,6 +97,9 @@ namespace SignalRGameSetup.Models.Setup
 
             Players.Remove(player);
 
+            // update how many are available
+            CalculateAvailable();
+
             return true;
         }
 
@@ -113,6 +125,9 @@ namespace SignalRGameSetup.Models.Setup
             };
 
             Watchers.Add(watcher);
+
+            // update how many are available
+            CalculateAvailable();
 
             return true;
         }
@@ -141,7 +156,42 @@ namespace SignalRGameSetup.Models.Setup
 
             Watchers.Remove(watcher);
 
+            // update how many are available
+            CalculateAvailable();
+
             return true;
+        }
+
+        /// <summary>
+        /// Calculate how many players can still join and how many watchers.
+        /// </summary>
+        public void CalculateAvailable()
+        {
+            // get max players and max watchers
+            int maxPlayers = GameInformation.MaximumPlayers;
+            int maxWatchers = 0;
+            if (AllowAudience)
+            {
+                maxWatchers = GameInformation.MaximumWatchers;
+            }
+
+            // get current players and watchers
+            int currentPlayers = Players.Count;
+            int currentWatchers = Watchers.Count;
+
+            // calculate how many are available.
+            PlayersAvailableToJoin = maxPlayers - currentPlayers;
+            WatchersAvailableToJoin = maxWatchers - currentWatchers;
+
+            // make sure nothing is below 0
+            if (PlayersAvailableToJoin < 0)
+            {
+                PlayersAvailableToJoin = 0;
+            }
+            if (WatchersAvailableToJoin < 0)
+            {
+                WatchersAvailableToJoin = 0;
+            }
         }
 
 
