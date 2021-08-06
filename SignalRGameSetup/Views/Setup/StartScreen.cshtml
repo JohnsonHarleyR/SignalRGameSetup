@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Welcom";
+}
+
+<link rel="stylesheet" href="~/Content/start-screen.css" />
+
+@section Scripts {
+    @*<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>*@
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+
+        // Start up the hub connection
+        jQuery(document).ready(function ($) {
+            connection = $.connection.setupHub;
+
+            // functions that happen when receiving from hub
+            // creating and entering a new room
+            connection.client.enterNewRoom = function (setup) {
+                console.log('received');
+                console.log(setup);
+                gameSetup = setup;
+                console.log(gameSetup);
+                enterWaitRoom();
+            };
+
+            // sending to hub
+            $.connection.hub.start().done(function () {
+                console.log('starting');
+
+                //// create a new room with an audience allowed
+                //$('yesAudienceBtn').click(function () {
+
+                //    let clientName = enterName.value;
+                //    console.log(clientName);
+
+                //    connection.server.newRoom({
+                //        name: clientName,
+                //        allowAudience: true
+                //    });
+                //});
+
+                //// create a new room with no audience allowed
+                //$('noAudienceBtn').click(function () {
+                //    connection.server.newRoom({
+                //        name: clientName,
+                //        allowAudience: false
+                //    });
+                //});
+
+
+            });
+
+        });
+
+
+    </script>
+}
+
+
+<div id="mainDiv">
+
+    <div id="initialOptions">
+        <p>
+            <label>Please enter your name.</label>
+            <br />
+            <input id="enterName" type="text" />
+        </p>
+        <p>
+            <input type="button" id="createRoomBtn" value="Create Room" /><br />
+            <input type="button" id="joinRoomBtn" value="Join Room" />
+        </p>
+        <div id="allowAudienceModal" class="modal">
+            <span class="close">&times;</span>
+            <p>Allow others to watch?</p>
+            <input type="button" id="yesAudienceBtn" value="Yes" />
+            <input type="button" id="noAudienceBtn" value="No" />
+        </div>
+
+    </div>
+
+    <div id="waitRoom">
+
+        <h2>Here is the code to join the room: <b id="roomCode"></b></h2>
+
+
+    </div>
+
+</div>
+
+
+
+<script src="~/Scripts/start-screen.js"></script>

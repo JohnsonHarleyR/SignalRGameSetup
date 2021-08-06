@@ -37,6 +37,7 @@ namespace SignalRGameSetup.Models.Setup
         public GameSetup(GameSetupDto setupDto)
         {
             GameCode = setupDto.GameCode;
+
             Players = JsonConvert.DeserializeObject<List<Player>>(setupDto.Players);
             Watchers = JsonConvert.DeserializeObject<List<Watcher>>(setupDto.Watchers);
             AllowAudience = AllowAudience;

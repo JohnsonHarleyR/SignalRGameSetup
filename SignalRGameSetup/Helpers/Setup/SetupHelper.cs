@@ -1,5 +1,4 @@
-﻿using Microsoft.Ajax.Utilities;
-using SignalRGameSetup.Database.Dtos;
+﻿using SignalRGameSetup.Database.Dtos;
 using SignalRGameSetup.Database.Repositories;
 using SignalRGameSetup.Logic;
 using SignalRGameSetup.Models.Setup;
@@ -14,12 +13,22 @@ namespace SignalRGameSetup.Helpers.Setup
     {
         private static Random random = new Random();
 
-        public static GameSetup NewGameSetup(Player player, bool allowAudience)
+        //public static GameSetup NewGameSetup(Player player, bool allowAudience)
+        //{
+        //    SetupRepository repository = new SetupRepository();
+
+        //    GameSetup setup = new GameSetup(allowAudience);
+        //    setup.AddPlayer(player);
+
+        //    repository.AddGameSetup(new GameSetupDto(setup));
+
+        //    return setup;
+        //}
+
+        public static GameSetup AddGameSetup(GameSetup setup)
         {
             SetupRepository repository = new SetupRepository();
 
-            GameSetup setup = new GameSetup(allowAudience);
-            setup.AddPlayer(player);
 
             repository.AddGameSetup(new GameSetupDto(setup));
 
@@ -122,27 +131,47 @@ namespace SignalRGameSetup.Helpers.Setup
 
             string participantCode = "";
 
-            do
-            {
-                for (int i = 0; i < GameInformation.ParticipantCodeLength; i++)
-                {
-                    // first decide whether to generate a letter or number
-                    int decision = random.Next(0, 2);
-                    string newCharacter;
-                    // grab random character
-                    if (decision == 0)
-                    {
-                        newCharacter = letters[random.Next(0, letters.Length)];
-                    }
-                    else
-                    {
-                        newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
-                    }
-                    // add it to the code
-                    participantCode += newCharacter;
-                }
 
-            } while (!ParticipantIdAvailable(participantCode));
+            for (int i = 0; i < GameInformation.ParticipantCodeLength; i++)
+            {
+                // first decide whether to generate a letter or number
+                int decision = random.Next(0, 2);
+                string newCharacter;
+                // grab random character
+                if (decision == 0)
+                {
+                    newCharacter = letters[random.Next(0, letters.Length)];
+                }
+                else
+                {
+                    newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
+                }
+                // add it to the code
+                participantCode += newCharacter;
+            }
+
+            // TODO fix so the player id code can be successfully checked to see if it already exists
+            //do
+            //{
+            //    for (int i = 0; i < GameInformation.ParticipantCodeLength; i++)
+            //    {
+            //        // first decide whether to generate a letter or number
+            //        int decision = random.Next(0, 2);
+            //        string newCharacter;
+            //        // grab random character
+            //        if (decision == 0)
+            //        {
+            //            newCharacter = letters[random.Next(0, letters.Length)];
+            //        }
+            //        else
+            //        {
+            //            newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
+            //        }
+            //        // add it to the code
+            //        participantCode += newCharacter;
+            //    }
+
+            //} while (!ParticipantIdAvailable(participantCode));
 
             // once an available code has been generated, return it
             return participantCode;
@@ -156,6 +185,7 @@ namespace SignalRGameSetup.Helpers.Setup
         /// <returns>Returns true if a game code is not taken, false if it is.</returns>
         public static bool ParticipantIdAvailable(string participantId)
         {
+            // TODO fix this method
 
             if (participantId == null || participantId.Length < GameInformation.ParticipantCodeLength)
             {
@@ -165,7 +195,11 @@ namespace SignalRGameSetup.Helpers.Setup
             SetupRepository repository = new SetupRepository();
             IEnumerable<GameSetupDto> setupDtos = repository.GetAllSetups();
             List<GameSetup> setups = new List<GameSetup>();
-            setupDtos.ForEach(s => setups.Add(new GameSetup(s)));
+            foreach (var setup in setupDtos)
+            {
+                setups.Add(new GameSetup(setup));
+            }
+            //setupDtos.ForEach(s => setups.Add(new GameSetup(s)));
             List<IParticipant> allParticipants = new List<IParticipant>();
             setups.ForEach(s => s.Players.ForEach(p => allParticipants.Add((IParticipant)p)));
             setups.ForEach(s => s.Watchers.ForEach(w => allParticipants.Add((IParticipant)w)));

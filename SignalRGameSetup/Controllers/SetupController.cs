@@ -2,12 +2,14 @@
 
 namespace SignalRGameSetup.Controllers
 {
-    public class GameController : Controller
+    public class SetupController : Controller
     {
         // GET: Game
         public ActionResult StartScreen()
         {
             return View();
         }
+
+
     }
 }

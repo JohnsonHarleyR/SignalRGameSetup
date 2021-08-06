@@ -12,7 +12,7 @@ namespace SignalRGameSetup
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Game", action = "StartScreen", id = UrlParameter.Optional }
+                defaults: new { controller = "Setup", action = "StartScreen", id = UrlParameter.Optional }
             );
         }
     }

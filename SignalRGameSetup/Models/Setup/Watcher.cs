@@ -15,5 +15,13 @@ namespace SignalRGameSetup.Models.Setup
             ParticipantId = SetupHelper.GenerateParticipantId();
         }
 
+        public Watcher(string name, string connectionId, string gameCode)
+        {
+            Name = name;
+            ParticipantId = SetupHelper.GenerateParticipantId();
+            ConnectionId = connectionId;
+            GameCode = gameCode;
+        }
+
     }
 }
