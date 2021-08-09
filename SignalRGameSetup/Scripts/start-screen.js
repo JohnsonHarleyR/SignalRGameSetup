@@ -20,7 +20,7 @@ function newRoom(allowAudienceChoice) {
 }
 
 // Fetch an existing wait room
-function existingRoom() {
+function decideHowToEnter() {
     console.log("Entering room.");
     clientName = enterName.value;
     console.log(clientName);
@@ -48,11 +48,16 @@ function joinAsPlayer() {
         setup: gameSetup
     });
 
-    //// callback method
-    //connection.client.joinRoom = function (setup) {
-    //    gameSetup = setup;
-    //    enterWaitRoom();
-    //};
+}
+
+function joinAsWatcher() {
+    console.log("joining as watcher");
+
+    // send to hub
+    connection.server.joinAsWatcher({
+        name: clientName,
+        setup: gameSetup
+    });
 
 }
 
@@ -98,6 +103,7 @@ function enterWaitRoom() {
     intialOptions.style.display = "none";
     gameCodeModal.style.display = "none";
     waitRoom.style.display = "block";
+    document.getElementById('chatArea').style.display = "block";
     roomCodeDisplay.innerHTML = gameSetup.GameCode;
     // update wait room
     updateWaitRoom();
@@ -138,8 +144,8 @@ function updateWaitRoomWatchers() {
 
 // variables
 var connection;
-var gameSetup;
-var clientName;
+/*var gameSetup;*/
+/*var clientName;*/
 
 var intialOptions = document.getElementById('initialOptions');
 var enterName = document.getElementById('enterName'); // TODO Add validation for name
@@ -165,6 +171,8 @@ var roomCodeDisplay = document.getElementById('roomCode');
 var waitRoomPlayers = document.getElementById('waitRoomPlayers');
 var waitRoomWatchers = document.getElementById('waitRoomWatchers');
 
+
+
 // event handlers
 newRoomBtn.addEventListener("click", askAboutAudience);
 yesAudienceBtn.addEventListener("click", function () { newRoom(true); })
@@ -174,4 +182,4 @@ joinRoomBtn.addEventListener("click", askForGameCode);
 submitGameCodeBtn.addEventListener("click", function () { existingRoom(); })
 
 joinAsPlayerBtn.addEventListener("click", joinAsPlayer);
-joinAsWatvherBtn.addEventListener("click", joinAsWatcher);
+joinAsWatcherBtn.addEventListener("click", joinAsWatcher);

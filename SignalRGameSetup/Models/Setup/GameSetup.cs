@@ -2,6 +2,7 @@
 using SignalRGameSetup.Database.Dtos;
 using SignalRGameSetup.Helpers.Setup;
 using SignalRGameSetup.Logic;
+using SignalRGameSetup.Models.Setup.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +20,8 @@ namespace SignalRGameSetup.Models.Setup
 
         public int PlayersAvailableToJoin { get; set; } // how many players are still available to join
         public int WatchersAvailableToJoin { get; set; } // how many players are still available to join
+
+        public IParticipant ActiveParticipant { get; set; } // the active player
 
         public GameSetup()
         {
@@ -43,7 +46,7 @@ namespace SignalRGameSetup.Models.Setup
 
             Players = JsonConvert.DeserializeObject<List<Player>>(setupDto.Players);
             Watchers = JsonConvert.DeserializeObject<List<Watcher>>(setupDto.Watchers);
-            AllowAudience = AllowAudience;
+            AllowAudience = setupDto.AllowAudience;
 
             // update how many are available
             CalculateAvailable();

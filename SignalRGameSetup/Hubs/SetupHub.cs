@@ -7,12 +7,31 @@ namespace SignalRGameSetup.Hubs
 {
     public class SetupHub : Hub
     {
+        // chat methods
+        //public void NewMessage(NewMessage message)
+        //{
+        //    // send the message to all clients in group
+        //    Clients.Group(message.GameCode).addNewMessage(message);
+
+        //}
+
+        public void NewMessage(NewMessage message)
+        {
+            // send the message to all clients in group
+            //Clients.Group(message.GameCode).addNewMessage(message.Message);
+            Clients.Group(message.GameCode).testThis();
+
+        }
+
+
+        // join methods
         public void NewRoom(NewRoom roomInfo)
         {
             // Generate a new game to set up
             GameSetup newSetup = new GameSetup(roomInfo.AllowAudience);
             Player firstPlayer = new Player(roomInfo.Name, Context.ConnectionId, newSetup.GameCode);
             bool successful = newSetup.AddPlayer(firstPlayer);
+            newSetup.ActiveParticipant = firstPlayer;
 
             // if successful, add the setup to a database to reference later
             if (successful)
@@ -33,7 +52,7 @@ namespace SignalRGameSetup.Hubs
             if (newSetup != null)
             {
                 Groups.Add(Context.ConnectionId, newSetup.GameCode);
-                Clients.Caller.enterExistingRoom(newSetup);
+                Clients.Caller.decideHowToEnter(newSetup);
             }
 
         }
@@ -47,12 +66,31 @@ namespace SignalRGameSetup.Hubs
 
             // add to list
             setup.Players.Add(participant);
+            setup.ActiveParticipant = participant;
 
             // update database
             SetupHelper.UpdateGameSetup(setup);
 
             // return new game setup
-            Clients.All.enterRoom(setup);
+            Clients.Group(info.Setup.GameCode).enterRoom(setup);
+        }
+
+        public void JoinAsWatcher(JoinAsParticipant info)
+        {
+            GameSetup setup = info.Setup;
+
+            // create a new participant and add the their information
+            Watcher participant = new Watcher(info.Name, Context.ConnectionId, setup.GameCode);
+
+            // add to list
+            setup.Watchers.Add(participant);
+            setup.ActiveParticipant = participant;
+
+            // update database
+            SetupHelper.UpdateGameSetup(setup);
+
+            // return new game setup
+            Clients.Group(info.Setup.GameCode).enterRoom(setup);
         }
 
     }

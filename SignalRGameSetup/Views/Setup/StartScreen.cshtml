@@ -10,9 +10,14 @@
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript">
 
-        // Start up the hub connection
+        var clientName; // this should be accessible to any needed javascript file
+        var gameSetup;
+/*        var chat;*/
+
+        // Start up the hub connection for setup
         jQuery(document).ready(function ($) {
             connection = $.connection.setupHub;
+            chat = $.connection.chatHub;
 
             // functions that happen when receiving from hub
             // creating and entering a new room
@@ -20,51 +25,72 @@
                 console.log('received');
                 console.log(setup);
                 gameSetup = setup;
+
                 console.log(gameSetup);
+
+                // add them to the chat group too
+                addToChatGroup(gameSetup.ActiveParticipant);
+
                 enterWaitRoom();
+
+
             };
 
-            // callback method
-            connection.client.enterExistingRoom = function (setup) {
+            connection.client.decideHowToEnter = function (setup) {
                 gameSetup = setup;
                 getJoinRoomOptions();
                 /*        enterWaitRoom();*/
             };
 
-            // callback method
-            connection.client.joinRoom = function (setup) {
-                gameSetup = setup;
-                enterWaitRoom();
+            // chat hub
+
+            // add participant to chat group
+            chat.client.addNewMessage = function (newMessage) {
+                console.log('adding message');
+                addChatMessage(newMessage.Name, newMessage.Message);
             };
 
-            // sending to hub
+            // Add message to the chat
+            chat.client.addToChat = function (newMessage) {
+                console.log('adding user');
+                addNotice(newMessage.Message, "green");
+            };
+
+            // start connection
             $.connection.hub.start().done(function () {
                 console.log('starting');
-
-                //// create a new room with an audience allowed
-                //$('yesAudienceBtn').click(function () {
-
-                //    let clientName = enterName.value;
-                //    console.log(clientName);
-
-                //    connection.server.newRoom({
-                //        name: clientName,
-                //        allowAudience: true
-                //    });
-                //});
-
-                //// create a new room with no audience allowed
-                //$('noAudienceBtn').click(function () {
-                //    connection.server.newRoom({
-                //        name: clientName,
-                //        allowAudience: false
-                //    });
-                //});
-
 
             });
 
         });
+
+//        // Start up the hub connection for the chat
+//        jQuery(document).ready(function ($) {
+//            chat = $.connection.chatHub;
+
+//            // functions that happen when receiving from hub
+//            // creating and entering a new room
+//            chat.client.addNewMessage = function (newMessage) {
+//                console.log('adding message');
+//                addNewMessage(newMessage.Name, newMessage.Message);
+//            };
+
+//            chat.client.addNewMessage = function (newMessage) {
+//                console.log(newMessage);
+///*                addNewMessage(newMessage.Name, newMessage.Message);*/
+//            };
+
+//            chat.client.testThis = function () {
+//                console.log('test');
+//            }
+
+//            // sending to hub
+//            $.connection.hub.start().done(function () {
+//                console.log('starting chat connection');
+
+//            });
+
+//        });
 
 
     </script>
@@ -125,8 +151,20 @@
 
     </div>
 
+
+    <div id="chatArea">
+
+        <div id="chatMessages"></div>
+        <div id="addMessage">
+            <input type="text" id="messageInput" placeholder="Enter message here" />
+            <input type="button" id="addMessageBtn" value="Add" />
+        </div>
+
+    </div>
+
 </div>
 
 
 
 <script src="~/Scripts/start-screen.js"></script>
+<script src="~/Scripts/chat.js"></script>
