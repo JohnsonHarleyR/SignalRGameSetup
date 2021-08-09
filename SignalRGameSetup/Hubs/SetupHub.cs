@@ -7,24 +7,8 @@ namespace SignalRGameSetup.Hubs
 {
     public class SetupHub : Hub
     {
-        // chat methods
-        //public void NewMessage(NewMessage message)
-        //{
-        //    // send the message to all clients in group
-        //    Clients.Group(message.GameCode).addNewMessage(message);
-
-        //}
-
-        public void NewMessage(NewMessage message)
-        {
-            // send the message to all clients in group
-            //Clients.Group(message.GameCode).addNewMessage(message.Message);
-            Clients.Group(message.GameCode).testThis();
-
-        }
 
 
-        // join methods
         public void NewRoom(NewRoom roomInfo)
         {
             // Generate a new game to set up

@@ -12,15 +12,12 @@ function newRoom(allowAudienceChoice) {
         allowAudience: allowAudienceChoice
     });
 
-    //// callback method
-    //connection.client.enterNewRoom = function (setup) {
-    //    gameSetup = setup;
-    //    enterWaitRoom();
-    //};
 }
 
 // Fetch an existing wait room
 function decideHowToEnter() {
+
+
     console.log("Entering room.");
     clientName = enterName.value;
     console.log(clientName);
@@ -31,12 +28,6 @@ function decideHowToEnter() {
         gameCode: gameCodeInput.value
     });
 
-//    // callback method
-//    connection.client.enterExistingRoom = function (setup) {
-//        gameSetup = setup;
-//        getJoinRoomOptions();
-///*        enterWaitRoom();*/
-//    };
 }
 
 function joinAsPlayer() {
@@ -63,15 +54,33 @@ function joinAsWatcher() {
 
 
 function askAboutAudience() {
-    console.log("asking...");
-    allowAudienceModal.style.display = "block";
+
+    // first make sure a name has been entered
+    if (enterName.value != '') {
+
+        console.log("asking...");
+        allowAudienceModal.style.display = "block";
+    } else {
+        alert('Please enter a name.');
+    }
+
 }
 
 function askForGameCode() {
-    console.log("asking for code...");
-    gameCodeModal.style.display = "block";
-    initialGameCodeModalDisplay.style.display = "block";
-    joinOptionsDisplay.style.display = "none";
+
+    // first make sure a name has been entered
+    if (enterName.value != '') {
+
+        console.log("asking for code...");
+        gameCodeModal.style.display = "block";
+        initialGameCodeModalDisplay.style.display = "block";
+        joinOptionsDisplay.style.display = "none";
+
+    } else {
+        alert('Please enter a name.');
+    }
+
+
 }
 
 function getJoinRoomOptions() {
@@ -138,10 +147,6 @@ function updateWaitRoomWatchers() {
 }
 
 
-
-
-
-
 // variables
 var connection;
 /*var gameSetup;*/
@@ -179,7 +184,7 @@ yesAudienceBtn.addEventListener("click", function () { newRoom(true); })
 noAudienceBtn.addEventListener("click", function () { newRoom(false); })
 
 joinRoomBtn.addEventListener("click", askForGameCode);
-submitGameCodeBtn.addEventListener("click", function () { existingRoom(); })
+submitGameCodeBtn.addEventListener("click", function () { decideHowToEnter(); })
 
 joinAsPlayerBtn.addEventListener("click", joinAsPlayer);
 joinAsWatcherBtn.addEventListener("click", joinAsWatcher);

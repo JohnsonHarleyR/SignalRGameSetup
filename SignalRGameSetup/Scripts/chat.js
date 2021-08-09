@@ -17,6 +17,7 @@ function addChatMessage(name, message) {
     chatMessages.innerHTML = chatMessages.innerHTML +
         "<b>" + name + ": </b>" +
         message + "<br>";
+    messageInput.value = '';
 }
 
 // these are notices such as a person entering or leaving the chat
@@ -26,6 +27,7 @@ function addNotice(message, color) {
         '<i style="color: ' + color + ';">' + message + " </i><br>";
 }
 
+// Add a person to the chat group
 function addToChatGroup(participant) {
     console.log('adding to chat');
     chat.server.addToChatGroup({
