@@ -86,7 +86,7 @@ namespace SignalRGameSetup.Hubs
                 ChatHtml = chatDto.ChatHtml
             };
 
-            Clients.Caller.loadChat();
+            Clients.Client(Context.ConnectionId).loadChat();
 
         }
 

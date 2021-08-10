@@ -34,13 +34,13 @@ function addNotice(message, color) {
 }
 
 // Add a person to the chat group
-function addToChatGroup(participant) {
+function addToChatGroup() {
     console.log('adding to chat');
     chat.server.addToChatGroup({
-        name: participant.Name,
-        participantId: participant.ParticipantId,
-        connectionId: participant.ConnectionId,
-        gameCode: participant.GameCode
+        name: clientName,
+        participantId: clientId,
+        connectionId: null,
+        gameCode: gameSetup.GameCode
     });
 }
 

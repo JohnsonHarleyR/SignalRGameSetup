@@ -44,9 +44,17 @@ namespace SignalRGameSetup.Helpers.Setup
         public static GameSetup GetSetupByGameCode(string gameCode)
         {
             SetupRepository repository = new SetupRepository();
-            GameSetup setup = new GameSetup(repository.GetSetupByGameCode(gameCode));
-            setup.CalculateAvailable(); // update how many players and watchers are available
-            return setup;
+            GameSetupDto setupDto = repository.GetSetupByGameCode(gameCode);
+            if (setupDto != null)
+            {
+                GameSetup setup = new GameSetup(setupDto);
+                setup.CalculateAvailable(); // update how many players and watchers are available
+                return setup;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static void DeleteGameSetup(string gameCode)

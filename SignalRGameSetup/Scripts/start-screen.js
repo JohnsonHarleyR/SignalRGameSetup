@@ -18,17 +18,34 @@ function newRoom(allowAudienceChoice) {
 // Fetch an existing wait room
 function decideHowToEnter() {
 
+    // make sure a game code has been entered - and is valid
+    if (gameCodeInput.value != '') {
+        checkValidGameCode(gameCodeInput.value);
+    } else {
+        decideHowToEnterProceed();
+    }
 
-    console.log("Entering room.");
-    clientName = enterName.value;
-    console.log(clientName);
 
-    // send to hub
-    connection.server.existingRoom({
-        name: clientName,
-        gameCode: gameCodeInput.value
-    });
 
+}
+
+// continuation of decideHowToEnter() that only gets called after important code is executed.
+function decideHowToEnterProceed() {
+    if (gameCodeInput.value === '') {
+        alert('Please enter a room code.');
+    } else if (!isValidGameCode) {
+        alert('That code is not valid.');
+    } else {
+        console.log("Entering room.");
+        clientName = enterName.value;
+        console.log(clientName);
+
+        // send to hub
+        connection.server.existingRoom({
+            name: clientName,
+            gameCode: gameCodeInput.value
+        });
+    }
 }
 
 function joinAsPlayer() {
@@ -85,6 +102,7 @@ function askForGameCode() {
 }
 
 function getJoinRoomOptions() {
+    
     console.log("getting join options...");
     initialGameCodeModalDisplay.style.display = "none";
     joinOptionsDisplay.style.display = "block";
@@ -104,6 +122,14 @@ function getJoinRoomOptions() {
     } else {
         joinAsWatcherBtn.style.display = "none";
     }
+
+
+}
+
+// check the hub to make sure the game code exists
+function checkValidGameCode(code) {
+    console.log('checking if game code is valid');
+    connection.server.isValidCode(code);
 }
 
 // return method for creating a room
@@ -153,6 +179,7 @@ function updateWaitRoomWatchers() {
 var connection;
 /*var gameSetup;*/
 /*var clientName;*/
+var isValidGameCode = false;
 
 var intialOptions = document.getElementById('initialOptions');
 var enterName = document.getElementById('enterName'); // TODO Add validation for name
@@ -162,11 +189,13 @@ var joinRoomBtn = document.getElementById('joinRoomBtn')
 var allowAudienceModal = document.getElementById('allowAudienceModal');
 var yesAudienceBtn = document.getElementById('yesAudienceBtn');
 var noAudienceBtn = document.getElementById('noAudienceBtn');
+var audienceModalClose = document.getElementById('audienceModalClose');
 
 var gameCodeModal = document.getElementById('gameCodeModal');
 var initialGameCodeModalDisplay = document.getElementById('initialGameCodeModalDisplay');
 var gameCodeInput = document.getElementById('gameCodeInput');
 var submitGameCodeBtn = document.getElementById('submitGameCodeBtn');
+var codeModalClose = document.getElementById('codeModalClose');
 
 var joinOptionsDisplay = document.getElementById('joinOptionsDisplay');
 var joinAsPlayerBtn = document.getElementById('joinAsPlayerBtn');
@@ -190,3 +219,6 @@ submitGameCodeBtn.addEventListener("click", function () { decideHowToEnter(); })
 
 joinAsPlayerBtn.addEventListener("click", joinAsPlayer);
 joinAsWatcherBtn.addEventListener("click", joinAsWatcher);
+
+audienceModalClose.addEventListener("click", function () { allowAudienceModal.style.display = "none"; })
+codeModalClose.addEventListener("click", function () { gameCodeModal.style.display = "none"; })

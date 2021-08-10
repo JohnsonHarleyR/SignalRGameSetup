@@ -15,13 +15,15 @@ namespace SignalRGameSetup.Hubs
             GameSetup newSetup = new GameSetup(roomInfo.AllowAudience);
             Player firstPlayer = new Player(roomInfo.Name, Context.ConnectionId, newSetup.GameCode);
             bool successful = newSetup.AddPlayer(firstPlayer);
-            newSetup.ActiveParticipant = firstPlayer;
+            //newSetup.ActiveParticipant = firstPlayer;
 
             // if successful, add the setup to a database to reference later
             if (successful)
             {
                 SetupHelper.AddGameSetup(newSetup);
                 Groups.Add(Context.ConnectionId, newSetup.GameCode);
+                // store the participant id on the view page
+                Clients.Client(Context.ConnectionId).setClientId(firstPlayer.ParticipantId);
                 Clients.Caller.enterRoom(newSetup);
             }
 
@@ -50,10 +52,13 @@ namespace SignalRGameSetup.Hubs
 
             // add to list
             setup.Players.Add(participant);
-            setup.ActiveParticipant = participant;
+            //setup.ActiveParticipant = participant;
 
             // update database
             SetupHelper.UpdateGameSetup(setup);
+
+            // store the participant id on the view page
+            Clients.Client(Context.ConnectionId).setClientId(participant.ParticipantId);
 
             // return new game setup
             Clients.Group(info.Setup.GameCode).enterRoom(setup);
@@ -68,13 +73,27 @@ namespace SignalRGameSetup.Hubs
 
             // add to list
             setup.Watchers.Add(participant);
-            setup.ActiveParticipant = participant;
+            //setup.ActiveParticipant = participant;
 
             // update database
             SetupHelper.UpdateGameSetup(setup);
 
+            // store the participant id on the view page
+            Clients.Client(Context.ConnectionId).setClientId(participant.ParticipantId);
+
             // return new game setup
             Clients.Group(info.Setup.GameCode).enterRoom(setup);
+        }
+
+        public void IsValidCode(string code)
+        {
+            GameSetup newSetup = SetupHelper.GetSetupByGameCode(code);
+            bool result = false;
+            if (newSetup != null)
+            {
+                result = true;
+            }
+            Clients.Caller.setGameCodeBool(result);
         }
 
     }

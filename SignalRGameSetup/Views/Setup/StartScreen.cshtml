@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Welcom";
+    ViewBag.Title = "Welcome";
 }
 
 <link rel="stylesheet" href="~/Content/start-screen.css" />
@@ -30,22 +30,39 @@
                 console.log(gameSetup);
 
                 // add them to the chat group too
-                addToChatGroup(gameSetup.ActiveParticipant);
+                addToChatGroup();
 
-                // create cookie for username and game code
-                document.cookie = "ParticipantId=" + gameSetup.ActiveParticipant.ParticipantId + "; GameCode=" + gameSetup.GameCode + ";";
+                //// create cookie for username and game code
+                                let cookieString = "ParticipantId=" + clientId + "; GameCode=" + gameSetup.GameCode + ";";
+/*                let cookieString = "GameCode=" + gameSetup.GameCode + "; ParticipantId=" + clientId + ";";*/
+
+                document.cookie = cookieString;
                 console.log("Cookie: " + document.cookie);
+/*                browser.cookies.set(cookieString);*/
 
                 enterWaitRoom();
 
 
             };
 
+            connection.client.setClientId = function (id) {
+                clientId = id;
+                //document.cookie = "ParticipantId=" + id + "; GameCode=" + gameSetup.GameCode + ";";
+                //console.log("Cookie: " + document.cookie);
+            };
+
+
             connection.client.decideHowToEnter = function (setup) {
                 gameSetup = setup;
                 getJoinRoomOptions();
                 /*        enterWaitRoom();*/
             };
+
+            connection.client.setGameCodeBool = function (result) {
+                isValidGameCode = result;
+                console.log('Valid?: ' + isValidGameCode);
+                decideHowToEnterProceed();
+            }
 
             // chat hub
 
@@ -78,35 +95,6 @@
 
         });
 
-//        // Start up the hub connection for the chat
-//        jQuery(document).ready(function ($) {
-//            chat = $.connection.chatHub;
-
-//            // functions that happen when receiving from hub
-//            // creating and entering a new room
-//            chat.client.addNewMessage = function (newMessage) {
-//                console.log('adding message');
-//                addNewMessage(newMessage.Name, newMessage.Message);
-//            };
-
-//            chat.client.addNewMessage = function (newMessage) {
-//                console.log(newMessage);
-///*                addNewMessage(newMessage.Name, newMessage.Message);*/
-//            };
-
-//            chat.client.testThis = function () {
-//                console.log('test');
-//            }
-
-//            // sending to hub
-//            $.connection.hub.start().done(function () {
-//                console.log('starting chat connection');
-
-//            });
-
-//        });
-
-
     </script>
 }
 
@@ -126,7 +114,7 @@
 
 
         <div id="allowAudienceModal" class="modal">
-            <span class="close">&times;</span>
+            <span class="close"  id="audienceModalClose">&times;</span>
             <p>Allow others to watch?</p>
             <input type="button" id="yesAudienceBtn" value="Yes" />
             <input type="button" id="noAudienceBtn" value="No" />
@@ -134,7 +122,7 @@
 
         <div id="gameCodeModal" class="modal">
             <div id="initialGameCodeModalDisplay">
-                <span class="close">&times;</span>
+                <span class="close" id="codeModalClose">&times;</span>
                 <p>Game Room Code:</p>
                 <input type="text" id="gameCodeInput" />
                 <input type="button" id="submitGameCodeBtn" value="Enter Room" />
