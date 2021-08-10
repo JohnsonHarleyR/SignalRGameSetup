@@ -14,7 +14,7 @@ namespace SignalRGameSetup.Hubs
                 Message = $"{participant.Name} has joined the chat!",
                 GameCode = participant.GameCode
             };
-            Clients.Group(participant.GameCode, Context.ConnectionId).addToChat(message);
+            Clients.Group(participant.GameCode/*, Context.ConnectionId*/).addToChat(message);
         }
 
         public void NewMessage(NewMessage message)
