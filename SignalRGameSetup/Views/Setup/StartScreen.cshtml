@@ -11,6 +11,7 @@
     <script type="text/javascript">
 
         var clientName; // this should be accessible to any needed javascript file
+        var clientId;
         var gameSetup;
 /*        var chat;*/
 
@@ -30,6 +31,10 @@
 
                 // add them to the chat group too
                 addToChatGroup(gameSetup.ActiveParticipant);
+
+                // create cookie for username and game code
+                document.cookie = "ParticipantId=" + gameSetup.ActiveParticipant.ParticipantId + "; GameCode=" + gameSetup.GameCode + ";";
+                console.log("Cookie: " + document.cookie);
 
                 enterWaitRoom();
 
@@ -53,8 +58,17 @@
             // Add message to the chat
             chat.client.addToChat = function (newMessage) {
                 console.log('adding user');
+                // also load the chat since the person is now in the chat
+                loadGameChat();
+                // notify everyone the person has entered
                 addNotice(newMessage.Message, "green");
             };
+
+            // load the chat
+            chat.client.loadChat = function (chat) {
+                console.log('chat loaded');
+                showChatHtml(chat.ChatHtml);
+            }
 
             // start connection
             $.connection.hub.start().done(function () {

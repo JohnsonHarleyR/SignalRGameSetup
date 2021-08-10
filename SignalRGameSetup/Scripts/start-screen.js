@@ -1,5 +1,6 @@
 ﻿// Hub
 
+
 // Creating a new room
 function newRoom(allowAudienceChoice) {
     console.log("New room.");
@@ -114,9 +115,7 @@ function enterWaitRoom() {
     waitRoom.style.display = "block";
     document.getElementById('chatArea').style.display = "block";
     roomCodeDisplay.innerHTML = gameSetup.GameCode;
-    // create cookie for username and game code
-    document.cookie = "ParticipantId=" + gameSetup.ActiveParticipant.ParticipantId + "; GameCode=" + gameSetup.GameCode + ";";
-    console.log("Cookie: " + document.cookie);
+
     // update wait room
     updateWaitRoom();
 }

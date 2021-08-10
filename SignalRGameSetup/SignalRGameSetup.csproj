@@ -143,7 +143,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\SetupController.cs" />
+    <Compile Include="Database\Dtos\GameChatDto.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
+    <Compile Include="Database\Repositories\ChatRepository.cs" />
     <Compile Include="Database\Repositories\SetupRepository.cs" />
     <Compile Include="Enums\Setup\ActionEnums.cs" />
     <Compile Include="Global.asax.cs">
@@ -153,12 +155,13 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\SetupHub.cs" />
     <Compile Include="Logic\GameInformation.cs" />
+    <Compile Include="Models\Chat\Containers\GameChat.cs" />
     <Compile Include="Models\GameViewModel.cs" />
     <Compile Include="Models\Setup\Containers\ExistingRoom.cs" />
     <Compile Include="Models\Setup\Containers\JoinAsParticipant.cs" />
-    <Compile Include="Models\Setup\Containers\NewMessage.cs" />
+    <Compile Include="Models\Chat\Containers\NewMessage.cs" />
     <Compile Include="Models\Setup\Containers\NewRoom.cs" />
-    <Compile Include="Models\Setup\Containers\Participant.cs" />
+    <Compile Include="Models\Chat\Containers\Participant.cs" />
     <Compile Include="Models\Setup\GameSetup.cs" />
     <Compile Include="Models\Setup\Interfaces\IParticipant.cs" />
     <Compile Include="Models\Setup\Player.cs" />

@@ -1,4 +1,4 @@
-﻿namespace SignalRGameSetup.Models.Setup.Containers
+﻿namespace SignalRGameSetup.Models.Chat.Containers
 {
     public class NewMessage
     {

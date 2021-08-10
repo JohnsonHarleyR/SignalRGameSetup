@@ -18,6 +18,9 @@ function addChatMessage(name, message) {
         "<b>" + name + ": </b>" +
         message + "<br>";
     messageInput.value = '';
+
+    // also save the chat
+    saveChatHtml();
 }
 
 // these are notices such as a person entering or leaving the chat
@@ -25,6 +28,9 @@ function addNotice(message, color) {
     console.log('adding?');
     chatMessages.innerHTML = chatMessages.innerHTML +
         '<i style="color: ' + color + ';">' + message + " </i><br>";
+
+    // also save the chat
+    saveChatHtml();
 }
 
 // Add a person to the chat group
@@ -38,6 +44,28 @@ function addToChatGroup(participant) {
     });
 }
 
+// load the chat
+function loadGameChat() {
+    console.log('loading game chat')
+    chat.server.loadGameChat({
+        gameCode: gameSetup.GameCode,
+        chatHtml: chatMessages.innerHTML
+    })
+}
+
+function showChatHtml(chatHtml) {
+    console.log('showing...');
+    chatMessages.innerHTML = chatHtml;
+}
+
+// save the chat
+function saveChatHtml() {
+    console.log('saving chat');
+    chat.server.saveGameChat({
+        gameCode: gameSetup.GameCode,
+        chatHtml: chatMessages.innerHTML
+    })
+}
 
 // Variables 
 

@@ -1,0 +1,21 @@
+USE [SignalRGame]
+GO
+
+/****** Object:  Table [dbo].[GameChat]    Script Date: 8/10/2021 12:52:35 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[GameChat](
+	[GameCode] [varchar](50) NOT NULL,
+	[ChatHtml] [nvarchar](max) NULL,
+ CONSTRAINT [PK_GameChat] PRIMARY KEY CLUSTERED 
+(
+	[GameCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+

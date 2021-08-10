@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
-using SignalRGameSetup.Models.Setup.Containers;
+using SignalRGameSetup.Database.Dtos;
+using SignalRGameSetup.Database.Repositories;
+using SignalRGameSetup.Models.Chat.Containers;
 
 namespace SignalRGameSetup.Hubs
 {
@@ -30,5 +32,63 @@ namespace SignalRGameSetup.Hubs
             //Clients.Group(message.GameCode).testThis();
 
         }
+
+        // save the chat to a database for later
+        public void SaveGameChat(GameChat chat)
+        {
+            // create a repo
+            ChatRepository chatRepo = new ChatRepository();
+
+            // see if the chat exists already or not - try to retrieve it
+            GameChatDto chatDto = chatRepo.GetChatByGameCode(chat.GameCode);
+
+            // if it's null, create a new item and save it
+            if (chatDto == null)
+            {
+                chatDto = new GameChatDto()
+                {
+                    GameCode = chat.GameCode,
+                    ChatHtml = chat.ChatHtml
+                };
+
+                chatRepo.AddGameChat(chatDto);
+            }
+            else // otherwise update it
+            {
+                chatDto.ChatHtml = chat.ChatHtml;
+
+                chatRepo.UpdateGameChat(chatDto);
+            }
+
+        }
+
+        // call this one after loading the page when entering the wait or game room
+        public void LoadGameChat(string gameCode)
+        {
+            // get the correct chat
+            ChatRepository chatRepo = new ChatRepository();
+            GameChatDto chatDto = chatRepo.GetChatByGameCode(gameCode);
+
+            // if it comes back null, create a new one and save it to repo
+            if (chatDto == null)
+            {
+                chatDto = new GameChatDto()
+                {
+                    GameCode = gameCode,
+                    ChatHtml = ""
+                };
+            }
+
+            // save it as a regular GameChat and save it
+            GameChat chat = new GameChat()
+            {
+                GameCode = chatDto.GameCode,
+                ChatHtml = chatDto.ChatHtml
+            };
+
+            Clients.Caller.loadChat();
+
+        }
+
     }
 }
