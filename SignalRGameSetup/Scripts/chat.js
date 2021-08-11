@@ -13,19 +13,22 @@ function newMessage(newMessage) {
 }
 
 function addChatMessage(name, message) {
-    console.log('adding?');
-    chatMessages.innerHTML = chatMessages.innerHTML +
-        "<b>" + name + ": </b>" +
-        message + "<br>";
-    messageInput.value = '';
+    if (message != '') {
+        console.log('adding chat message');
+        chatMessages.innerHTML = chatMessages.innerHTML +
+            "<b>" + name + ": </b>" +
+            message + "<br>";
+        messageInput.value = '';
 
-    // also save the chat
-    saveChatHtml();
+        // also save the chat
+        saveChatHtml();
+    }
+
 }
 
 // these are notices such as a person entering or leaving the chat
 function addNotice(message, color) {
-    console.log('adding?');
+    console.log('adding notice');
     chatMessages.innerHTML = chatMessages.innerHTML +
         '<i style="color: ' + color + ';">' + message + " </i><br>";
 
@@ -48,14 +51,20 @@ function addToChatGroup() {
 function loadGameChat() {
     console.log('loading game chat')
     chat.server.loadGameChat({
-        gameCode: gameSetup.GameCode,
-        chatHtml: chatMessages.innerHTML
+        gameCode: gameSetup.GameCode
     })
 }
 
-function showChatHtml(chatHtml) {
-    console.log('showing...');
+function showChatHtml(chatHtml, doSave) {
+    console.log('showing chat...');
+    console.log('Html: ' + chatHtml);
+    console.log('Do save: ' + doSave);
+    chatMessages.innerHTML = "";
     chatMessages.innerHTML = chatHtml;
+    if (doSave) {
+        console.log('saving chat...');
+        saveChatHtml();
+    }
 }
 
 // save the chat
@@ -63,7 +72,8 @@ function saveChatHtml() {
     console.log('saving chat');
     chat.server.saveGameChat({
         gameCode: gameSetup.GameCode,
-        chatHtml: chatMessages.innerHTML
+        chatHtml: chatMessages.innerHTML,
+        doSaveAfterShow: false
     })
 }
 

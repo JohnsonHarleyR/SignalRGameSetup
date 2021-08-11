@@ -6,6 +6,7 @@ namespace SignalRGameSetup.Controllers
     {
         // GET: Game
         public ActionResult StartScreen()
+
         {
             return View();
         }

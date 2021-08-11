@@ -58,10 +58,11 @@ namespace SignalRGameSetup.Hubs
             SetupHelper.UpdateGameSetup(setup);
 
             // store the participant id on the view page
-            Clients.Client(Context.ConnectionId).setClientId(participant.ParticipantId);
+            //Clients.Client(Context.ConnectionId).setClientId(participant.ParticipantId);
 
             // return new game setup
-            Clients.Group(info.Setup.GameCode).enterRoom(setup);
+            Clients.Group(info.Setup.GameCode, Context.ConnectionId).updateGameSetup(setup);
+            Clients.Client(Context.ConnectionId).enterRoom(setup);
         }
 
         public void JoinAsWatcher(JoinAsParticipant info)
@@ -79,10 +80,11 @@ namespace SignalRGameSetup.Hubs
             SetupHelper.UpdateGameSetup(setup);
 
             // store the participant id on the view page
-            Clients.Client(Context.ConnectionId).setClientId(participant.ParticipantId);
+            //Clients.Client(Context.ConnectionId).setClientId(participant.ParticipantId);
 
             // return new game setup
-            Clients.Group(info.Setup.GameCode).enterRoom(setup);
+            Clients.Group(info.Setup.GameCode, Context.ConnectionId).updateGameSetup(setup);
+            Clients.Client(Context.ConnectionId).enterRoom(setup);
         }
 
         public void IsValidCode(string code)

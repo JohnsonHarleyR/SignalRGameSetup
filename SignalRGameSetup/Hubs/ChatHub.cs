@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using SignalRGameSetup.Database.Dtos;
 using SignalRGameSetup.Database.Repositories;
+using SignalRGameSetup.Helpers.Chat;
 using SignalRGameSetup.Models.Chat.Containers;
 
 namespace SignalRGameSetup.Hubs
@@ -10,13 +11,18 @@ namespace SignalRGameSetup.Hubs
         public void AddToChatGroup(Participant participant)
         {
             Groups.Add(Context.ConnectionId, participant.GameCode);
-            NewMessage message = new NewMessage()
-            {
-                Name = participant.Name,
-                Message = $"{participant.Name} has joined the chat!",
-                GameCode = participant.GameCode
-            };
-            Clients.Group(participant.GameCode/*, Context.ConnectionId*/).addToChat(message);
+
+            // after adding, load the chat and add string saying the user has joined
+            // also set that save option to true so it updates for everyone else too
+            GameChat chat = ChatHelper.GetChatByGameCode(participant.GameCode);
+            chat.DoSaveAfterShow = true;
+
+            // get string to add to chat
+            string noticeToAdd = ChatHelper
+                .GetNoticeString($"{participant.Name} has joined the chat!", "green");
+            chat.ChatHtml += noticeToAdd;
+
+            Clients.Client(Context.ConnectionId).addParticipantToChat(chat);
         }
 
         public void NewMessage(NewMessage message)
@@ -33,37 +39,18 @@ namespace SignalRGameSetup.Hubs
 
         }
 
+
         // save the chat to a database for later
         public void SaveGameChat(GameChat chat)
         {
-            // create a repo
-            ChatRepository chatRepo = new ChatRepository();
+            ChatHelper.SaveChat(chat);
 
-            // see if the chat exists already or not - try to retrieve it
-            GameChatDto chatDto = chatRepo.GetChatByGameCode(chat.GameCode);
-
-            // if it's null, create a new item and save it
-            if (chatDto == null)
-            {
-                chatDto = new GameChatDto()
-                {
-                    GameCode = chat.GameCode,
-                    ChatHtml = chat.ChatHtml
-                };
-
-                chatRepo.AddGameChat(chatDto);
-            }
-            else // otherwise update it
-            {
-                chatDto.ChatHtml = chat.ChatHtml;
-
-                chatRepo.UpdateGameChat(chatDto);
-            }
+            Clients.Group(chat.GameCode).loadTheChat(chat);
 
         }
 
         // call this one after loading the page when entering the wait or game room
-        public void LoadGameChat(string gameCode)
+        public void LoadGameChatBeforeNotice(string gameCode)
         {
             // get the correct chat
             ChatRepository chatRepo = new ChatRepository();
@@ -86,7 +73,16 @@ namespace SignalRGameSetup.Hubs
                 ChatHtml = chatDto.ChatHtml
             };
 
-            Clients.Client(Context.ConnectionId).loadChat();
+            Clients.Caller.loadTheChatBeforeAdd(chat);
+
+        }
+
+        // call this one after loading the page when entering the wait or game room
+        public void LoadGameChat(string gameCode)
+        {
+            GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+
+            Clients.Group(gameCode).loadTheChat(chat);
 
         }
 

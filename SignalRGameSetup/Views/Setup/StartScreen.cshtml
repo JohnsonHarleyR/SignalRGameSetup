@@ -64,6 +64,12 @@
                 decideHowToEnterProceed();
             }
 
+            connection.client.updateGameSetup = function (setup) {
+                console.log('updating setup');
+                gameSetup = setup;
+                updateWaitRoom();
+            }
+
             // chat hub
 
             // add participant to chat group
@@ -73,18 +79,17 @@
             };
 
             // Add message to the chat
-            chat.client.addToChat = function (newMessage) {
+            chat.client.addParticipantToChat = function (chat) {
                 console.log('adding user');
-                // also load the chat since the person is now in the chat
-                loadGameChat();
-                // notify everyone the person has entered
-                addNotice(newMessage.Message, "green");
+                // show the new chat - then it should save the chat and update it for everyone else
+                showChatHtml(chat.ChatHtml, chat.DoSaveAfterShow);
             };
 
             // load the chat
-            chat.client.loadChat = function (chat) {
+            chat.client.loadTheChat = function (chat) {
                 console.log('chat loaded');
-                showChatHtml(chat.ChatHtml);
+                console.log(chat);
+                showChatHtml(chat.ChatHtml, chat.DoSaveAfterShow);
             }
 
             // start connection

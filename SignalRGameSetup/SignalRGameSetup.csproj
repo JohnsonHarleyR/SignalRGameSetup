@@ -151,6 +151,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Chat\ChatHelper.cs" />
     <Compile Include="Helpers\Setup\SetupHelper.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\SetupHub.cs" />
@@ -215,7 +216,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Database\SQL\Procedures\" />
     <Folder Include="Database\SQL\Tables\" />
-    <Folder Include="Helpers\Chat\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
