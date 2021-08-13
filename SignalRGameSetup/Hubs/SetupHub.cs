@@ -10,8 +10,15 @@ namespace SignalRGameSetup.Hubs
 {
     public class SetupHub : Hub
     {
-
+        // TODO Write tests!
+        // TODO write more helper methods to minimize some of this code
         // HACK this method works around problems with browser cookies - consider changing back one uploaded online
+
+        public void GoToGame(string gameCode, string participantId)
+        {
+            // get the setup and change the bool to tell it to leave in the database
+            GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
+        }
         public override Task OnDisconnected(bool stopCalled)
         {
             if (stopCalled)
@@ -81,7 +88,8 @@ namespace SignalRGameSetup.Hubs
 
                     // if the setup has no players or watchers, delete it
                     // TODO decide if it should close when all players are gone and only watchers are left
-                    if (setup.Players.Count == 0 && setup.Watchers.Count == 0)
+                    if (setup.LeaveInDatabase == false &&
+                        setup.Players.Count == 0 && setup.Watchers.Count == 0)
                     {
                         SetupHelper.DeleteGameSetup(gameCode);
                         // Also delete associated chat

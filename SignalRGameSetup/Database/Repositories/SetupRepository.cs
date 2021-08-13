@@ -59,7 +59,8 @@ namespace SignalRGameSetup.Database.Repositories
                                         GameCode = setupDto.GameCode,
                                         Players = setupDto.Players,
                                         Watchers = setupDto.Watchers,
-                                        AllowAudience = setupDto.AllowAudience
+                                        AllowAudience = setupDto.AllowAudience,
+                                        LeaveInDatabase = setupDto.LeaveInDatabase
                                     },
                                     commandType: System.Data.CommandType.StoredProcedure);
 
@@ -78,7 +79,8 @@ namespace SignalRGameSetup.Database.Repositories
                                         GameCode = setupDto.GameCode,
                                         Players = setupDto.Players,
                                         Watchers = setupDto.Watchers,
-                                        AllowAudience = setupDto.AllowAudience
+                                        AllowAudience = setupDto.AllowAudience,
+                                        LeaveInDatabase = setupDto.LeaveInDatabase
                                     },
                                     commandType: System.Data.CommandType.StoredProcedure);
 

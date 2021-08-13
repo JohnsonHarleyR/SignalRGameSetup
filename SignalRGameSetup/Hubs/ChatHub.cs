@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SignalRGameSetup.Hubs
 {
+    // TODO set a hubname for security reasons
     public class ChatHub : Hub
     {
 

@@ -16,6 +16,7 @@ namespace SignalRGameSetup.Models.Setup
         public List<Player> Players { get; } // You must use the AddPlayer() method to add players
         public List<Watcher> Watchers { get; } // You must use the AddWatcher() method to add watchers
         public bool AllowAudience { get; set; }
+        public bool LeaveInDatabase { get; set; } // this is for navigating between the wait room and game room so nothing gets deleted in the process
 
         public int PlayersAvailableToJoin { get; set; } // how many players are still available to join
         public int WatchersAvailableToJoin { get; set; } // how many players are still available to join
@@ -28,6 +29,7 @@ namespace SignalRGameSetup.Models.Setup
             GameCode = SetupHelper.GenerateGameCode();
             Players = new List<Player>();
             Watchers = new List<Watcher>();
+            LeaveInDatabase = false;
         }
 
         public GameSetup(bool allowAudience)
@@ -37,6 +39,7 @@ namespace SignalRGameSetup.Models.Setup
             Players = new List<Player>();
             Watchers = new List<Watcher>();
             AllowAudience = allowAudience;
+            LeaveInDatabase = false;
         }
 
         public GameSetup(GameSetupDto setupDto)
@@ -46,6 +49,7 @@ namespace SignalRGameSetup.Models.Setup
             Players = JsonConvert.DeserializeObject<List<Player>>(setupDto.Players);
             Watchers = JsonConvert.DeserializeObject<List<Watcher>>(setupDto.Watchers);
             AllowAudience = setupDto.AllowAudience;
+            LeaveInDatabase = setupDto.LeaveInDatabase;
 
             // update how many are available
             CalculateAvailable();

@@ -9,6 +9,7 @@ namespace SignalRGameSetup.Database.Dtos
         public string Players { get; set; } // A Json string
         public string Watchers { get; set; } // A Json string
         public bool AllowAudience { get; set; }
+        public bool LeaveInDatabase { get; set; }
 
         public GameSetupDto() { }
 
@@ -18,6 +19,7 @@ namespace SignalRGameSetup.Database.Dtos
             Players = JsonConvert.SerializeObject(setup.Players);
             Watchers = JsonConvert.SerializeObject(setup.Watchers);
             AllowAudience = setup.AllowAudience;
+            LeaveInDatabase = setup.LeaveInDatabase;
         }
 
     }

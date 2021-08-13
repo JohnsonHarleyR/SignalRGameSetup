@@ -9,10 +9,13 @@ using System.Linq;
 
 namespace SignalRGameSetup.Helpers.Setup
 {
+
+    // TODO add full description to all methods, including parameter info
     public static class SetupHelper
     {
         private static Random random = new Random();
 
+        // overloaded method
         public static IParticipant GetParticipantById(string gameCode, string participantId)
         {
             // get the setup based on the game code
