@@ -50,6 +50,63 @@ namespace SignalRGameSetup.Helpers.Setup
 
         }
 
+        public static IParticipant GetParticipantByConnectionId(string gameCode, string participantId)
+        {
+            // get the setup based on the game code
+            GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
+
+            IParticipant participant = null;
+
+            // first look through the players
+            foreach (var player in setup.Players)
+            {
+                if (player.ConnectionId == participantId)
+                {
+                    // if it matches, grab the player
+                    participant = player;
+                    break;
+                }
+            }
+
+            // if participant is still null, check the watchers
+            if (participant == null)
+            {
+                foreach (var watcher in setup.Watchers)
+                {
+                    if (watcher.ConnectionId == participantId)
+                    {
+                        // if it matches, grab the watcher
+                        participant = watcher;
+                        break;
+                    }
+                }
+            }
+
+            // return the result
+            return participant;
+
+        }
+
+        // Get a participant based on a connection id
+        public static IParticipant GetParticipantByConnectionId(string connectionId)
+        {
+            // first get a list of all setups
+            List<GameSetup> setups = GetAllSetups();
+
+            // loop through setups - if it finds the connection id, set the participant and return
+            IParticipant participant = null;
+            foreach (var setup in setups)
+            {
+                participant = GetParticipantByConnectionId(setup.GameCode, connectionId);
+                if (participant != null)
+                {
+                    break;
+                }
+            }
+
+            return participant;
+        }
+
         public static GameSetup AddGameSetup(GameSetup setup)
         {
             SetupRepository repository = new SetupRepository();
@@ -58,6 +115,20 @@ namespace SignalRGameSetup.Helpers.Setup
             repository.AddGameSetup(new GameSetupDto(setup));
 
             return setup;
+        }
+
+        public static List<GameSetup> GetAllSetups()
+        {
+            SetupRepository repository = new SetupRepository();
+
+            IEnumerable<GameSetupDto> setupDtos = repository.GetAllSetups();
+            List<GameSetup> setups = new List<GameSetup>();
+            foreach (var dto in setupDtos)
+            {
+                setups.Add(new GameSetup(dto));
+            }
+
+            return setups;
         }
 
         public static void UpdateGameSetup(GameSetup setup)

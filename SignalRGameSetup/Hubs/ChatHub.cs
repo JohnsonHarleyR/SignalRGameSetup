@@ -10,6 +10,35 @@ namespace SignalRGameSetup.Hubs
     public class ChatHub : Hub
     {
 
+        //public void UpdateOnDisconnect(string gameCode, string participantId)
+        //{
+        //    // if the values are not null, add notice saying the player has left the chat
+        //    if (gameCode != null && participantId != null)
+        //    {
+
+        //        // grab the participant by their ID
+        //        IParticipant participant = SetupHelper.GetParticipantById(gameCode, participantId);
+
+        //        // get the chat based on the game code
+        //        GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+
+        //        if (participant != null)
+        //        {
+        //            // add a notice saying the player has left
+        //            chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
+        //                "red");
+
+        //            // now save the chat
+        //            ChatHelper.SaveChat(chat);
+
+        //            // now load the new chat for everyone
+        //            chat.DoSaveAfterShow = true;
+        //            Clients.Group(gameCode).loadTheChat(chat);
+        //        }
+
+        //    }
+        //}
+
         public override Task OnDisconnected(bool stopCalled)
         {
             if (stopCalled)
@@ -17,27 +46,20 @@ namespace SignalRGameSetup.Hubs
                 //We know that Stop() was called on the client,
                 //and the connection shut down gracefully.
 
-                // get the game code and participant's id from cookies - if they exist
+                // get the game code and participant's
+
+                IParticipant participant = SetupHelper.GetParticipantByConnectionId(Context.ConnectionId);
                 string gameCode = null;
                 string participantId = null;
-
-                var httpContext = Context.Request.GetHttpContext();
-
-                if (httpContext.Request.Cookies["GameCode"] != null)
+                if (participant != null)
                 {
-                    gameCode = httpContext.Request.Cookies["GameCode"].Value;
-                }
-                if (httpContext.Request.Cookies["ParticipantId"] != null)
-                {
-                    participantId = httpContext.Request.Cookies["ParticipantId"].Value;
+                    gameCode = participant.GameCode;
+                    participantId = participant.ParticipantId;
                 }
 
                 // if the values are not null, add notice saying the player has left the chat
                 if (gameCode != null && participantId != null)
                 {
-
-                    // grab the participant by their ID
-                    IParticipant participant = SetupHelper.GetParticipantById(gameCode, participantId);
 
                     // get the chat based on the game code
                     GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
@@ -68,6 +90,65 @@ namespace SignalRGameSetup.Hubs
 
             return base.OnDisconnected(stopCalled);
         }
+
+        //public override Task OnDisconnected(bool stopCalled)
+        //{
+        //    if (stopCalled)
+        //    {
+        //        //We know that Stop() was called on the client,
+        //        //and the connection shut down gracefully.
+
+        //        // get the game code and participant's id from cookies - if they exist
+        //        string gameCode = null;
+        //        string participantId = null;
+
+        //        var httpContext = Context.Request.GetHttpContext();
+
+        //        if (httpContext.Request.Cookies["GameCode"] != null)
+        //        {
+        //            gameCode = httpContext.Request.Cookies["GameCode"].Value;
+        //        }
+        //        if (httpContext.Request.Cookies["ParticipantId"] != null)
+        //        {
+        //            participantId = httpContext.Request.Cookies["ParticipantId"].Value;
+        //        }
+
+        //        // if the values are not null, add notice saying the player has left the chat
+        //        if (gameCode != null && participantId != null)
+        //        {
+
+        //            // grab the participant by their ID
+        //            IParticipant participant = SetupHelper.GetParticipantById(gameCode, participantId);
+
+        //            // get the chat based on the game code
+        //            GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+
+        //            if (participant != null)
+        //            {
+        //                // add a notice saying the player has left
+        //                chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
+        //                    "red");
+
+        //                // now save the chat
+        //                ChatHelper.SaveChat(chat);
+
+        //                // now load the new chat for everyone
+        //                chat.DoSaveAfterShow = true;
+        //                Clients.Group(gameCode).loadTheChat(chat);
+        //            }
+
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        // This server hasn't heard from the client in the last ~35 seconds.
+        //        // If SignalR is behind a load balancer with scaleout configured, 
+        //        // the client may still be connected to another SignalR server.
+        //    }
+
+        //    return base.OnDisconnected(stopCalled);
+        //}
 
         public void AddToChatGroup(Participant participant)
         {
