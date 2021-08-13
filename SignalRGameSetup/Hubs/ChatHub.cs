@@ -19,6 +19,9 @@ namespace SignalRGameSetup.Hubs
             // get the correct chat
             GameChat chat = ChatHelper.GetChatByGameCode(info.GameCode);
 
+            // Add to chat group
+            Groups.Add(Context.ConnectionId, info.GameCode);
+
             Clients.Client(Context.ConnectionId).loadTheChat(chat);
 
         }
