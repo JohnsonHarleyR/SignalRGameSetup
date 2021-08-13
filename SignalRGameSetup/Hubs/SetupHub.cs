@@ -4,6 +4,7 @@ using SignalRGameSetup.Helpers.Setup;
 using SignalRGameSetup.Models.Setup;
 using SignalRGameSetup.Models.Setup.Containers;
 using SignalRGameSetup.Models.Setup.Interfaces;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SignalRGameSetup.Hubs
@@ -13,6 +14,50 @@ namespace SignalRGameSetup.Hubs
         // TODO Write tests!
         // TODO write more helper methods to minimize some of this code
         // HACK this method works around problems with browser cookies - consider changing back one uploaded online
+
+
+        // Methods specific to the actual game page
+        public void ConnectToGame(GoToGamePage info)
+        {
+            // get the correct setup
+            GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
+
+            // update the player/watcher to have their new connection id
+            IParticipant participant = setup.Players.Where(p => p.ParticipantId == info.ParticipantId).FirstOrDefault();
+
+            if (participant == null)
+            {
+                participant = setup.Watchers.Where(p => p.ParticipantId == info.ParticipantId).FirstOrDefault();
+            }
+
+            if (participant != null)
+            {
+                // TODO make sure this updates the setup correctly!!
+                participant.ConnectionId = Context.ConnectionId;
+            }
+
+            // change the setup to work properly if there's a disconnection
+            setup.LeaveInDatabase = false;
+
+            // save the setup
+            SetupHelper.UpdateGameSetup(setup);
+
+            // update their client info on their page
+            Clients.Client(Context.ConnectionId).setClientInfo(participant);
+
+            // add this person to the group again
+            Groups.Add(Context.ConnectionId, setup.GameCode);
+
+            // update info on game page for everyone
+            Clients.Group(setup.GameCode).updateGameSetup(setup);
+
+            // load the chat for everyone
+            Clients.Group(setup.GameCode).connectTheChat();
+        }
+
+
+
+        // Methods used/also used on the waiting page
 
         public void GoToGame(GoToGamePage info)
         {

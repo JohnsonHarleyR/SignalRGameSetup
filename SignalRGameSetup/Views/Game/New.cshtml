@@ -8,3 +8,89 @@
 @ViewBag.GameCode
 <br />
 @ViewBag.ParticipantId
+
+
+<div id="chatArea">
+
+    <div id="chatMessages"></div>
+    <div id="addMessage">
+        <input type="text" id="messageInput" placeholder="Enter message here" />
+        <input type="button" id="addMessageBtn" value="Add" />
+    </div>
+
+</div>
+
+
+
+
+@section Scripts {
+    @*<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>*@
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+
+        var clientName; // this should be accessible to any needed javascript file
+        var clientId;
+        var gameSetup;
+
+        // Start up the hub connection for setup
+        jQuery(document).ready(function ($) {
+            setupHub = $.connection.setupHub;
+            chat = $.connection.chatHub;
+
+
+            setupHub.client.setClientInfo = function (participant) {
+                clientName = participant.Name;
+                clientId = participant.ParticipantId;
+            };
+
+            setupHub.client.updateGameSetup = function (setup) {
+                console.log('updating setup');
+                gameSetup = setup;
+            }
+
+            setupHub.client.connectTheChat = function () {
+                chat.server.connectToGame({
+                    gameCode: '@ViewBag.GameCode',
+                    ParticipantId: '@ViewBag.ParticipantId'
+                });
+            }
+
+            // chat hub
+
+            // add participant to chat group
+            chat.client.addNewMessage = function (newMessage) {
+                console.log('adding message');
+                addChatMessage(newMessage.Name, newMessage.Message);
+            };
+
+            // load the chat
+            chat.client.loadTheChat = function (gameChat) {
+                console.log('chat loaded');
+                console.log(gameChat);
+                showChatHtml(gameChat.ChatHtml, gameChat.DoSaveAfterShow);
+            }
+
+            // start connection
+            $.connection.hub.start().done(function () {
+                console.log('starting');
+
+                // set the game up
+                setupHub.server.connectToGame({
+                    gameCode: '@ViewBag.GameCode',
+                    ParticipantId: '@ViewBag.ParticipantId'
+                });
+            });
+
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+<script src="~/Scripts/game.js"></script>
+<script src="~/Scripts/chat.js"></script>

@@ -2,6 +2,8 @@
 using SignalRGameSetup.Helpers.Chat;
 using SignalRGameSetup.Helpers.Setup;
 using SignalRGameSetup.Models.Chat.Containers;
+using SignalRGameSetup.Models.Setup;
+using SignalRGameSetup.Models.Setup.Containers;
 using SignalRGameSetup.Models.Setup.Interfaces;
 using System.Threading.Tasks;
 
@@ -10,6 +12,16 @@ namespace SignalRGameSetup.Hubs
     // TODO set a hubname for security reasons
     public class ChatHub : Hub
     {
+
+        // Methods specific to the actual game page
+        public void ConnectToGame(GoToGamePage info)
+        {
+            // get the correct chat
+            GameChat chat = ChatHelper.GetChatByGameCode(info.GameCode);
+
+            Clients.Client(Context.ConnectionId).loadTheChat(chat);
+
+        }
 
         //public void UpdateOnDisconnect(string gameCode, string participantId)
         //{
@@ -60,27 +72,33 @@ namespace SignalRGameSetup.Hubs
                     participantId = participant.ParticipantId;
                 }
 
+
                 // if the values are not null, add notice saying the player has left the chat
                 if (gameCode != null && participantId != null)
                 {
 
-                    // get the chat based on the game code
-                    GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+                    // get the game setup and check it before doing this
+                    GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-                    if (participant != null)
+                    if (!setup.LeaveInDatabase)
                     {
-                        // add a notice saying the player has left
-                        chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
-                            "red");
+                        // get the chat based on the game code
+                        GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
 
-                        // now save the chat
-                        ChatHelper.SaveChat(chat);
+                        if (participant != null)
+                        {
+                            // add a notice saying the player has left
+                            chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
+                                "red");
 
-                        // now load the new chat for everyone
-                        chat.DoSaveAfterShow = true;
-                        Clients.Group(gameCode).loadTheChat(chat);
+                            // now save the chat
+                            ChatHelper.SaveChat(chat);
+
+                            // now load the new chat for everyone
+                            chat.DoSaveAfterShow = true;
+                            Clients.Group(gameCode).loadTheChat(chat);
+                        }
                     }
-
                 }
 
             }
