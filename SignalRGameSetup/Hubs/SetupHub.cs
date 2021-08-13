@@ -146,6 +146,7 @@ namespace SignalRGameSetup.Hubs
         //    return base.OnDisconnected(stopCalled);
         //}
 
+        // HACK this method works around problems with browser cookies - consider changing back one uploaded online
         public override Task OnDisconnected(bool stopCalled)
         {
             if (stopCalled)
