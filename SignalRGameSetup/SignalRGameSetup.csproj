@@ -142,6 +142,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Database\Dtos\GameChatDto.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Models\Chat\Containers\GameChat.cs" />
     <Compile Include="Models\GameViewModel.cs" />
     <Compile Include="Models\Setup\Containers\ExistingRoom.cs" />
+    <Compile Include="Models\Setup\Containers\GoToGamePage.cs" />
     <Compile Include="Models\Setup\Containers\JoinAsParticipant.cs" />
     <Compile Include="Models\Chat\Containers\NewMessage.cs" />
     <Compile Include="Models\Setup\Containers\NewRoom.cs" />
@@ -211,6 +213,7 @@
     <Content Include="connectionstrings.config" />
     <Content Include="Views\Setup\StartScreen.cshtml" />
     <Content Include="Views\Setup\WaitRoom.cshtml" />
+    <Content Include="Views\Game\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

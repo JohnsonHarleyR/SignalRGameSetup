@@ -1,5 +1,12 @@
 ﻿// Hub
 
+// Go to the game page
+function goToGame() {
+    connection.server.goToGame({
+        gameCode: gameSetup.GameCode,
+        participantId: clientId
+    });
+}
 
 // Creating a new room
 function newRoom(allowAudienceChoice) {

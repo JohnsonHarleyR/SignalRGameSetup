@@ -14,11 +14,19 @@ namespace SignalRGameSetup.Hubs
         // TODO write more helper methods to minimize some of this code
         // HACK this method works around problems with browser cookies - consider changing back one uploaded online
 
-        public void GoToGame(string gameCode, string participantId)
+        public void GoToGame(GoToGamePage info)
         {
             // get the setup and change the bool to tell it to leave in the database
-            GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
+            GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
+
+            // Try this... don't allow setup to be deleted, then redirect to game page
+            setup.LeaveInDatabase = true; // TODO set this back to false when directed to game page
+            SetupHelper.UpdateGameSetup(setup);
+
+            // go back to setup page and have everyone direct to game page
+            Clients.Group(info.GameCode).goToGamePage(setup);
         }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             if (stopCalled)
@@ -47,53 +55,55 @@ namespace SignalRGameSetup.Hubs
                     // get the setup based on the game code
                     GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-                    // first look through the players
-                    foreach (var player in setup.Players)
+                    if (setup != null && setup.LeaveInDatabase == false)
                     {
-                        if (player.ParticipantId == participantId)
+                        // first look through the players
+                        foreach (var player in setup.Players)
                         {
-                            // if it matches, remove that player
-                            foundParticipant = player;
-                            setup.Players.Remove(player);
-                            break;
-                        }
-                    }
-
-                    // if participant is still null, check the watchers
-                    if (foundParticipant == null)
-                    {
-
-                        // remove the from the group
-
-                        foreach (var watcher in setup.Watchers)
-                        {
-                            if (watcher.ParticipantId == participantId)
+                            if (player.ParticipantId == participantId)
                             {
-                                // if it matches, remove that watcher
-                                foundParticipant = watcher;
-                                setup.Watchers.Remove(watcher);
+                                // if it matches, remove that player
+                                foundParticipant = player;
+                                setup.Players.Remove(player);
                                 break;
                             }
                         }
-                    }
 
-                    // now save the setup
-                    SetupHelper.UpdateGameSetup(setup);
+                        // if participant is still null, check the watchers
+                        if (foundParticipant == null)
+                        {
 
-                    // if participant isn't null, update the wait room
-                    if (foundParticipant != null)
-                    {
-                        Clients.Group(gameCode).updateGameSetup(setup);
-                    }
+                            // remove the from the group
 
-                    // if the setup has no players or watchers, delete it
-                    // TODO decide if it should close when all players are gone and only watchers are left
-                    if (setup.LeaveInDatabase == false &&
-                        setup.Players.Count == 0 && setup.Watchers.Count == 0)
-                    {
-                        SetupHelper.DeleteGameSetup(gameCode);
-                        // Also delete associated chat
-                        ChatHelper.DeleteGameChat(gameCode);
+                            foreach (var watcher in setup.Watchers)
+                            {
+                                if (watcher.ParticipantId == participantId)
+                                {
+                                    // if it matches, remove that watcher
+                                    foundParticipant = watcher;
+                                    setup.Watchers.Remove(watcher);
+                                    break;
+                                }
+                            }
+                        }
+
+                        // now save the setup
+                        SetupHelper.UpdateGameSetup(setup);
+
+                        // if participant isn't null, update the wait room
+                        if (foundParticipant != null)
+                        {
+                            Clients.Group(gameCode).updateGameSetup(setup);
+                        }
+
+                        // if the setup has no players or watchers, delete it
+                        // TODO decide if it should close when all players are gone and only watchers are left
+                        if (setup.Players.Count == 0 && setup.Watchers.Count == 0)
+                        {
+                            SetupHelper.DeleteGameSetup(gameCode);
+                            // Also delete associated chat
+                            ChatHelper.DeleteGameChat(gameCode);
+                        }
                     }
 
                 }

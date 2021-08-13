@@ -68,6 +68,14 @@
                 updateWaitRoom();
             }
 
+            connection.client.goToGamePage = function (setup) {
+                // update the game setup
+                gameSetup = setup;
+                // now have everyone redirect to the game page
+                window.location.href = '/Setup/GoToGame?gameCode=' + setup.GameCode +
+                    '&participantId=' + clientId;
+            }
+
             //$.connection.hub.disconnected(function () { // TODO write stuff for this
             //    console.log('disconnected');
             //    if (tryingToReconnect) {
