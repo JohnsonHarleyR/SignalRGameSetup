@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR;
+using SignalRGameSetup.Helpers.Chat;
 using SignalRGameSetup.Helpers.Setup;
 using SignalRGameSetup.Models.Setup;
 using SignalRGameSetup.Models.Setup.Containers;
@@ -9,55 +10,96 @@ namespace SignalRGameSetup.Hubs
 {
     public class SetupHub : Hub
     {
-        //public void UpdateOnDisconnect(string gameCode, string participantId)
-        //{
-        //    // if the values are not null, remove user from appropriate setup list
-        //    if (gameCode != null && participantId != null)
-        //    {
-        //        // get the setup based on the game code
-        //        GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-        //        // remove the participant
-        //        IParticipant participant = null;
+        // HACK this method works around problems with browser cookies - consider changing back one uploaded online
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            if (stopCalled)
+            {
+                //We know that Stop() was called on the client,
+                //and the connection shut down gracefully.
 
-        //        // first look through the players
-        //        foreach (var player in setup.Players)
-        //        {
-        //            if (player.ParticipantId == participantId)
-        //            {
-        //                // if it matches, remove that player
-        //                participant = player;
-        //                setup.Players.Remove(player);
-        //                break;
-        //            }
-        //        }
+                // get the game code and participant's id
+                //var httpContext = Context.Request.GetHttpContext();
+                //UserConnection user = UserHandler.UserList.Find(x => x.ConnectionId == Context.ConnectionId);
 
-        //        // if participant is still null, check the watchers
-        //        if (participant == null)
-        //        {
-        //            foreach (var watcher in setup.Watchers)
-        //            {
-        //                if (watcher.ParticipantId == participantId)
-        //                {
-        //                    // if it matches, remove that watcher
-        //                    participant = watcher;
-        //                    setup.Watchers.Remove(watcher);
-        //                    break;
-        //                }
-        //            }
-        //        }
+                IParticipant participant = SetupHelper.GetParticipantByConnectionId(Context.ConnectionId);
+                string gameCode = null;
+                string participantId = null;
+                if (participant != null)
+                {
+                    gameCode = participant.GameCode;
+                    participantId = participant.ParticipantId;
+                }
 
-        //        // now save the setup
-        //        SetupHelper.UpdateGameSetup(setup);
+                IParticipant foundParticipant = null;
 
-        //        // if participant isn't null, update the wait room
-        //        if (participant != null)
-        //        {
-        //            Clients.Group(gameCode).updateGameSetup(setup);
-        //        }
+                // if the values are not null, remove user from appropriate setup list
+                if (gameCode != null && participantId != null)
+                {
+                    // get the setup based on the game code
+                    GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-        //    }
-        //}
+                    // first look through the players
+                    foreach (var player in setup.Players)
+                    {
+                        if (player.ParticipantId == participantId)
+                        {
+                            // if it matches, remove that player
+                            foundParticipant = player;
+                            setup.Players.Remove(player);
+                            break;
+                        }
+                    }
+
+                    // if participant is still null, check the watchers
+                    if (foundParticipant == null)
+                    {
+
+                        // remove the from the group
+
+                        foreach (var watcher in setup.Watchers)
+                        {
+                            if (watcher.ParticipantId == participantId)
+                            {
+                                // if it matches, remove that watcher
+                                foundParticipant = watcher;
+                                setup.Watchers.Remove(watcher);
+                                break;
+                            }
+                        }
+                    }
+
+                    // now save the setup
+                    SetupHelper.UpdateGameSetup(setup);
+
+                    // if participant isn't null, update the wait room
+                    if (foundParticipant != null)
+                    {
+                        Clients.Group(gameCode).updateGameSetup(setup);
+                    }
+
+                    // if the setup has no players or watchers, delete it
+                    // TODO decide if it should close when all players are gone and only watchers are left
+                    if (setup.Players.Count == 0 && setup.Watchers.Count == 0)
+                    {
+                        SetupHelper.DeleteGameSetup(gameCode);
+                        // Also delete associated chat
+                        ChatHelper.DeleteGameChat(gameCode);
+                    }
+
+                }
+
+            }
+            else
+            {
+                // This server hasn't heard from the client in the last ~35 seconds.
+                // If SignalR is behind a load balancer with scaleout configured, 
+                // the client may still be connected to another SignalR server.
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
 
         //public override Task OnDisconnected(bool stopCalled)
         //{
@@ -145,87 +187,6 @@ namespace SignalRGameSetup.Hubs
 
         //    return base.OnDisconnected(stopCalled);
         //}
-
-        // HACK this method works around problems with browser cookies - consider changing back one uploaded online
-        public override Task OnDisconnected(bool stopCalled)
-        {
-            if (stopCalled)
-            {
-                //We know that Stop() was called on the client,
-                //and the connection shut down gracefully.
-
-                // get the game code and participant's id
-                //var httpContext = Context.Request.GetHttpContext();
-                //UserConnection user = UserHandler.UserList.Find(x => x.ConnectionId == Context.ConnectionId);
-
-                IParticipant participant = SetupHelper.GetParticipantByConnectionId(Context.ConnectionId);
-                string gameCode = null;
-                string participantId = null;
-                if (participant != null)
-                {
-                    gameCode = participant.GameCode;
-                    participantId = participant.ParticipantId;
-                }
-
-                IParticipant foundParticipant = null;
-
-                // if the values are not null, remove user from appropriate setup list
-                if (gameCode != null && participantId != null)
-                {
-                    // get the setup based on the game code
-                    GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
-
-                    // first look through the players
-                    foreach (var player in setup.Players)
-                    {
-                        if (player.ParticipantId == participantId)
-                        {
-                            // if it matches, remove that player
-                            foundParticipant = player;
-                            setup.Players.Remove(player);
-                            break;
-                        }
-                    }
-
-                    // if participant is still null, check the watchers
-                    if (foundParticipant == null)
-                    {
-
-                        // remove the from the group
-
-                        foreach (var watcher in setup.Watchers)
-                        {
-                            if (watcher.ParticipantId == participantId)
-                            {
-                                // if it matches, remove that watcher
-                                foundParticipant = watcher;
-                                setup.Watchers.Remove(watcher);
-                                break;
-                            }
-                        }
-                    }
-
-                    // now save the setup
-                    SetupHelper.UpdateGameSetup(setup);
-
-                    // if participant isn't null, update the wait room
-                    if (foundParticipant != null)
-                    {
-                        Clients.Group(gameCode).updateGameSetup(setup);
-                    }
-
-                }
-
-            }
-            else
-            {
-                // This server hasn't heard from the client in the last ~35 seconds.
-                // If SignalR is behind a load balancer with scaleout configured, 
-                // the client may still be connected to another SignalR server.
-            }
-
-            return base.OnDisconnected(stopCalled);
-        }
 
         public void NewRoom(NewRoom roomInfo)
         {

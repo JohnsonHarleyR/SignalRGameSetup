@@ -84,7 +84,11 @@ namespace SignalRGameSetup.Helpers.Chat
 
         }
 
-
+        public static void DeleteGameChat(string gameCode)
+        {
+            ChatRepository repository = new ChatRepository();
+            repository.DeleteGameChat(gameCode);
+        }
 
     }
 }

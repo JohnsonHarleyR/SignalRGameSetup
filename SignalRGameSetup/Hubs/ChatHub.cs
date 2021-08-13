@@ -49,6 +49,7 @@ namespace SignalRGameSetup.Hubs
 
                 // get the game code and participant's
 
+                // HACK Make sure that the participant doesn't get deleted from the setup before reaching this - watch for that
                 IParticipant participant = SetupHelper.GetParticipantByConnectionId(Context.ConnectionId);
                 string gameCode = null;
                 string participantId = null;
