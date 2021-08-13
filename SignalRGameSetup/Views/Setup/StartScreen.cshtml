@@ -33,12 +33,10 @@
                 addToChatGroup();
 
                 //// create cookie for username and game code
-                                let cookieString = "ParticipantId=" + clientId + "; GameCode=" + gameSetup.GameCode + ";";
-/*                let cookieString = "GameCode=" + gameSetup.GameCode + "; ParticipantId=" + clientId + ";";*/
-
-                document.cookie = cookieString;
+                document.cookie = "ParticipantId=" + clientId;
                 console.log("Cookie: " + document.cookie);
-/*                browser.cookies.set(cookieString);*/
+                document.cookie = "GameCode=" + gameSetup.GameCode;
+                console.log("Cookie: " + document.cookie);
 
                 enterWaitRoom();
 

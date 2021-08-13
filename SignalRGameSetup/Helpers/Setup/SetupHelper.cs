@@ -13,17 +13,42 @@ namespace SignalRGameSetup.Helpers.Setup
     {
         private static Random random = new Random();
 
-        //public static GameSetup NewGameSetup(Player player, bool allowAudience)
-        //{
-        //    SetupRepository repository = new SetupRepository();
+        public static IParticipant GetParticipantById(string gameCode, string participantId)
+        {
+            // get the setup based on the game code
+            GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-        //    GameSetup setup = new GameSetup(allowAudience);
-        //    setup.AddPlayer(player);
+            IParticipant participant = null;
 
-        //    repository.AddGameSetup(new GameSetupDto(setup));
+            // first look through the players
+            foreach (var player in setup.Players)
+            {
+                if (player.ParticipantId == participantId)
+                {
+                    // if it matches, grab the player
+                    participant = player;
+                    break;
+                }
+            }
 
-        //    return setup;
-        //}
+            // if participant is still null, check the watchers
+            if (participant == null)
+            {
+                foreach (var watcher in setup.Watchers)
+                {
+                    if (watcher.ParticipantId == participantId)
+                    {
+                        // if it matches, grab the watcher
+                        participant = watcher;
+                        break;
+                    }
+                }
+            }
+
+            // return the result
+            return participant;
+
+        }
 
         public static GameSetup AddGameSetup(GameSetup setup)
         {

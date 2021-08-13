@@ -2,12 +2,93 @@
 using SignalRGameSetup.Helpers.Setup;
 using SignalRGameSetup.Models.Setup;
 using SignalRGameSetup.Models.Setup.Containers;
+using SignalRGameSetup.Models.Setup.Interfaces;
+using System.Threading.Tasks;
 
 namespace SignalRGameSetup.Hubs
 {
     public class SetupHub : Hub
     {
 
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            if (stopCalled)
+            {
+                //We know that Stop() was called on the client,
+                //and the connection shut down gracefully.
+
+                // get the game code and participant's id from cookies - if they exist
+                string gameCode = null;
+                string participantId = null;
+
+                var httpContext = Context.Request.GetHttpContext();
+
+                if (httpContext.Request.Cookies["GameCode"] != null)
+                {
+                    gameCode = httpContext.Request.Cookies["GameCode"].Value;
+                }
+                if (httpContext.Request.Cookies["ParticipantId"] != null)
+                {
+                    participantId = httpContext.Request.Cookies["ParticipantId"].Value;
+                }
+
+                // if the values are not null, remove user from appropriate setup list
+                if (gameCode != null && participantId != null)
+                {
+                    // get the setup based on the game code
+                    GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
+
+                    // remove the participant
+                    IParticipant participant = null;
+
+                    // first look through the players
+                    foreach (var player in setup.Players)
+                    {
+                        if (player.ParticipantId == participantId)
+                        {
+                            // if it matches, remove that player
+                            participant = player;
+                            setup.Players.Remove(player);
+                            break;
+                        }
+                    }
+
+                    // if participant is still null, check the watchers
+                    if (participant == null)
+                    {
+                        foreach (var watcher in setup.Watchers)
+                        {
+                            if (watcher.ParticipantId == participantId)
+                            {
+                                // if it matches, remove that watcher
+                                participant = watcher;
+                                setup.Watchers.Remove(watcher);
+                                break;
+                            }
+                        }
+                    }
+
+                    // now save the setup
+                    SetupHelper.UpdateGameSetup(setup);
+
+                    // if participant isn't null, update the wait room
+                    if (participant != null)
+                    {
+                        Clients.Group(gameCode).updateGameSetup(setup);
+                    }
+
+                }
+
+            }
+            else
+            {
+                // This server hasn't heard from the client in the last ~35 seconds.
+                // If SignalR is behind a load balancer with scaleout configured, 
+                // the client may still be connected to another SignalR server.
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
 
         public void NewRoom(NewRoom roomInfo)
         {
@@ -15,7 +96,7 @@ namespace SignalRGameSetup.Hubs
             GameSetup newSetup = new GameSetup(roomInfo.AllowAudience);
             Player firstPlayer = new Player(roomInfo.Name, Context.ConnectionId, newSetup.GameCode);
             bool successful = newSetup.AddPlayer(firstPlayer);
-            //newSetup.ActiveParticipant = firstPlayer;
+
 
             // if successful, add the setup to a database to reference later
             if (successful)
