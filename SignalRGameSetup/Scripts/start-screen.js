@@ -164,7 +164,8 @@ function updateWaitRoom() {
 // update wait room player list
 function updateWaitRoomPlayers() {
     console.log('updating wait room players');
-    waitRoomPlayers.innerHTML = "<h3>Players</h3>";
+    playersAvailable.innerHTML = gameSetup.PlayersAvailableToJoin;
+    waitRoomPlayers.innerHTML = "";
     // loop through list of players in the setup
     for (let i = 0; i < gameSetup.Players.length; i++) {
         waitRoomPlayers.innerHTML += gameSetup.Players[i].Name + "</br>";
@@ -174,7 +175,8 @@ function updateWaitRoomPlayers() {
 // update wait room watcher list
 function updateWaitRoomWatchers() {
     console.log('updating wait room watchers');
-    waitRoomWatchers.innerHTML = "<h3>Watchers</h3>";
+    watchersAvailable.innerHTML = gameSetup.WatchersAvailableToJoin;
+    waitRoomWatchers.innerHTML = "";
     // loop through list of players in the setup
     for (let i = 0; i < gameSetup.Watchers.length; i++) {
         waitRoomWatchers.innerHTML += gameSetup.Watchers[i].Name + "</br>";
@@ -213,7 +215,8 @@ var waitRoom = document.getElementById('waitRoom');
 var roomCodeDisplay = document.getElementById('roomCode');
 var waitRoomPlayers = document.getElementById('waitRoomPlayers');
 var waitRoomWatchers = document.getElementById('waitRoomWatchers');
-
+var playersAvailable = document.getElementById('playersAvailable');
+var watchersAvailable = document.getElementById('watchersAvailable');
 
 
 // event handlers

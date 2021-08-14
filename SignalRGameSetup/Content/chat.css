@@ -1,30 +1,37 @@
 ﻿#chatArea {
     position: relative;
-    border: 1px solid black;
 }
 
     /* TODO change the wait room dimensions - keep the same for game room*/
     #chatArea.wait-room-chat {
-        width: 200px;
+        width: 48%;
         height: 200px;
     }
-        #chatArea.wait-room-chat #chatMessages {
-            height: 70%;
+        #chatArea.wait-room-chat #chatContent {
+
         }
-        #chatArea.wait-room-chat #addMessage {
-            height: 30%;
-        }
+            #chatArea.wait-room-chat #chatContent #chatMessages {
+                height: 70%;
+            }
+            #chatArea.wait-room-chat #chatContent #addMessage {
+                height: 30%;
+            }
+
 
     #chatArea.game-room-chat {
         width: 200px;
         height: 300px;
     }
-        #chatArea.game-room-chat #chatMessages {
-            height: 80%;
+        #chatArea.game-room-chat #chatContent {
+            width: 70%;
+            border: 1px solid black;
         }
-        #chatArea.game-room-chat #addMessage {
-            height: 20%;
-        }
+            #chatArea.game-room-chat #chatContent #chatMessages {
+                height: 80%;
+            }
+            #chatArea.game-room-chat #chatContent #addMessage {
+                height: 20%;
+            }
 
 #chatContent {
     position: absolute;
