@@ -64,11 +64,8 @@ function loadGameChat() {
 }
 
 function showChatHtml(chatHtml, doSave) {
-    console.log('showing chat...');
-    console.log('Html: ' + chatHtml);
-    console.log('Do save: ' + doSave);
-    chatMessages.innerHTML = "";
     chatMessages.innerHTML = chatHtml;
+    updateScroll();
     if (doSave) {
         console.log('saving chat...');
         saveChatHtml();
@@ -84,6 +81,15 @@ function saveChatHtml() {
         doSaveAfterShow: false
     })
 }
+
+
+// layout javascript
+
+// used so the scrollbar stays at the bottom
+function updateScroll() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 
 // Variables 
 

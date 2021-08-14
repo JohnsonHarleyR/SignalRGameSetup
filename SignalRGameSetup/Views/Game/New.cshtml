@@ -3,6 +3,8 @@
     ViewBag.Title = "New";
 }
 
+<link rel="stylesheet" href="~/Content/chat.css" />
+
 <h2>New</h2>
 
 @ViewBag.GameCode
@@ -10,12 +12,18 @@
 @ViewBag.ParticipantId
 
 
-<div id="chatArea">
+<div id="chatArea" class="game-room-chat">
 
-    <div id="chatMessages"></div>
-    <div id="addMessage">
-        <input type="text" id="messageInput" placeholder="Enter message here" />
-        <input type="button" id="addMessageBtn" value="Add" />
+    <div id="chatContent">
+
+        <div id="chatMessages"></div>
+
+        <div id="addMessage">
+            <input type="text" id="messageInput" placeholder="Enter message here"
+                   onkeypress="checkIfEnterPressed(event)" />
+            <input type="button" id="addMessageBtn" value="Add" />
+        </div>
+
     </div>
 
 </div>

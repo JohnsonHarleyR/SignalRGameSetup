@@ -4,6 +4,7 @@
 }
 
 <link rel="stylesheet" href="~/Content/start-screen.css" />
+<link rel="stylesheet" href="~/Content/chat.css" />
 
 @section Scripts {
     @*<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>*@
@@ -119,6 +120,8 @@
 
 <div id="mainDiv">
 
+    <!-- TODO Add validation so name can't be too long -->
+
     <div id="initialOptions">
         <p>
             <label>Please enter your name.</label>
@@ -132,7 +135,7 @@
 
 
         <div id="allowAudienceModal" class="modal">
-            <span class="close"  id="audienceModalClose">&times;</span>
+            <span class="close" id="audienceModalClose">&times;</span>
             <p>Allow others to watch?</p>
             <input type="button" id="yesAudienceBtn" value="Yes" />
             <input type="button" id="noAudienceBtn" value="No" />
@@ -150,7 +153,7 @@
                 <input type="button" id="joinAsWatcherBtn" value="Join as Watcher" />
                 <span id="noSpaceAvailable">Sorry, this game room is full!</span>
             </div>
-            
+
         </div>
 
     </div>
@@ -172,13 +175,18 @@
     </div>
 
 
-    <div id="chatArea">
+    <div id="chatArea" class="wait-room-chat">
 
-        <div id="chatMessages"></div>
-        <div id="addMessage">
-            <input type="text" id="messageInput" placeholder="Enter message here"
-                   onkeypress="checkIfEnterPressed(event)" />
-            <input type="button" id="addMessageBtn" value="Add" />
+        <div id="chatContent">
+
+            <div id="chatMessages"></div>
+
+            <div id="addMessage">
+                <input type="text" id="messageInput" placeholder="Enter message here"
+                       onkeypress="checkIfEnterPressed(event)" />
+                <input type="button" id="addMessageBtn" value="Add" />
+            </div>
+
         </div>
 
     </div>
