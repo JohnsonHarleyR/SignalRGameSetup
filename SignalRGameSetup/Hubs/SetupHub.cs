@@ -94,6 +94,7 @@ namespace SignalRGameSetup.Hubs
 
                 IParticipant foundParticipant = null;
 
+                // TODO put this next part inside a SetupHelper method
                 // if the values are not null, remove user from appropriate setup list
                 if (gameCode != null && participantId != null)
                 {

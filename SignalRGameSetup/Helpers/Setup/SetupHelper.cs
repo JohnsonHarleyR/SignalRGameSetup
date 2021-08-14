@@ -5,7 +5,6 @@ using SignalRGameSetup.Models.Setup;
 using SignalRGameSetup.Models.Setup.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SignalRGameSetup.Helpers.Setup
 {
@@ -20,6 +19,13 @@ namespace SignalRGameSetup.Helpers.Setup
         {
             // get the setup based on the game code
             GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
+
+            // if the setup is null, either the setup is still being created or it is
+            // an invalid code. Either way, return null.
+            if (setup == null)
+            {
+                return null;
+            }
 
             IParticipant participant = null;
 
@@ -226,7 +232,6 @@ namespace SignalRGameSetup.Helpers.Setup
             return true;
         }
 
-
         /// <summary>
         /// Generate a code that will allow users to join a particular game.
         /// </summary>
@@ -258,66 +263,70 @@ namespace SignalRGameSetup.Helpers.Setup
                 participantCode += newCharacter;
             }
 
-            // TODO fix so the player id code can be successfully checked to see if it already exists
-            //do
-            //{
-            //    for (int i = 0; i < GameInformation.ParticipantCodeLength; i++)
-            //    {
-            //        // first decide whether to generate a letter or number
-            //        int decision = random.Next(0, 2);
-            //        string newCharacter;
-            //        // grab random character
-            //        if (decision == 0)
-            //        {
-            //            newCharacter = letters[random.Next(0, letters.Length)];
-            //        }
-            //        else
-            //        {
-            //            newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
-            //        }
-            //        // add it to the code
-            //        participantCode += newCharacter;
-            //    }
-
-            //} while (!ParticipantIdAvailable(participantCode));
-
-            // once an available code has been generated, return it
             return participantCode;
         }
 
+        /// <summary>
+        /// Generate a code that will allow users to join a particular game. This overloaded method checks if an Id is available in a game.
+        /// </summary>
+        /// <returns>Returns a generated code with a specified number of characters.</returns>
+        public static string GenerateParticipantId(string gameCode)
+        {
+            string[] letters = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+            "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+            int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+
+            string participantCode = "";
+
+            do
+            {
+
+                for (int i = 0; i < GameInformation.ParticipantCodeLength; i++)
+                {
+                    // first decide whether to generate a letter or number
+                    int decision = random.Next(0, 2);
+                    string newCharacter;
+                    // grab random character
+                    if (decision == 0)
+                    {
+                        newCharacter = letters[random.Next(0, letters.Length)];
+                    }
+                    else
+                    {
+                        newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
+                    }
+                    // add it to the code
+                    participantCode += newCharacter;
+                }
+
+            } while (!ParticipantIdAvailable(gameCode, participantCode));
+
+            return participantCode;
+        }
 
         /// <summary>
         /// Check the database as to whether a given game code is not already in use.
         /// </summary>
+        /// <param name="gameCode"></param>
         /// <param name="participantId"></param>
         /// <returns>Returns true if a game code is not taken, false if it is.</returns>
-        public static bool ParticipantIdAvailable(string participantId)
+        public static bool ParticipantIdAvailable(string gameCode, string participantId)
         {
-            // TODO fix this method
-
+            // return false if either parameter is null or impossible
             if (participantId == null || participantId.Length < GameInformation.ParticipantCodeLength)
             {
                 return false;
             }
 
-            SetupRepository repository = new SetupRepository();
-            IEnumerable<GameSetupDto> setupDtos = repository.GetAllSetups();
-            List<GameSetup> setups = new List<GameSetup>();
-            foreach (var setup in setupDtos)
-            {
-                setups.Add(new GameSetup(setup));
-            }
-            //setupDtos.ForEach(s => setups.Add(new GameSetup(s)));
-            List<IParticipant> allParticipants = new List<IParticipant>();
-            setups.ForEach(s => s.Players.ForEach(p => allParticipants.Add((IParticipant)p)));
-            setups.ForEach(s => s.Watchers.ForEach(w => allParticipants.Add((IParticipant)w)));
-            IParticipant participant = allParticipants.Where(p => p.ParticipantId == participantId).FirstOrDefault();
+            IParticipant participant = SetupHelper.GetParticipantById(gameCode, participantId);
 
+            // if the method was able to grab a participant, that means the Id is not available.
             if (participant != null)
             {
                 return false;
             }
 
+            // If it came up with nothing, the id is available.
             return true;
         }
 

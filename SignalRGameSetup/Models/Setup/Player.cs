@@ -18,7 +18,7 @@ namespace SignalRGameSetup.Models.Setup
         public Player(string name, string connectionId, string gameCode)
         {
             Name = name;
-            ParticipantId = SetupHelper.GenerateParticipantId();
+            ParticipantId = SetupHelper.GenerateParticipantId(gameCode);
             ConnectionId = connectionId;
             GameCode = gameCode;
         }

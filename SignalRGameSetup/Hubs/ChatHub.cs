@@ -55,7 +55,7 @@ namespace SignalRGameSetup.Hubs
         //    }
         //}
 
-        // HACK this method works around problems with browser cookies - consider changing back one uploaded online
+        // HACK this method works around problems with browser cookies - consider changing back once uploaded online
         public override Task OnDisconnected(bool stopCalled)
         {
             if (stopCalled)
@@ -107,6 +107,7 @@ namespace SignalRGameSetup.Hubs
             }
             else
             {
+                // TODO add code to notify player of a time out - or reconnect
                 // This server hasn't heard from the client in the last ~35 seconds.
                 // If SignalR is behind a load balancer with scaleout configured, 
                 // the client may still be connected to another SignalR server.
