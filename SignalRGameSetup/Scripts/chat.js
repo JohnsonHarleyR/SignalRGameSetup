@@ -1,4 +1,12 @@
-﻿
+﻿// function that checks if the enter button has been hit while inside the chat message input
+// if it has, then it will send a message
+function checkIfEnterPressed(event) {
+    console.log('pressed');
+    if (event.keyCode == 13) {
+        console.log('enter pressed');
+        newMessage(messageInput.value);
+    }
+}
 
 function newMessage(newMessage) {
 

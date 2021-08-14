@@ -22,7 +22,7 @@ namespace SignalRGameSetup.Hubs
             // get the correct setup
             GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
 
-            // update the player/watcher to have their new connection id
+            // update the player/watcher to have their new connection id in the database
             IParticipant participant = setup.Players.Where(p => p.ParticipantId == info.ParticipantId).FirstOrDefault();
 
             if (participant == null)
@@ -78,10 +78,6 @@ namespace SignalRGameSetup.Hubs
             {
                 //We know that Stop() was called on the client,
                 //and the connection shut down gracefully.
-
-                // get the game code and participant's id
-                //var httpContext = Context.Request.GetHttpContext();
-                //UserConnection user = UserHandler.UserList.Find(x => x.ConnectionId == Context.ConnectionId);
 
                 IParticipant participant = SetupHelper.GetParticipantByConnectionId(Context.ConnectionId);
                 string gameCode = null;

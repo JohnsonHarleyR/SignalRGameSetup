@@ -233,11 +233,12 @@ namespace SignalRGameSetup.Helpers.Setup
         }
 
         /// <summary>
-        /// Generate a code that will allow users to join a particular game.
+        /// Generate a code that will allow users to join a particular game. This one does not check for existing.
         /// </summary>
         /// <returns>Returns a generated code with a specified number of characters.</returns>
         public static string GenerateParticipantId()
         {
+
             string[] letters = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
             int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
@@ -272,6 +273,8 @@ namespace SignalRGameSetup.Helpers.Setup
         /// <returns>Returns a generated code with a specified number of characters.</returns>
         public static string GenerateParticipantId(string gameCode)
         {
+            // TODO Consider doing something similar for the participant's name - will probably have to use AJAX, I think.
+
             string[] letters = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
             int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
