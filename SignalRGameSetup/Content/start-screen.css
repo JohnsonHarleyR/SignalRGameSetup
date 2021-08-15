@@ -1,10 +1,15 @@
 ﻿:root {
-    --accentColor: blue;
-    --accentBorder: darkBlue;
+    --accentColor: #4AA1E7;
+    --accentBorder: #1865A3;
     --accentText: white;
     --sectionWidth: 300px;
     --sectionHeight: 200px;
     --upperHeight: 100px;
+}
+
+.break {
+    flex-basis: 100%;
+    height: 0;
 }
 
 #mainDiv {
@@ -64,6 +69,7 @@
             height: 100%;
             float: left;
             display: flex;
+            flex-wrap: wrap;
             justify-content: flex-end;
             align-items: flex-end;
             max-width: 100%;
@@ -91,14 +97,15 @@
             float: right;
         }
 
-        #contentSection #participantArea table th {
-            width: 50%;
-            border: 2px solid var(--accentBorder);
-            text-align: center;
-            font-size: smaller;
-            color: var(--accentText);
-            background-color: var(--accentColor);
-        }
+            #contentSection #participantArea table th {
+                width: 50%;
+                border: 2px solid var(--accentBorder);
+                text-align: center;
+                font-size: smaller;
+                color: var(--accentText);
+                background-color: var(--accentColor);
+                position: relative;
+            }
 
 /* Chat Stuff */
     #contentSection #chatArea {

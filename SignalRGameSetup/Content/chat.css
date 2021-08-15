@@ -1,7 +1,7 @@
 ﻿#chatArea {
     position: relative;
 }
-
+/* TODO fix the CSS code in here*/
     /* TODO change the wait room dimensions - keep the same for game room*/
     #chatArea.wait-room-chat {
         width: 48%;

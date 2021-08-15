@@ -8,11 +8,40 @@ function goToGame() {
     });
 }
 
+
+function updateEnterGameButton() {
+    // only let them use or see this button if they started the game
+    if (isStarter) {
+        // only let it be available if there are enough players for the game
+        if (gameSetup.Players.length < minimumPlayers) {
+
+            startGameBtn.disabled = true;
+            let howManyLeft = minimumPlayers - gameSetup.Players.length;
+            if (howManyLeft === 1) {
+                startGameBtn.innerHTML = 'Only ' + howManyLeft + ' player needed to start';
+            } else {
+                startGameBtn.innerHTML = 'only ' + howManyLeft + ' players needed to start';
+            }
+            
+        } else {
+            startGameBtn.disabled = false;
+            startGameBtn.innerHTML = 'Start Game';
+        }
+
+    } else {
+        startGameBtn.style.display = 'none';
+    }
+
+}
+
 // Creating a new room
 function newRoom(allowAudienceChoice) {
     console.log("New room.");
     clientName = enterName.value;
     console.log(clientName);
+
+    // if someone is creating a room, they are automatically a player
+    isStarter = true;
 
     // send to hub
     connection.server.newRoom({
@@ -157,6 +186,7 @@ function enterWaitRoom() {
 
 // update all the participants in a wait room - and anything else necessary
 function updateWaitRoom() {
+    updateEnterGameButton();
     updateWaitRoomPlayers();
     updateWaitRoomWatchers();
 }
@@ -218,6 +248,7 @@ var waitRoomWatchers = document.getElementById('waitRoomWatchers');
 var playersAvailable = document.getElementById('playersAvailable');
 var watchersAvailable = document.getElementById('watchersAvailable');
 
+var startGameBtn = document.getElementById('startGameBtn');
 
 // event handlers
 newRoomBtn.addEventListener("click", askAboutAudience);
@@ -232,3 +263,5 @@ joinAsWatcherBtn.addEventListener("click", joinAsWatcher);
 
 audienceModalClose.addEventListener("click", function () { allowAudienceModal.style.display = "none"; })
 codeModalClose.addEventListener("click", function () { gameCodeModal.style.display = "none"; })
+
+startGameBtn.addEventListener("click", goToGame)

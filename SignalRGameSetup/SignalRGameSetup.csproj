@@ -158,7 +158,6 @@
     <Compile Include="Hubs\SetupHub.cs" />
     <Compile Include="Logic\GameInformation.cs" />
     <Compile Include="Models\Chat\Containers\GameChat.cs" />
-    <Compile Include="Models\GameViewModel.cs" />
     <Compile Include="Models\Setup\Containers\ExistingRoom.cs" />
     <Compile Include="Models\Setup\Containers\GoToGamePage.cs" />
     <Compile Include="Models\Setup\Containers\JoinAsParticipant.cs" />

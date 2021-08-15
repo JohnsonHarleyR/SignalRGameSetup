@@ -25,7 +25,7 @@
 
         <p>
             <label>Please enter your name.</label>
-            <br />
+            <div class="break"></div> <!-- break to a new row -->
             <input id="enterName" type="text" />
         </p>
         <p>
@@ -74,6 +74,10 @@
             <div id="waitInfo">
                 <div id="infoContainer">
                     <h2>Code: <b id="roomCode"></b></h2>
+                    <button id="startGameBtn" type="button"
+                            class="btn">
+                        not enough players
+                    </button>
                 </div>
             </div>
         </div>
@@ -90,17 +94,20 @@
                 <table>
                     <tr>
                         <th>
-                            <h3>Playing</h3>
-                            <span class="available">
-                                Available: <span id="playersAvailable"></span>
-                            </span>
-
+                            <div>
+                                <h3>Playing</h3>
+                                <span class="available">
+                                    <span id="playersAvailable"></span> more can join
+                                </span>
+                            </div>
                         </th>
                         <th>
-                            <h3>Watching</h3>
-                            <span class="available">
-                                Available: <span id="watchersAvailable"></span>
-                            </span>
+                            <div>
+                                <h3>Watching</h3>
+                                <span class="available">
+                                    <span id="watchersAvailable"></span> more can join
+                                </span>
+                            </div>
 
                         </th>
                     </tr>
@@ -152,7 +159,9 @@
 
         var clientName; // this should be accessible to any needed javascript file
         var clientId;
+        var isStarter;
         var gameSetup;
+        var minimumPlayers = @GameInformation.MinimumPlayers;
         /*        var chat;*/
 
         // Start up the hub connection for setup
