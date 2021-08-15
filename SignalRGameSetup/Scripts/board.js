@@ -9,8 +9,8 @@ function addSquares(boardId) {
     // test adding one row
     let squareLength = 30
     let insideSquareLength = 30;
-    let xPos = 10; // starting spot
-    let yPos = 10;
+    let xPos = 5; // starting spot
+    let yPos = 5;
 
     // count rows
     for (let r = 0; r <= 10; r++) {
@@ -41,12 +41,12 @@ function addSquares(boardId) {
                 square.className = 'square';
 
                 // TODO consider adding a highlight to the inside square
-                //let insideSquare = document.createElement('div');
-                //insideSquare.className = 'inside-square';
+                let pegHole = document.createElement('div');
+                pegHole.className = 'peg-hole';
 
                 //// Add a peg hole too
 
-                //square.appendChild(insideSquare);
+                square.appendChild(pegHole);
 
             }
 
@@ -59,7 +59,7 @@ function addSquares(boardId) {
         yPos += squareLength + 5;
 
         // set the x position back to it's start
-        xPos = 10;
+        xPos = 5;
 
     }
 

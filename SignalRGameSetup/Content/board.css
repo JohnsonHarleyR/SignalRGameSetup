@@ -1,7 +1,7 @@
 ﻿:root {
     --squareLength: 30px;
     --backdropLength: 355px;
-    --insideSquareLength: 25px;
+    --holeDiameter: 13px;
     --boardColor: #256BA3;
     --darkAccent: #134165;
     --lightAccent: #60B1F2;
@@ -19,8 +19,8 @@
     flex-flow: column wrap;
     justify-content: space-around;
     align-content: space-around;*/
-    width: 400px;
-    height: 400px;
+    width: 395px;
+    height: 395px;
     background: var(--boardColor);
 }
 
@@ -29,8 +29,8 @@
         width: var(--backdropLength);
         height: var(--backdropLength);
         background: var(--darkAccent);
-        top: 40px;
-        left: 40px;
+        top: 35px;
+        left: 35px;
     }
 
 .square {
@@ -38,10 +38,11 @@
     height: var(--squareLength);
     background: var(--boardColor);
 }
-    .square > .inside-square {
-        width: var(--insideSquareLength);
-        height: var(--insideSquareLength);
-        background: var(--boardColor);
+    .square > .peg-hole {
+        width: var(--holeDiameter);
+        height: var(--holeDiameter);
+        border-radius: 50%;
+        background: var(--darkAccent);
     }
 
 .info-square {
