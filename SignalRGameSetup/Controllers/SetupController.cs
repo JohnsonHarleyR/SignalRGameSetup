@@ -1,4 +1,5 @@
-﻿using SignalRGameSetup.Models.Setup.Containers;
+﻿using SignalRGameSetup.Helpers.Setup;
+using SignalRGameSetup.Models.Setup.Containers;
 using System.Web.Mvc;
 
 namespace SignalRGameSetup.Controllers
@@ -14,8 +15,6 @@ namespace SignalRGameSetup.Controllers
 
         public ActionResult GoToGame(string gameCode, string participantId)
         {
-            // test this
-            ViewBag.Test = $"Setup: {gameCode}; Id: {participantId}";
 
             GoToGamePage container = new GoToGamePage()
             {
@@ -23,10 +22,13 @@ namespace SignalRGameSetup.Controllers
                 ParticipantId = participantId
             };
 
-            TempData["GameCode"] = gameCode;
-            TempData["ParticipantId"] = participantId;
+            // generate a second code to help with participant identity not getting lost
+            string callCode = SetupHelper.GenerateCode(5);
 
-            return RedirectToAction("New", "Game");
+            TempData[$"GameCode{callCode}"] = gameCode;
+            TempData[$"ParticipantId{callCode}"] = participantId;
+
+            return RedirectToAction("New", "Game", new { reference = callCode });
         }
 
 

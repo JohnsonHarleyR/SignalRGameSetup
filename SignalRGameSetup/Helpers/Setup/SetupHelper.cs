@@ -168,6 +168,43 @@ namespace SignalRGameSetup.Helpers.Setup
             repository.DeleteGameSetup(gameCode);
         }
 
+        /// <summary>
+        /// Generate a code with a given length of characters.
+        /// </summary>
+        /// <returns>Returns a generated code.</returns>
+        public static string GenerateCode(int length)
+        {
+            string[] letters = new string[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+            "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+            int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+
+            string code = "";
+
+            for (int i = 0; i < length; i++)
+            {
+                // first decide whether to generate a letter or number
+                int decision = random.Next(0, 3);
+                string newCharacter;
+                // grab random character
+                if (decision == 0)
+                {
+                    newCharacter = letters[random.Next(0, letters.Length)];
+                }
+                else if (decision == 1)
+                {
+                    newCharacter = numbers[random.Next(0, numbers.Length)].ToString();
+                }
+                else
+                {
+                    newCharacter = letters[random.Next(0, letters.Length)].ToLower();
+                }
+                // add it to the code
+                code += newCharacter;
+            }
+
+            // once an available code has been generated, return it
+            return code;
+        }
 
         /// <summary>
         /// Generate a code that will allow users to join a particular game.

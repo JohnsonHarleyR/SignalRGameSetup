@@ -5,11 +5,11 @@ namespace SignalRGameSetup.Controllers
     public class GameController : Controller
     {
 
-        public ActionResult New()
+        public ActionResult New(string reference)
         {
             // Put important participant info on the page
-            var gameCodeData = TempData["GameCode"];
-            var participantIdData = TempData["ParticipantId"];
+            var gameCodeData = TempData[$"GameCode{reference}"];
+            var participantIdData = TempData[$"ParticipantId{reference}"];
             string gameCode = null;
             string participantId = null;
             if (gameCodeData == null || participantIdData == null)
@@ -18,8 +18,8 @@ namespace SignalRGameSetup.Controllers
             }
             else
             {
-                gameCode = TempData["GameCode"].ToString();
-                participantId = TempData["ParticipantId"].ToString();
+                gameCode = TempData[$"GameCode{reference}"].ToString();
+                participantId = TempData[$"ParticipantId{reference}"].ToString();
             }
 
             ViewBag.GameCode = gameCode;
