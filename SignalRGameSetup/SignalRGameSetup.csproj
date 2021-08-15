@@ -148,16 +148,28 @@
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
     <Compile Include="Database\Repositories\ChatRepository.cs" />
     <Compile Include="Database\Repositories\SetupRepository.cs" />
+    <Compile Include="Enums\Game\GameEnums.cs" />
     <Compile Include="Enums\Setup\ActionEnums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Chat\ChatHelper.cs" />
+    <Compile Include="Helpers\Game\BoardHelper.cs" />
     <Compile Include="Helpers\Setup\SetupHelper.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\SetupHub.cs" />
     <Compile Include="Logic\GameInformation.cs" />
     <Compile Include="Models\Chat\Containers\GameChat.cs" />
+    <Compile Include="Models\Game\Board\FullBoard.cs" />
+    <Compile Include="Models\Game\Board\EnemyBoardHalf.cs" />
+    <Compile Include="Models\Game\Board\Pieces\BoardPosition.cs" />
+    <Compile Include="Models\Game\Board\Pieces\Peg.cs" />
+    <Compile Include="Models\Game\Board\Pieces\ShipPiece.cs" />
+    <Compile Include="Models\Game\Board\Pieces\Ship\ShipPosition.cs" />
+    <Compile Include="Models\Game\Board\PlayerBoardHalf.cs" />
+    <Compile Include="Models\Game\Interfaces\IBoard.cs" />
+    <Compile Include="Models\Game\Interfaces\IBoardHalf.cs" />
+    <Compile Include="Models\Game\Interfaces\IShipPiece.cs" />
     <Compile Include="Models\Setup\Containers\ExistingRoom.cs" />
     <Compile Include="Models\Setup\Containers\GoToGamePage.cs" />
     <Compile Include="Models\Setup\Containers\JoinAsParticipant.cs" />
@@ -183,8 +195,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\board.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="connectionstrings.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\chat.js" />
     <Content Include="Scripts\game.js" />
@@ -212,7 +226,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="connectionstrings.config" />
     <Content Include="Views\Setup\StartScreen.cshtml" />
     <Content Include="Views\Setup\WaitRoom.cshtml" />
     <Content Include="Views\Game\New.cshtml" />
