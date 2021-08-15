@@ -15,16 +15,41 @@
 @ViewBag.ParticipantId
 
 
-<div id="chatArea" class="game-room-chat">
+<div id="mainDiv">
 
-    <div id="chatContent">
 
-        <div id="chatMessages"></div>
+    <div id="gameArea">
 
-        <div id="addMessage">
-            <input type="text" id="messageInput" placeholder="Enter message here"
-                   onkeypress="checkIfEnterPressed(event)" />
-            <input type="button" id="addMessageBtn" value="Add" />
+
+        <div id="boardDiv">
+
+            <div id="enemyBoard" class="halfBoard">
+
+            </div>
+
+            <div id="playerBoard" class="halfBoard">
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div id="chatArea" class="game-room-chat">
+
+        <div id="chatContent">
+
+            <div id="chatMessages"></div>
+
+            <div id="addMessage">
+                <input type="text" id="messageInput" placeholder="Enter message here"
+                       onkeypress="checkIfEnterPressed(event)" />
+                <input type="button" id="addMessageBtn" value="Add" />
+            </div>
+
         </div>
 
     </div>
