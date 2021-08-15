@@ -184,6 +184,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\board.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -229,6 +230,7 @@
     <Content Include="Views\Setup\StartScreen.cshtml" />
     <Content Include="Views\Setup\WaitRoom.cshtml" />
     <Content Include="Views\Game\New.cshtml" />
+    <Content Include="Views\Game\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

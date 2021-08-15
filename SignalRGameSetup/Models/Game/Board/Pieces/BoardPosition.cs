@@ -1,5 +1,4 @@
 ﻿using SignalRGameSetup.Enums.Game;
-using SignalRGameSetup.Models.Game.Board.Pieces.Ship;
 
 namespace SignalRGameSetup.Models.Game.Board.Pieces
 {
@@ -17,21 +16,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         public int XPos { get { return _xPos; } }
         private YPosition _yPos;
         public YPosition YPos { get { return _yPos; } }
-        public bool HasShip
-        {
-            get
-            {
-                if (ShipPiece == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-        public ShipPosition ShipPiece { get; set; }
+        public bool HasShip { get; set; } = false;
         public bool HasPeg
         {
             get

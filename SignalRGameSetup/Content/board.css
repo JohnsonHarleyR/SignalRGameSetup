@@ -1,0 +1,56 @@
+﻿:root {
+    --squareLength: 30px;
+    --backdropLength: 355px;
+    --insideSquareLength: 25px;
+    --boardColor: #256BA3;
+    --darkAccent: #134165;
+    --lightAccent: #60B1F2;
+}
+
+#boardDiv {
+    justify-content: center;
+    display: flex;
+}
+
+.halfBoard {
+    position: relative;
+/*    display: flex;
+    flex-wrap: wrap;
+    flex-flow: column wrap;
+    justify-content: space-around;
+    align-content: space-around;*/
+    width: 400px;
+    height: 400px;
+    background: var(--boardColor);
+}
+
+    .halfBoard .backdrop-area {
+        position: absolute;
+        width: var(--backdropLength);
+        height: var(--backdropLength);
+        background: var(--darkAccent);
+        top: 40px;
+        left: 40px;
+    }
+
+.square {
+    width: var(--squareLength);
+    height: var(--squareLength);
+    background: var(--boardColor);
+}
+    .square > .inside-square {
+        width: var(--insideSquareLength);
+        height: var(--insideSquareLength);
+        background: var(--boardColor);
+    }
+
+.info-square {
+    width: var(--squareLength);
+    height: var(--squareLength);
+    background: var(--lightAccent); /*This is temporarily a weird color to just identify it*/
+}
+
+.empty-square {
+    width: var(--squareLength);
+    height: var(--squareLength);
+}

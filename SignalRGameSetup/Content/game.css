@@ -1,9 +1,1 @@
-﻿.root {
-    --boardColor: #391365;
-}
-
-.halfBoard {
-    width: 400px;
-    height: 400px;
-    background-color: var(--boardColor);
-}
+﻿

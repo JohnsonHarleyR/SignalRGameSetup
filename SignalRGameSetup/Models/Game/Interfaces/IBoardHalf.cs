@@ -4,7 +4,6 @@
     {
 
         string ParticipantId { get; set; }
-        int BoardSize { get; set; }
 
     }
 }
