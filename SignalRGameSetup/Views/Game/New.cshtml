@@ -1,4 +1,6 @@
-﻿
+﻿@using SignalRGameSetup.Models.Setup
+@model NewGameViewModel
+
 @{
     ViewBag.Title = "New";
 }
@@ -19,7 +21,9 @@
 
     <div id="chatContent">
 
-        <div id="chatMessages"></div>
+        <div id="chatMessages">
+            @Model.Chat.ChatHtml
+        </div>
 
         <div id="addMessage">
             <input type="text" id="messageInput" placeholder="Enter message here"
@@ -30,8 +34,7 @@
     </div>
 
 </div>
-
-
+            
 
 
 @section Scripts {
@@ -39,8 +42,10 @@
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript">
 
+                        @*document.getElementById('chatMessages').innerHTML = @Model.Chat.ChatHtml;*@
+
         var clientName; // this should be accessible to any needed javascript file
-        var clientId;
+        var clientId = '@Model.ParticipantId';
         var gameSetup;
 
         // Start up the hub connection for setup
@@ -62,8 +67,8 @@
 
             setupHub.client.connectTheChat = function () {
                 chat.server.connectToGame({
-                    gameCode: '@ViewBag.GameCode',
-                    ParticipantId: '@ViewBag.ParticipantId'
+                    gameCode: '@Model.GameCode',
+                    ParticipantId: '@Model.ParticipantId'
                 });
             }
 
@@ -82,14 +87,25 @@
                 showChatHtml(gameChat.ChatHtml, gameChat.DoSaveAfterShow);
             }
 
+            chat.client.updateGameSetup = function (setup) {
+                console.log('updating setup');
+                gameSetup = setup;
+            }
+
             // start connection
             $.connection.hub.start().done(function () {
                 console.log('starting');
 
                 // set the game up
                 setupHub.server.connectToGame({
-                    gameCode: '@ViewBag.GameCode',
-                    ParticipantId: '@ViewBag.ParticipantId'
+                    gameCode: '@Model.GameCode',
+                    ParticipantId: '@Model.ParticipantId'
+                });
+
+                console.log('connecting chat');
+                chat.server.connectToGame({
+                    gameCode: '@Model.GameCode',
+                    ParticipantId: '@Model.ParticipantId'
                 });
             });
 

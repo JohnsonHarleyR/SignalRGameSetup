@@ -166,6 +166,7 @@
     <Compile Include="Models\Chat\Containers\Participant.cs" />
     <Compile Include="Models\Setup\GameSetup.cs" />
     <Compile Include="Models\Setup\Interfaces\IParticipant.cs" />
+    <Compile Include="Models\Setup\NewGameViewModel.cs" />
     <Compile Include="Models\Setup\Player.cs" />
     <Compile Include="Models\Setup\Watcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

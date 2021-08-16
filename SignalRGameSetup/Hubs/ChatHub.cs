@@ -22,11 +22,36 @@ namespace SignalRGameSetup.Hubs
             // get the setup and participant in order to set the correct bool
             GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
             IParticipant participant = SetupHelper.GetParticipantById(setup, info.ParticipantId);
+            //bool IsFound = false;
+            //foreach (var p in setup.Players)
+            //{
+            //    if (p.ParticipantId == participant.ParticipantId)
+            //    {
+            //        p.IsEnteringGameChat = false;
+            //        IsFound = true;
+            //        break;
+            //    }
+            //}
+            //if (!IsFound)
+            //{
+            //    foreach (var w in setup.Watchers)
+            //    {
+            //        if (w.ParticipantId == participant.ParticipantId)
+            //        {
+            //            w.IsEnteringGameChat = false;
+            //            IsFound = true;
+            //            break;
+            //        }
+            //    }
+            //}
             participant.IsEnteringGameChat = false;
             SetupHelper.UpdateGameSetup(setup);
 
             // Add to chat group
             Groups.Add(Context.ConnectionId, info.GameCode);
+
+            // update setup for everyone
+            Clients.Client(Context.ConnectionId).updateGameSetup(setup);
 
             Clients.Client(Context.ConnectionId).loadTheChat(chat);
 

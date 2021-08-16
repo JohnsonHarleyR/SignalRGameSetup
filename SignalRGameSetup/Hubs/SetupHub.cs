@@ -54,10 +54,10 @@ namespace SignalRGameSetup.Hubs
             Groups.Add(Context.ConnectionId, setup.GameCode);
 
             // update info on game page for everyone
-            Clients.Group(setup.GameCode).updateGameSetup(setup);
+            Clients.Client(Context.ConnectionId).updateGameSetup(setup);
 
-            // load the chat for everyone
-            Clients.Group(setup.GameCode).connectTheChat();
+            //// load the chat for everyone
+            //return Clients.Group(setup.GameCode).connectTheChat();
         }
 
 
