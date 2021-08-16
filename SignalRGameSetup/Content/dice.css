@@ -1,0 +1,115 @@
+﻿
+
+
+#dice-area {
+    border: 2px solid black;
+    width: 75%;
+}
+
+#roll-info {
+    position: relative;
+    text-align: right;
+    margin-right: 5%;
+    padding-top: 5%;
+}
+
+#roll-buttons {
+    padding-bottom: 5%;
+    position: relative;
+    text-align: center;
+}
+
+#roll-all {
+    display: inline;
+}
+
+#roll-selected {
+    display: none;
+}
+
+#roll-buttons .btn {
+    border: 2px solid black;
+    font-size: xx-large;
+    width: 20%;
+    height: 15%;
+}
+
+#dice-display {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-content: space-between;
+    justify-content: center;
+}
+
+
+
+.die {
+    width: 210px;
+    height: 210px;
+    border-radius: 10%;
+    background-color: #afe695;
+    background: linear-gradient(135deg, #cef7ba, #68cf4f);
+/*    background: rgb(0,212,255);
+    background: linear-gradient(135deg, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 35%, rgba(2,0,36,1) 100%);*/
+    border: 2px solid black;
+    position: relative;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.selected {
+    margin: 3px;
+    border: 7px solid red;
+    border-radius: 10%;
+}
+
+.outside {
+    margin: 10px;
+}
+
+
+.die-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: black;
+    position: absolute;
+}
+
+.circle1 {
+    left: 10px;
+    top: 10px;
+}
+
+.circle2 {
+    left: 10px;
+    top: 75px;
+}
+
+.circle3 {
+    left: 10px;
+    top: 140px;
+}
+
+.circle4 {
+    left: 75px;
+    top: 75px;
+}
+
+.circle5 {
+    left: 140px;
+    top: 10px;
+}
+
+.circle6 {
+    left: 140px;
+    top: 75px;
+}
+
+.circle7 {
+    left: 140px;
+    top: 140px;
+}

@@ -1,0 +1,119 @@
+﻿@*@model List<Games.Models.DiceViewModel>*@
+
+@Styles.Render("~/Style/dice.css")
+
+
+<!-- Store the information from the previous dice roll -->
+<script>
+
+    var dice = jModel.Dice;
+
+</script>
+
+
+<div id="dice-area">
+
+    <!-- Show the roll number -->
+    <h2 id="roll-info">
+        <b>Rolls left: </b><span id="roll-number" onchange="getTheoreticalScores()">
+            @Model.CurrentPlayer.RollsLeft
+        </span>
+    </h2>
+
+
+
+
+    <!-- Show 5 dice that will be rolled -->
+
+    <div id="dice-display">
+
+        <!-- TODO turn this into a loop to auto generate each one-->
+
+        <div class="outside" id="die0-border">
+            <div class="die" id="die0" onclick="clickDie(0)">
+                <div class="die-circle circle1" id="d0-c1"></div>
+                <div class="die-circle circle2" id="d0-c2"></div>
+                <div class="die-circle circle3" id="d0-c3"></div>
+                <div class="die-circle circle4" id="d0-c4"></div>
+                <div class="die-circle circle5" id="d0-c5"></div>
+                <div class="die-circle circle6" id="d0-c6"></div>
+                <div class="die-circle circle7" id="d0-c7"></div>
+            </div>
+        </div>
+
+
+        <div class="outside" id="die1-border">
+            <div class="die" id="die1" onclick="clickDie(1)">
+                <div class="die-circle circle1" id="d1-c1"></div>
+                <div class="die-circle circle2" id="d1-c2"></div>
+                <div class="die-circle circle3" id="d1-c3"></div>
+                <div class="die-circle circle4" id="d1-c4"></div>
+                <div class="die-circle circle5" id="d1-c5"></div>
+                <div class="die-circle circle6" id="d1-c6"></div>
+                <div class="die-circle circle7" id="d1-c7"></div>
+            </div>
+        </div>
+
+
+        <div class="outside" id="die2-border">
+            <div class="die" id="die2" onclick="clickDie(2)">
+                <div class="die-circle circle1" id="d2-c1"></div>
+                <div class="die-circle circle2" id="d2-c2"></div>
+                <div class="die-circle circle3" id="d2-c3"></div>
+                <div class="die-circle circle4" id="d2-c4"></div>
+                <div class="die-circle circle5" id="d2-c5"></div>
+                <div class="die-circle circle6" id="d2-c6"></div>
+                <div class="die-circle circle7" id="d2-c7"></div>
+            </div>
+        </div>
+
+
+        <div class="outside" id="die3-border">
+            <div class="die" id="die3" onclick="clickDie(3)">
+                <div class="die-circle circle1" id="d3-c1"></div>
+                <div class="die-circle circle2" id="d3-c2"></div>
+                <div class="die-circle circle3" id="d3-c3"></div>
+                <div class="die-circle circle4" id="d3-c4"></div>
+                <div class="die-circle circle5" id="d3-c5"></div>
+                <div class="die-circle circle6" id="d3-c6"></div>
+                <div class="die-circle circle7" id="d3-c7"></div>
+            </div>
+        </div>
+
+
+        <div class="outside" id="die4-border">
+            <div class="die" id="die4" onclick="clickDie(4)">
+                <div class="die-circle circle1" id="d4-c1"></div>
+                <div class="die-circle circle2" id="d4-c2"></div>
+                <div class="die-circle circle3" id="d4-c3"></div>
+                <div class="die-circle circle4" id="d4-c4"></div>
+                <div class="die-circle circle5" id="d4-c5"></div>
+                <div class="die-circle circle6" id="d4-c6"></div>
+                <div class="die-circle circle7" id="d4-c7"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Show the roll buttons -->
+
+    <div id="roll-buttons">
+        <button type="button" id="roll-selected" onclick="rollSelectedDice()" class="btn btn-default">Roll Selected</button>
+        <button type="button" id="roll-all" onclick="rollAllDice()" class="btn btn-default">Roll All</button><br />
+        <button type="button" id="finish" onclick="stopRolling()" class="btn btn-default">Stop Rolling</button>
+    </div>
+
+    <div id="dice-message">
+        Text here to show a message about what is happening...
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+@Scripts.Render("~/Scripts/dice.js")

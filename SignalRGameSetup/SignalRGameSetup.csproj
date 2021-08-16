@@ -143,21 +143,34 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\ScoreController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Database\Dtos\GameChatDto.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
+    <Compile Include="Database\Dtos\Game\DieDto.cs" />
+    <Compile Include="Database\Dtos\Game\YahtzeeGameDto.cs" />
+    <Compile Include="Database\Dtos\Game\ScoreSheetDto.cs" />
+    <Compile Include="Database\Dtos\Game\YahtzeePlayerDto.cs" />
     <Compile Include="Database\Repositories\ChatRepository.cs" />
+    <Compile Include="Database\Repositories\GameRepository.cs" />
     <Compile Include="Database\Repositories\SetupRepository.cs" />
     <Compile Include="Enums\Setup\ActionEnums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Chat\ChatHelper.cs" />
+    <Compile Include="Helpers\Game\GameHelper.cs" />
+    <Compile Include="Helpers\Game\MiscGameMethods.cs" />
+    <Compile Include="Helpers\Game\ScoreCalculator.cs" />
     <Compile Include="Helpers\Setup\SetupHelper.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\SetupHub.cs" />
     <Compile Include="Logic\GameInformation.cs" />
     <Compile Include="Models\Chat\Containers\GameChat.cs" />
+    <Compile Include="Models\Game\Die.cs" />
+    <Compile Include="Models\Game\YahtzeeGame.cs" />
+    <Compile Include="Models\Game\ScoreSheet.cs" />
+    <Compile Include="Models\Game\YahtzeePlayer.cs" />
     <Compile Include="Models\Setup\Containers\ExistingRoom.cs" />
     <Compile Include="Models\Setup\Containers\GoToGamePage.cs" />
     <Compile Include="Models\Setup\Containers\JoinAsParticipant.cs" />
@@ -178,7 +191,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\chat.css" />
+    <Content Include="Content\dice.css" />
     <Content Include="Content\game.css" />
+    <Content Include="Content\scoresheet.css" />
     <Content Include="Content\start-screen.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -217,11 +232,14 @@
     <Content Include="Views\Setup\StartScreen.cshtml" />
     <Content Include="Views\Setup\WaitRoom.cshtml" />
     <Content Include="Views\Game\New.cshtml" />
+    <Content Include="Views\Shared\_Dice.cshtml" />
+    <Content Include="Views\Shared\_Scoresheet.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Database\SQL\Procedures\" />
     <Folder Include="Database\SQL\Tables\" />
+    <Folder Include="Views\Score\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

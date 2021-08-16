@@ -1,0 +1,252 @@
+﻿
+
+@Styles.Render("~/Style/scoresheet.css")
+
+
+
+<!-- Render the score table for the current player -->
+<h3 id="score-title">@(Model.CurrentPlayer.Name)</h3>
+<a id="score-link"
+   onclick="window.open('Home/AllScores','name','width=600,height=400')">See all score sheets</a>
+<table class="table table-bordered" id="score-table">
+
+
+    <tr>
+        <th id="upper-section-label"><b>Upper Section</b></th>
+        <th id="instruction-label"><b>Instructions</b></th>
+        <th id="score-label"><b>Score</b></th>
+    </tr>
+
+
+
+
+    <!-- Upper section -->
+    <tr>
+        <td id="aces-label"><b>Aces</b></td>
+        <td id="aces-instruction">Count and add only Aces</td>
+        <td id="aces-score" class="not-null">
+            @(Model.CurrentPlayer.Scoresheet.Aces)
+
+        </td>
+    </tr>
+
+    <tr>
+        <td id="twos-label"><b>Twos</b></td>
+        <td id="twos-instruction">Count and add only Twos</td>
+        <td id="twos-score" class="not-null">
+            @(Model.CurrentPlayer.Scoresheet.Twos)
+
+        </td>
+    </tr>
+
+    <tr>
+        <td id="threes-label"><b>Threes</b></td>
+        <td id="threes-instruction">Count and add only Threes</td>
+        <td id="threes-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.Threes)</td>
+    </tr>
+
+    <tr>
+        <td id="fours-label"><b>Fours</b></td>
+        <td id="fours-instruction">Count and add only Fours</td>
+        <td id="fours-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.Fours)</td>
+    </tr>
+
+    <tr>
+        <td id="fives-label"><b>Fives</b></td>
+        <td id="fives-instruction">Count and add only Fives</td>
+        <td id="fives-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.Fives)</td>
+    </tr>
+
+    <tr>
+        <td id="sixes-label"><b>Sixes</b></td>
+        <td id="sixes-instruction">Count and add only Sixes</td>
+        <td id="sixes-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.Sixes)</td>
+    </tr>
+
+    <!-- Upper totals and bonus -->
+    <tr>
+        <td id="uppertotalbeforebonus-label"><b>Total Score</b></td>
+        <td id="uppertotalbeforebonus-instruction"><b>--></b></td>
+        <td id="uppertotalbeforebonus-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.UpperTotalBeforeBonus)</td>
+    </tr>
+
+    <tr>
+        <td id="upperbonus-label"><b>Bonus</b></td>
+        <td id="upperbonus-instruction">Score 35<br /><i>(If total score is 63 or over)</i></td>
+        <td id="upperbonus-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.UpperBonus)</td>
+    </tr>
+
+    <tr>
+        <td id="uppertotalfinal-label"><b>Final Total</b></td>
+        <td id="uppertotalfinal-instruction"><b>--></b><br /><i>(Of Upper Section)</i></td>
+        <td id="uppertotalfinal-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.UpperTotalFinal)</td>
+    </tr>
+
+    <!-- Lower Section -->
+    <tr>
+        <th id="lower-section-label"><b>Lower Section</b></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    <tr>
+        <td id="threeofakind-label"><b>Three of a Kind</b></td>
+        <td id="threeofakind-instruction">Add total of all dice</td>
+        <td id="threeofakind-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.ThreeOfAKind)</td>
+    </tr>
+
+    <tr>
+        <td id="fourofakind-label"><b>Four of a Kind</b></td>
+        <td id="fourofakind-instruction">Add total of all dice</td>
+        <td id="fourofakind-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.FourOfAKind)</td>
+    </tr>
+
+    <tr>
+        <td id="fullhouse-label"><b>Full House</b></td>
+        <td id="fullhouse-instruction">Score 25</td>
+        <td id="fullhouse-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.FullHouse)</td>
+    </tr>
+
+    <tr>
+        <td id="smallstraight-label"><b>Small Straight</b></td>
+        <td id="smallstraight-instruction">Score 30<br /><i>(Sequence of 4)</i></td>
+        <td id="smallstraight-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.SmallStraight)</td>
+    </tr>
+
+    <tr>
+        <td id="largestraight-label"><b>Large Straight</b></td>
+        <td id="largestraight-instruction">Score 40<br /><i>(Sequence of 5)</i></td>
+        <td id="largestraight-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.LargeStraight)</td>
+    </tr>
+
+    <tr>
+        <td id="chance-label"><b>Chance</b></td>
+        <td id="chance-instruction">Score total of all 5 dice</td>
+        <td id="chance-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.Chance)</td>
+    </tr>
+
+    <tr>
+        <td id="yahtzee-label"><b>Yahtzee</b></td>
+        <td id="yahtzee-instruction">Score 50<br /><i>(5 of a kind)</i></td>
+        <td id="yahtzee-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.Yahtzee)</td>
+    </tr>
+
+    <tr>
+        <td id="yahtzeebonus-label"><b>Yahtzee Bonus</b></td>
+        <td id="yahtzeebonus-instruction">Score 100 per bonus</td>
+        <td id="yahtzeebonus-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.YahtzeeBonus)</td>
+    </tr>
+
+    <tr>
+        <td id="yahtzeebonuscount-label"></td>
+        <td id="yahtzeebonuscount-instruction">Count</td>
+        <td id="yahtzeebonuscount-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.YahtzeeBonusCount)</td>
+    </tr>
+
+
+
+    <!-- Lower and other totals -->
+
+    <tr>
+        <td id="lowertotal-label"><b>Total</b></td>
+        <td id="lowertotal-instruction"><b>--></b><br /><i>(Of Lower Section)</i></td>
+        <td id="lowertotal-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.LowerTotal)</td>
+    </tr>
+
+    <tr>
+        <td id="uppertotal-label"><b>Total</b></td>
+        <td id="uppertotal-instruction"><b>--></b><br /><i>(Of Upper Section)</i></td>
+        <td id="uppertotal-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.UpperTotalFinal)</td>
+    </tr>
+
+    <tr>
+        <td id="grandtotal-label"><b>Grand Total</b></td>
+        <td id="grandtotal-instruction"><b>--></b></td>
+        <td id="grandtotal-score" class="not-null">@(Model.CurrentPlayer.Scoresheet.GrandTotal)</td>
+    </tr>
+
+
+</table>
+
+<!-- Change class of table properties that are null-->
+@foreach (var property in Model.CurrentPlayer.Scoresheet.GetType().GetProperties())
+{
+    if (property.GetValue(Model.CurrentPlayer.Scoresheet) == null && property.Name != "YahtzeeBonusCount")
+    {
+
+        <script>
+    @*let element = document.getElementById('@(property.Name.ToLower())-score');
+            element.ClassName = "null";*@
+    document.getElementById('@(property.Name.ToLower())-score').ClassName = "is-null";
+    document.getElementById('@(property.Name.ToLower())-score').style.color = "blue";
+    console.log(document.getElementById('@(property.Name.ToLower())-score').ClassName);
+        </script>
+
+        // now check if there's a theoretical scoresheet or not - if there is, fill those null values
+
+    }
+}
+
+
+
+
+
+
+@*function fillScores() { // fill blanks with main scoresheet model
+
+        console.log("Filling scores");
+        console.log('Aces: @(Model.CurrentPlayer.Scoresheet.Aces)');
+        document.getElementById('aces-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Aces)';
+        document.getElementById('twos-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Twos)';
+        document.getElementById('threes-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Threes)';
+        document.getElementById('fours-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Fours)';
+        document.getElementById('fives-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Fives)';
+        document.getElementById('sixes-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Sixes)';
+        document.getElementById('uppertotalbeforebonus-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.UpperTotalBeforeBonus)';
+        document.getElementById('upperbonus-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.UpperBonus)';
+        document.getElementById('uppertotalfinal-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.UpperTotalFinal)';
+        document.getElementById('threeofakind-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.ThreeOfAKind)';
+        document.getElementById('fourofakind-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.FourOfAKind)';
+        document.getElementById('fullhouse-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.FullHouse)';
+        document.getElementById('smallstraight-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.SmallStraight)';
+        document.getElementById('largestraight-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.LargeStraight)';
+        document.getElementById('chance-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Chance)';
+        document.getElementById('yahtzee-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.Yahtzee)';
+        document.getElementById('yahtzeebonus-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.YahtzeeBonus)';
+        document.getElementById('yahtzeebonuscount-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.YahtzeeBonusCount)';
+        document.getElementById('lowertotal-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.LowerTotal)';
+        document.getElementById('uppertotal-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.UpperTotalFinal)';
+        document.getElementById('grandtotal-score').innerHTML = '@(Model.CurrentPlayer.Scoresheet.GrandTotal)';
+    }*@
+
+
+@*if (@(Model.CurrentPlayer.TheoreticalScores != null)) {
+
+        console.log("Filling scores");
+    console.log('Aces: @(Model.CurrentPlayer.TheoreticalScores.Aces)');
+    document.getElementById('aces-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Aces)';
+    document.getElementById('twos-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Twos)';
+    document.getElementById('threes-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Threes)';
+    document.getElementById('fours-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Fours)';
+    document.getElementById('fives-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Fives)';
+    document.getElementById('sixes-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Sixes)';
+    document.getElementById('uppertotalbeforebonus-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.UpperTotalBeforeBonus)';
+    document.getElementById('upperbonus-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.UpperBonus)';
+    document.getElementById('uppertotalfinal-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.UpperTotalFinal)';
+    document.getElementById('threeofakind-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.ThreeOfAKind)';
+    document.getElementById('fourofakind-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.FourOfAKind)';
+    document.getElementById('fullhouse-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.FullHouse)';
+    document.getElementById('smallstraight-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.SmallStraight)';
+    document.getElementById('largestraight-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.LargeStraight)';
+    document.getElementById('chance-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Chance)';
+    document.getElementById('yahtzee-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.Yahtzee)';
+    document.getElementById('yahtzeebonus-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.YahtzeeBonus)';
+    document.getElementById('yahtzeebonuscount-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.YahtzeeBonusCount)';
+    document.getElementById('lowertotal-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.LowerTotal)';
+    document.getElementById('uppertotal-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.UpperTotalFinal)';
+    document.getElementById('grandtotal-score').innerHTML = '@(Model.CurrentPlayer.TheoreticalScores.GrandTotal)';
+
+
+    }*@
+
+

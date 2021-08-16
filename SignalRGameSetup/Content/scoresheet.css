@@ -1,0 +1,50 @@
+﻿body {
+}
+
+/* Set choose button to hidden by default - this will change after dice are all rolled if the function is called to do so */
+.choose-btn {
+    display: none;
+}
+
+/* values that aren't null should be displayed in black */
+.not-null {
+    color: black;
+}
+
+/* theoretical values that are null should be blue - this will show values after dice are all rolled */
+.is-null {
+    color: blue;
+}
+
+#score-table {
+    border: 2px solid black;
+    width: 40%;
+    table-layout: fixed;
+    
+}
+
+td {
+    border: 2px solid black;
+    font-size: medium;
+}
+
+td:last-child {
+    border-left: none;
+}
+
+.all-scores {
+    display: flex;
+}
+
+.mini-table-div {
+    width: 45%;
+}
+
+.mini-table {
+    border: 2px solid black;
+    table-layout: fixed;
+}
+
+.foot {
+    display: none;
+}

@@ -7,6 +7,18 @@ namespace SignalRGameSetup.Controllers
 {
     public class GameController : Controller
     {
+        // TODO Move unit tests from old project into this one
+
+        // TODO Add button on main page for players to start a new game - add a "are you sure?" message
+        // TODO store all game information into a table that can be accessed later
+        // TODO  when page first loads (session?) ask user if they want to start a new game or load the previous game
+        // TODO Add a high score table
+        // TODO Add a page once somebody wins to say the winner
+        // TODO Allow user to log in and track their stats? (maybe not, idk - long term maybe)
+
+        // TODO solve issue with maximum request length being exceeded (?)
+
+        // TODO remove all unnecessary code and commented out stuff and also references at top
 
         //[HttpPost]
         public ActionResult New(GoToGamePage container)
