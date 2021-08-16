@@ -59,6 +59,49 @@ namespace SignalRGameSetup.Helpers.Setup
 
         }
 
+        // overloaded method
+        public static IParticipant GetParticipantById(GameSetup setup, string participantId)
+        {
+
+            // if the setup is null, either the setup is still being created or it is
+            // an invalid code. Either way, return null.
+            if (setup == null)
+            {
+                return null;
+            }
+
+            IParticipant participant = null;
+
+            // first look through the players
+            foreach (var player in setup.Players)
+            {
+                if (player.ParticipantId == participantId)
+                {
+                    // if it matches, grab the player
+                    participant = player;
+                    break;
+                }
+            }
+
+            // if participant is still null, check the watchers
+            if (participant == null)
+            {
+                foreach (var watcher in setup.Watchers)
+                {
+                    if (watcher.ParticipantId == participantId)
+                    {
+                        // if it matches, grab the watcher
+                        participant = watcher;
+                        break;
+                    }
+                }
+            }
+
+            // return the result
+            return participant;
+
+        }
+
         public static IParticipant GetParticipantByConnectionId(string gameCode, string participantId)
         {
             // get the setup based on the game code

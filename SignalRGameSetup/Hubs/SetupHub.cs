@@ -34,10 +34,15 @@ namespace SignalRGameSetup.Hubs
             {
                 // TODO make sure this updates the setup correctly!!
                 participant.ConnectionId = Context.ConnectionId;
+
+                // indicate the participant is no longer entering the game
+                participant.IsEnteringGameSetup = false;
+
             }
 
-            // change the setup to work properly if there's a disconnection
-            setup.LeaveInDatabase = false;
+            //// change the setup to work properly if there's a disconnection
+            //setup.LeaveInDatabase = false;
+
 
             // save the setup
             SetupHelper.UpdateGameSetup(setup);
@@ -65,7 +70,22 @@ namespace SignalRGameSetup.Hubs
             GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
 
             // Try this... don't allow setup to be deleted, then redirect to game page
-            setup.LeaveInDatabase = true; // TODO set this back to false when directed to game page
+            //setup.LeaveInDatabase = true; // TODO set this back to false when directed to game page
+
+            // New way - get all participants and set it so that they are entering a new game
+            foreach (var player in setup.Players)
+            {
+                player.IsEnteringGameSetup = true;
+                player.IsEnteringGameChat = true;
+            }
+            foreach (var watcher in setup.Watchers)
+            {
+                watcher.IsEnteringGameSetup = true;
+                watcher.IsEnteringGameChat = true;
+            }
+            //IParticipant participant = SetupHelper.GetParticipantById(setup, info.ParticipantId);
+            //participant.IsEnteringGame = true;
+
             SetupHelper.UpdateGameSetup(setup);
 
             // go back to setup page and have everyone direct to game page
@@ -97,7 +117,8 @@ namespace SignalRGameSetup.Hubs
                     // get the setup based on the game code
                     GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-                    if (setup != null && setup.LeaveInDatabase == false)
+                    if (setup != null)
+                    //if (setup != null && setup.LeaveInDatabase == false)
                     {
                         // first look through the players
                         foreach (var player in setup.Players)
@@ -106,7 +127,11 @@ namespace SignalRGameSetup.Hubs
                             {
                                 // if it matches, remove that player
                                 foundParticipant = player;
-                                setup.Players.Remove(player);
+                                // if the participant isn't entering an new game, remove
+                                if (!foundParticipant.IsEnteringGameSetup)
+                                {
+                                    setup.Players.Remove(player);
+                                }
                                 break;
                             }
                         }
@@ -123,7 +148,11 @@ namespace SignalRGameSetup.Hubs
                                 {
                                     // if it matches, remove that watcher
                                     foundParticipant = watcher;
-                                    setup.Watchers.Remove(watcher);
+                                    // if the participant isn't entering an new game, remove
+                                    if (!foundParticipant.IsEnteringGameSetup)
+                                    {
+                                        setup.Watchers.Remove(watcher);
+                                    }
                                     break;
                                 }
                             }

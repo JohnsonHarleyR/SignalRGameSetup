@@ -19,6 +19,12 @@ namespace SignalRGameSetup.Hubs
             // get the correct chat
             GameChat chat = ChatHelper.GetChatByGameCode(info.GameCode);
 
+            // get the setup and participant in order to set the correct bool
+            GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
+            IParticipant participant = SetupHelper.GetParticipantById(setup, info.ParticipantId);
+            participant.IsEnteringGameChat = false;
+            SetupHelper.UpdateGameSetup(setup);
+
             // Add to chat group
             Groups.Add(Context.ConnectionId, info.GameCode);
 
@@ -77,30 +83,27 @@ namespace SignalRGameSetup.Hubs
 
 
                 // if the values are not null, add notice saying the player has left the chat
-                if (gameCode != null && participantId != null)
+                if (gameCode != null && participantId != null && participant != null)
                 {
 
                     // get the game setup and check it before doing this
                     GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-                    if (!setup.LeaveInDatabase)
+                    // get the chat based on the game code
+                    GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+
+                    if (participant != null && !participant.IsEnteringGameChat)
                     {
-                        // get the chat based on the game code
-                        GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+                        // add a notice saying the player has left
+                        chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
+                            "red");
 
-                        if (participant != null)
-                        {
-                            // add a notice saying the player has left
-                            chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
-                                "red");
+                        // now save the chat
+                        ChatHelper.SaveChat(chat);
 
-                            // now save the chat
-                            ChatHelper.SaveChat(chat);
-
-                            // now load the new chat for everyone
-                            chat.DoSaveAfterShow = true;
-                            Clients.Group(gameCode).loadTheChat(chat);
-                        }
+                        // now load the new chat for everyone
+                        chat.DoSaveAfterShow = true;
+                        Clients.Group(gameCode).loadTheChat(chat);
                     }
                 }
 
