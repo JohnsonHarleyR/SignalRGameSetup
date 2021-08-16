@@ -9,6 +9,8 @@ namespace SignalRGameSetup.Models.Setup
         public string ParticipantId { get; set; }
         public string ConnectionId { get; set; }
         public string GameCode { get; set; }
+        public bool IsEnteringGameSetup { get; set; }
+        public bool IsEnteringGameChat { get; set; }
 
         public Watcher()
         {

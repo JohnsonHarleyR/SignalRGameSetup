@@ -19,8 +19,39 @@ namespace SignalRGameSetup.Hubs
             // get the correct chat
             GameChat chat = ChatHelper.GetChatByGameCode(info.GameCode);
 
+            // get the setup and participant in order to set the correct bool
+            GameSetup setup = SetupHelper.GetSetupByGameCode(info.GameCode);
+            IParticipant participant = SetupHelper.GetParticipantById(setup, info.ParticipantId);
+            //bool IsFound = false;
+            //foreach (var p in setup.Players)
+            //{
+            //    if (p.ParticipantId == participant.ParticipantId)
+            //    {
+            //        p.IsEnteringGameChat = false;
+            //        IsFound = true;
+            //        break;
+            //    }
+            //}
+            //if (!IsFound)
+            //{
+            //    foreach (var w in setup.Watchers)
+            //    {
+            //        if (w.ParticipantId == participant.ParticipantId)
+            //        {
+            //            w.IsEnteringGameChat = false;
+            //            IsFound = true;
+            //            break;
+            //        }
+            //    }
+            //}
+            participant.IsEnteringGameChat = false;
+            SetupHelper.UpdateGameSetup(setup);
+
             // Add to chat group
             Groups.Add(Context.ConnectionId, info.GameCode);
+
+            // update setup for everyone
+            Clients.Client(Context.ConnectionId).updateGameSetup(setup);
 
             Clients.Client(Context.ConnectionId).loadTheChat(chat);
 
@@ -77,30 +108,27 @@ namespace SignalRGameSetup.Hubs
 
 
                 // if the values are not null, add notice saying the player has left the chat
-                if (gameCode != null && participantId != null)
+                if (gameCode != null && participantId != null && participant != null)
                 {
 
                     // get the game setup and check it before doing this
                     GameSetup setup = SetupHelper.GetSetupByGameCode(gameCode);
 
-                    if (!setup.LeaveInDatabase)
+                    // get the chat based on the game code
+                    GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+
+                    if (participant != null && !participant.IsEnteringGameChat)
                     {
-                        // get the chat based on the game code
-                        GameChat chat = ChatHelper.GetChatByGameCode(gameCode);
+                        // add a notice saying the player has left
+                        chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
+                            "red");
 
-                        if (participant != null)
-                        {
-                            // add a notice saying the player has left
-                            chat.ChatHtml += ChatHelper.GetNoticeString($"{participant.Name} has left the room!",
-                                "red");
+                        // now save the chat
+                        ChatHelper.SaveChat(chat);
 
-                            // now save the chat
-                            ChatHelper.SaveChat(chat);
-
-                            // now load the new chat for everyone
-                            chat.DoSaveAfterShow = true;
-                            Clients.Group(gameCode).loadTheChat(chat);
-                        }
+                        // now load the new chat for everyone
+                        chat.DoSaveAfterShow = true;
+                        Clients.Group(gameCode).loadTheChat(chat);
                     }
                 }
 

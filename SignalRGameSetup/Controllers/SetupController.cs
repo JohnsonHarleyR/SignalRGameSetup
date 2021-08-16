@@ -1,6 +1,4 @@
-﻿using SignalRGameSetup.Helpers.Setup;
-using SignalRGameSetup.Models.Setup.Containers;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace SignalRGameSetup.Controllers
 {
@@ -13,23 +11,28 @@ namespace SignalRGameSetup.Controllers
             return View();
         }
 
-        public ActionResult GoToGame(string gameCode, string participantId)
-        {
+        //    public ActionResult GoToGame(string gameCode, string participantId)
+        //    {
 
-            GoToGamePage container = new GoToGamePage()
-            {
-                GameCode = gameCode,
-                ParticipantId = participantId
-            };
+        //        GoToGamePage container = new GoToGamePage()
+        //        {
+        //            GameCode = gameCode,
+        //            ParticipantId = participantId
+        //        };
 
-            // generate a second code to help with participant identity not getting lost
-            string callCode = SetupHelper.GenerateCode(5);
+        //        //// generate a second code to help with participant identity not getting lost
+        //        //string callCode = SetupHelper.GenerateCode(5);
 
-            TempData[$"GameCode{callCode}"] = gameCode;
-            TempData[$"ParticipantId{callCode}"] = participantId;
+        //        //TempData[$"GameCode{callCode}"] = gameCode;
+        //        //TempData[$"ParticipantId{callCode}"] = participantId;
 
-            return RedirectToAction("New", "Game", new { reference = callCode });
-        }
+        //        //return RedirectToAction("New", "Game", new { reference = callCode });
+        //        //return RedirectToAction("New", "Game",
+        //        //    new { gameCode = gameCode, participantId = participantId });
+        //        return RedirectToAction("RouteToGame", "Game",
+        //new { gameCode = gameCode, participantId = participantId });
+        //        //return New(gameCode, participantId);
+        //    }
 
 
     }

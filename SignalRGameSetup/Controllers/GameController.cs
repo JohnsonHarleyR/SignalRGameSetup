@@ -1,32 +1,45 @@
-﻿using System.Web.Mvc;
+﻿using SignalRGameSetup.Helpers.Chat;
+using SignalRGameSetup.Models.Setup;
+using SignalRGameSetup.Models.Setup.Containers;
+using System.Web.Mvc;
 
 namespace SignalRGameSetup.Controllers
 {
     public class GameController : Controller
     {
 
-        public ActionResult New(string reference)
+        //[HttpPost]
+        public ActionResult New(GoToGamePage container)
+        // TODO figure out a way to make it hide the info in the url
         {
-            // Put important participant info on the page
-            var gameCodeData = TempData[$"GameCode{reference}"];
-            var participantIdData = TempData[$"ParticipantId{reference}"];
-            string gameCode = null;
-            string participantId = null;
-            if (gameCodeData == null || participantIdData == null)
+            if (container == null || container.GameCode == null || container.ParticipantId == null)
             {
                 return RedirectToAction("StartScreen", "Setup");
             }
-            else
+
+            // HACK putting all the chat info in the model so that nothing is lost due to threading in the hub
+            NewGameViewModel model = new NewGameViewModel()
             {
-                gameCode = TempData[$"GameCode{reference}"].ToString();
-                participantId = TempData[$"ParticipantId{reference}"].ToString();
-            }
+                GameCode = container.GameCode,
+                ParticipantId = container.ParticipantId,
+                Chat = ChatHelper.GetChatByGameCode(container.GameCode)
+            };
 
-            ViewBag.GameCode = gameCode;
-            ViewBag.ParticipantId = participantId;
+            return View(model);
 
-            return View();
+        }
 
+        public ActionResult GoToGame(string gameCode, string participantId)
+        {
+
+            GoToGamePage container = new GoToGamePage()
+            {
+                GameCode = gameCode,
+                ParticipantId = participantId
+            };
+
+            return RedirectToAction("New", "Game",
+                container);
         }
 
         public ActionResult Test()

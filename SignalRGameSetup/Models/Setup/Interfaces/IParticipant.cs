@@ -6,5 +6,7 @@
         string ParticipantId { get; set; }
         string ConnectionId { get; set; }
         string GameCode { get; set; }
+        bool IsEnteringGameSetup { get; set; }
+        bool IsEnteringGameChat { get; set; }
     }
 }
