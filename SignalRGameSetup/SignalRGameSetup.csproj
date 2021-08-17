@@ -268,10 +268,18 @@
     <Content Include="Images\Ships\submarine-west-1.png" />
     <Content Include="Images\Ships\submarine-west-2.png" />
     <Content Include="Images\Ships\submarine-west-3.png" />
+    <Content Include="Scripts\board.es5.js" />
+    <Content Include="Scripts\board.es5.min.js">
+      <DependentUpon>board.es5.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\board.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="connectionstrings.config" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\chat.js" />
     <Content Include="Scripts\game.js" />
