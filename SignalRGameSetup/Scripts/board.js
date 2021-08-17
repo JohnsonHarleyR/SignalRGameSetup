@@ -76,11 +76,17 @@ function addSquares(boardId) {
                 // Add a peg hole too
                 square.appendChild(pegHole);
 
-                // TEST - add preview square
+                // add ship preview square
                 let shipPreview = document.createElement('div');
                 shipPreview.className = 'ship-preview hide';
                 shipPreview.id = 'preview' + r + '-' + c;
                 square.appendChild(shipPreview);
+
+                // add ship image square
+                let shipImage = document.createElement('img');
+                shipImage.id = 'ship' + r + '-' + c;
+                shipImage.className = 'ship hide';
+                square.appendChild(shipImage);
 
             }
 
@@ -381,8 +387,49 @@ function addSquares(boardId) {
                 square.setAttribute('hasPreview', true);
                 squareCount = 1;
 
-            } else { // otherwise if it's the last position that can be set - set the ship!
+            } else if (isFinalPreviewSquare(positionCoordinates)) { // otherwise if it's the last position that can be set - set the ship!
 
+                // store info
+                currentShip.Direction = previewDirection;
+                currentShip.IsSet = true;
+
+                // set all the ship positions
+                for (let i = 0; i < previewPositions.length; i++) {
+                    // TODO make sure this will translate correctly to hub
+                    let imageSrc = '\\Images\\Ships\\' + currentShip.Name.toLowerCase() + '-' +
+                        currentShip.Direction + '-' + (i + 1) + '.png';
+                    let pos = new TestPositionClass(previewPositions[i][0], previewPositions[i][1], imageSrc);
+                    currentShip.Positions
+                        .push(pos);
+                    // set image too
+                    let ship = document.getElementById('ship' + previewPositions[i][0] + '-' +
+                        previewPositions[i][1]);
+                    ship.className = 'ship';
+                    ship.src = imageSrc;
+                    let preview = document.getElementById('preview' + previewPositions[i][0] + '-' +
+                        previewPositions[i][1]);
+                    preview.className = 'preview hide';
+                    // set square properties
+                    let square = document.getElementById('square' + previewPositions[i][0] + '-' +
+                        previewPositions[i][1]);
+                    square.setAttribute('hasShip', true);
+                }
+
+                // unset all the preview stuff
+                squareCount = 0;
+                firstPosition.length = 0;
+                previousPosition.length = 0;
+                finalPosition.length = 0;
+                previewPositions.length = 0;
+                previewDirection = null;
+
+
+                // TODO send info to the game hub to update everyone
+
+
+                // TODO cycle to next ship to place - check if it's done or not
+                // HACK for now, just setting isSettingShips to false
+                isSettingShips = false;
             }
 
 
@@ -406,7 +453,7 @@ class TestShipClass {
         this.Name = Name;
         this.Length = Length;
         this.Direction = null;
-        this.Positions = null;
+        this.Positions = new Array();
         this.IsSet = false;
         this.IsSunk = false;
     }

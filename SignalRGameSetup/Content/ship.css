@@ -27,3 +27,14 @@
 .ship-preview.last {
     background: var(--previewLastColor);
 }
+
+.ship {
+    position: absolute;
+    width: var(--squareLength);
+    height: var(--squareLength);
+    z-index: var(--shipIndex);
+}
+
+.ship.hide {
+    display: none;
+}
