@@ -1,15 +1,15 @@
 ﻿@using SignalRGameSetup.Models.Setup
 @model NewGameViewModel
 
-@{
-    ViewBag.Title = "New";
-}
+@{ ViewBag.Title = "New"; }
 
 <!-- Figure out why the chat isn't updating for a second player (especially in a diff browser)-->
 
-<link rel="stylesheet" href="~/Content/board.css" />
 <link rel="stylesheet" href="~/Content/chat.css" />
 <link rel="stylesheet" href="~/Content/game.css" />
+<link rel="stylesheet" href="~/Content/board.css" />
+<link rel="stylesheet" href="~/Content/ship.css" />
+
 
 <h2>New</h2>
 
@@ -72,12 +72,20 @@
         var clientId = '@Model.ParticipantId';
         var gameSetup;
 
+
+        var gameInformation; // this should be set on page load by the game hub - it should contain ship info too
+
+
         // Start up the hub connection for setup
         jQuery(document).ready(function ($) {
             setupHub = $.connection.setupHub;
             gameHub = $.connection.gameHub;
             chat = $.connection.chatHub;
 
+            // game hub
+            
+
+            // setup hub
 
             setupHub.client.setClientInfo = function (participant) {
                 clientName = participant.Name;
@@ -109,6 +117,8 @@
                 console.log('chat loaded');
                 console.log(gameChat);
                 showChatHtml(gameChat.ChatHtml, gameChat.DoSaveAfterShow);
+
+                // TODO once chat is loaded, set the game information
             }
 
             chat.client.updateGameSetup = function (setup) {

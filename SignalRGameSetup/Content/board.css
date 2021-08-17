@@ -5,6 +5,10 @@
     --boardColor: #256BA3;
     --darkAccent: #134165;
     --lightAccent: #60B1F2;
+    --boardIndex: 1;
+    --squareIndex: 2;
+    --pegHoleIndex: 3;
+    --pegIndex: 5;
 }
 
 #boardDiv {
@@ -12,19 +16,15 @@
     display: flex;
 }
 
-.halfBoard {
+.half-board {
     position: relative;
-/*    display: flex;
-    flex-wrap: wrap;
-    flex-flow: column wrap;
-    justify-content: space-around;
-    align-content: space-around;*/
     width: 395px;
     height: 395px;
     background: var(--boardColor);
+    z-index: var(--boardIndex);
 }
 
-    .halfBoard .backdrop-area {
+    .half-board.backdrop {
         position: absolute;
         width: var(--backdropLength);
         height: var(--backdropLength);
@@ -37,21 +37,20 @@
     width: var(--squareLength);
     height: var(--squareLength);
     background: var(--boardColor);
+    z-index: var(--squareIndex);
 }
     .square > .peg-hole {
         width: var(--holeDiameter);
         height: var(--holeDiameter);
         border-radius: 50%;
         background: var(--darkAccent);
+        z-index: var(--pegHoleIndex);
     }
 
-.info-square {
-    width: var(--squareLength);
-    height: var(--squareLength);
+.square.info {
     background: var(--lightAccent); /*This is temporarily a weird color to just identify it*/
 }
 
-.empty-square {
-    width: var(--squareLength);
-    height: var(--squareLength);
+.square.empty {
+    display: none;
 }

@@ -1,0 +1,29 @@
+﻿:root {
+    --squareLength: 30px;
+    --previewLength: 23px;
+    --previewColor: #5AE2F9;
+    --previewLastColor: #4BFF7B;
+    --previewErrorColor: #F5233C;
+    --previewIndex: 6;
+    --shipIndex: 4;
+}
+
+.ship-preview {
+    width: var(--previewLength);
+    height: var(--previewLength);
+    background: var(--previewColor);
+    position: absolute;
+    z-index: var(--previewIndex);
+}
+
+.ship-preview.hide {
+    display: none;
+}
+
+.ship-preview.error {
+    background: var(--previewErrorColor);
+}
+
+.ship-preview.last {
+    background: var(--previewLastColor);
+}

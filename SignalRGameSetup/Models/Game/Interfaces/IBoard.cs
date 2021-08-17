@@ -5,7 +5,7 @@ namespace SignalRGameSetup.Models.Game.Interfaces
     interface IBoard
     {
         string GameCode { get; set; }
-        EnemyBoardHalf EnemyBoard { get; set; }
+        GuessBoardHalf EnemyBoard { get; set; }
         PlayerBoardHalf PlayerBoard { get; set; }
     }
 }

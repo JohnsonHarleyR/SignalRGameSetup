@@ -42,6 +42,8 @@ namespace SignalRGameSetup.Controllers
                 container);
         }
 
+
+
         public ActionResult Test()
         {
             return View();
