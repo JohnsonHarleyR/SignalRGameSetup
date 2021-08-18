@@ -20,8 +20,6 @@ function getCoordinates(positionString) {
 
 function addSquares(boardId) {
 
-    console.log('addSquares function reached');
-
     let board = document.getElementById(boardId);
 
     // test adding one row
@@ -35,7 +33,6 @@ function addSquares(boardId) {
 
         // count columns
         for (let c = 0; c <= 10; c++) {
-            console.log('adding');
             let square = document.createElement('div');
 
             // position the square
@@ -105,7 +102,6 @@ function addSquares(boardId) {
 
     // Square clicking/mouseover functions
     function clickSquare(positionString) {
-        console.log('square clicked');
         if (isSettingShips && shipToSet != null) {
             setShipPosition(positionString);
         }
@@ -113,7 +109,6 @@ function addSquares(boardId) {
     }
 
     function mouseOverSquare(positionString) {
-        console.log('mouse over');
         let square = document.getElementById('square' + positionString);
         let shipPreview = document.getElementById('preview' + positionString);
         let positionCoordinates = getCoordinates(positionString);
@@ -186,7 +181,6 @@ function addSquares(boardId) {
 
     // check if it should be the last position in a direction
     function isFinalPreviewSquare(coordinates) {
-        console.log('Is it the last preview square?');
         let result = false;
         // figure out the final preview square - if fields are not blank
         if (isSettingShips && firstPosition.length != 0 &&
@@ -204,7 +198,6 @@ function addSquares(boardId) {
     }
 
     function isBeyondFinalPreviewSquare(coordinates) {
-        console.log('seeing if its beyound the final preview square');
         let result = false;
         // figure out the final preview square - if fields are not blank
         if (isSettingShips && firstPosition.length != 0 &&
@@ -238,7 +231,6 @@ function addSquares(boardId) {
     }
 
     function getFinalPreviewSquare() {
-        console.log('settng final preview square');
         let position = new Array();
         let lengthToAccount = currentShip.Length - 1;
         // figure out the final preview square - if fields are not blank
@@ -262,7 +254,6 @@ function addSquares(boardId) {
 
     // check if a position is in a row of highlighted cells
     function isInPreviews(coordinates) {
-        console.log('checking if it exists in previews');
         if (previewPositions.length === 0) {
             console.log('false - no positions set');
             return false;
@@ -281,7 +272,6 @@ function addSquares(boardId) {
 
     // get the index of a position in the list of preview cells by a coordinate
     function getPreviewIndex(coordinates) {
-        console.log('getting preview index');
         if (previewPositions.length === 0) {
             console.log('error');
             return -1; // -1 indicates error
@@ -299,26 +289,17 @@ function addSquares(boardId) {
 
     // see if a square is next to another
     function isNextTo(coordinates, previous) {
-        console.log('Is next to previous?');
-        console.log('coordinates: ' + coordinates[0] + ', ' + coordinates[1]);
-        console.log('previous: ' + previous);
         let north = [previous[0] - 1, previous[1]];
         let south = [previous[0] + 1, previous[1]]
         let west = [previous[0], previous[1] - 1];
         let east = [previous[0], previous[1] + 1];
-        console.log('North: ' + north);
-        console.log('South: ' + south);
-        console.log('West: ' + west);
-        console.log('East: ' + east);
 
         if ((coordinates[0] === north[0] && coordinates[1] === north[1]) ||
             (coordinates[0] === south[0] && coordinates[1] === south[1]) || 
             (coordinates[0] === west[0] && coordinates[1] === west[1]) || 
             (coordinates[0] === east[0] && coordinates[1] === east[1])) {
-            console.log('true');
             return true;
         } else {
-            console.log('false');
             return false;
         }
 
@@ -326,22 +307,17 @@ function addSquares(boardId) {
 
     // determine which direction a line of squares is going
     function getDirection(coordinates, previous) {
-        console.log('What direction?');
         let north = [(previous[0] + 1), (previous[1])];
         let south = [previous[0] - 1, previous[1]]
         let west = [previous[0], previous[1] + 1];
         let east = [previous[0], previous[1] - 1];
         if (coordinates[0] === north[0] && coordinates[1] === north[1]) {
-            console.log('north');
             return 'north';
         } else if (coordinates[0] === south[0] && coordinates[1] === south[1]) {
-            console.log('south');
             return 'south';
         } else if (coordinates[0] === west[0] && coordinates[1] === west[1]) {
-            console.log('west');
             return 'west';
         } else if (coordinates[0] === east[0] && coordinates[1] === east[1]) {
-            console.log('east');
             return 'east';
         } else {
             return null;
@@ -350,19 +326,13 @@ function addSquares(boardId) {
 
     // setting ship functions
     function setShipPosition(positionString) {
-        console.log('setting position');
         let square = document.getElementById('square' + positionString);
         let shipPreview = document.getElementById('preview' + positionString);
         let positionCoordinates = getCoordinates(positionString);
-        //console.log('Square id: ' + square.id);
-        //console.log('has ship: ' + square.getAttribute('hasShip'));
-        //console.log('has peg: ' + square.getAttribute('hasPeg'));
 
         // first make sure it doesn't have a ship or peg
         if (square.getAttribute('hasShip') == 'false' &&
             square.getAttribute('hasPeg') == 'false') {
-
-            console.log('no ship or peg on square');
 
             // check if it has a preview already - if it does and it's the first
             // square, then unset it
@@ -370,7 +340,6 @@ function addSquares(boardId) {
                 firstPosition.length != 0 && firstPosition[0] === positionCoordinates[0] &&
                 firstPosition[1] === positionCoordinates[1]) {
 
-                console.log('has preview already and is first square - unsetting');
                 shipPreview.className = 'ship-preview hide';
                 firstPosition.length = 0; // like setting them null
                 previousPosition.length = 0; // like setting it to null
@@ -379,7 +348,6 @@ function addSquares(boardId) {
                 squareCount = 0;
 
             } else if (firstPosition.length === 0) { // otherwise if a position is not set yet
-                console.log('setting preview');
                 firstPosition = positionCoordinates;
                 previousPosition = positionCoordinates;
                 previewPositions.push(positionCoordinates);
