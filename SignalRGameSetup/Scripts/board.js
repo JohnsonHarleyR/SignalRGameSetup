@@ -43,6 +43,9 @@ function addSquares(boardId) {
             square.style.left = xPos + 'px';
             square.style.top = yPos + 'px';
 
+            // give the square an id
+            square.id = 'square' + r + '-' + c;
+
             // modify position
             xPos += squareLength + 5;
 
@@ -51,6 +54,16 @@ function addSquares(boardId) {
                 square.className = 'square empty';
             } else if (r === 0 || c === 0) {
                 square.className = 'square info';
+                // display info depending on square
+                if (r === 0 && c != 0) {
+                    // the top row displays number, so put a number in the square
+                    square.innerText = c;
+                } else if (r != 0 && c === 0) {
+                    // the first column displays letters - determine which letter
+                    let letter = VERTICAL_INFO[r - 1];
+                    square.innerText = letter;
+                }
+
             } else {
                 // if it's a regular square, also append a child square and a peg hole
                 square.className = 'square';
@@ -99,6 +112,7 @@ function addSquares(boardId) {
         xPos = 5;
 
     }
+    // TODO fix preview square placement so that if you don't move your mouse directly in a row, it doesn't leave squares and do weird thing - make it so if it's in the same row, it works
 
     // Square clicking/mouseover functions
     function clickSquare(positionString) {
@@ -118,17 +132,17 @@ function addSquares(boardId) {
 
             // if it's in the line of square previews and has a preview, unset everything after it
             if (isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true') {
+                consoleLog("isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true'");
                 // figure out position of that coordinate in the array
                 let squareIndex = getPreviewIndex(positionCoordinates);
                 // loop and unset anything after that index in the array
                 previousPosition = positionCoordinates;
-                console.log('removing extra preview');
                 for (let i = squareIndex + 1; i < previewPositions.length; i++) {
                     let preview = document.getElementById('preview' + previewPositions[i][0] +
                         '-' + previewPositions[i][1]);
                     preview.setAttribute('hasPreview', false);
                     previewPositions.splice(i, 1);
-/*                    previewPositions = previewPositions[i].splice(i, 1);*/
+                    /*                    previewPositions = previewPositions[i].splice(i, 1);*/
                     preview.className = 'ship-preview hide';
                     squareCount--;
                 }
@@ -147,6 +161,7 @@ function addSquares(boardId) {
 
                 // now check that this square is next to the previous square
             } else if (isNextTo(positionCoordinates, previousPosition)) {
+                consoleLog("isNextTo(positionCoordinates, previousPosition)");
 
                 // check if it's the second position (check the count) - if it is, set the direction
                 if (squareCount === 1) {
@@ -171,6 +186,10 @@ function addSquares(boardId) {
 
                 }
 
+            } else if (isInRow(positionCoordinates)) {
+                consoleLog('********************************************');
+                consoleLog("isInRow(positionCoordinates) WAS SUCCESSFUL");
+                consoleLog('********************************************');
             }
 
 
@@ -193,7 +212,6 @@ function addSquares(boardId) {
         }
 
         // return result
-        console.log(result);
         return result;
     }
 
@@ -226,7 +244,6 @@ function addSquares(boardId) {
                 }
             }
         }
-        console.log(result);
         return result;
     }
 
@@ -248,42 +265,35 @@ function addSquares(boardId) {
                 position = [firstPosition[0], firstPosition[1] - lengthToAccount];
             }
         }
-        console.log(position);
         return position;
     }
 
     // check if a position is in a row of highlighted cells
     function isInPreviews(coordinates) {
         if (previewPositions.length === 0) {
-            console.log('false - no positions set');
             return false;
         }
         for (var i = previewPositions.length - 1; i >= 0; i--)
         {
             if (coordinates[0] === previewPositions[i][0] &&
                 coordinates[1] === previewPositions[i][1]) {
-                console.log('true');
                 return true;
             }
         }
-        console.log('false');
         return false;
     }
 
     // get the index of a position in the list of preview cells by a coordinate
     function getPreviewIndex(coordinates) {
         if (previewPositions.length === 0) {
-            console.log('error');
             return -1; // -1 indicates error
         }
         for (var i = previewPositions.length - 1; i >= 0; i--) {
             if (coordinates[0] === previewPositions[i][0] &&
                 coordinates[1] === previewPositions[i][1]) {
-                console.log('index: ' + i);
                 return i;
             }
         }
-        console.log('error');
         return -1;
     }
 
@@ -305,12 +315,137 @@ function addSquares(boardId) {
 
     }
 
+
+    // determine if a square moused over is in the same row as the original square - depending if direction has been set or not
+    function isInRow(coordinates) {
+        consoleLog("--------------------------------------------");
+        consoleLog("isInRow(coordinates)");
+        consoleLog('Coordinates: ' + coordinates[0] + ', ' + coordinates[1])
+        let result = false; // it will stay as false if nothing is found
+        if (firstPosition.length != 0) {
+            consoleLog("(firstPosition.length != 0)");
+            // determine north south east and west row - it doesn't matter if it has out of range indexes
+            let direction = null;
+            let north = new Array();
+            let west = new Array();
+            let south = new Array();
+            let east = new Array();
+
+            // find values for arrays using addition
+            for (let i = 1; i <= BOARD_SIZE; i++) {
+                let northPosition = [firstPosition[0] + i, firstPosition[1]];
+                let westPosition = [firstPosition[0], firstPosition[1] + i];
+                let southPosition = [firstPosition[0] - i, firstPosition[1]]
+                let eastPosition = [firstPosition[0], firstPosition[1] - i];
+                north.push(northPosition);
+                west.push(westPosition);
+                south.push(southPosition);
+                east.push(eastPosition);
+            }
+
+            // see if a preview direction has been set - if it has only check for that. If it hasn't then any of the rows can contain that position
+            if (previewDirection != null) {
+                consoleLog("Ln: 343 (previewDirection != null)")
+                // figure out which row is set
+                if (previewDirection === 'north') {
+                    result = checkArrayForPosition(north, coordinates);
+                    consoleLog('North?: ' + result);
+                } else if (previewDirection === 'west') {
+                    result = checkArrayForPosition(west, coordinates);
+                    consoleLog('West?: ' + result);
+                } else if (previewDirection === 'south') {
+                    result = checkArrayForPosition(south, coordinates);
+                    consoleLog('South?: ' + result);
+                } else if (previewDirection === 'east') {
+                    result = checkArrayForPosition(east, coordinates);
+                    consoleLog('East?: ' + result);
+                }
+
+                // return result
+                return result;
+            } else {
+                consoleLog("Ln: 363 No previewDirection")
+                result = checkArrayForPosition(north, coordinates);
+                consoleLog('North?: ' + result);
+                if (result === true) {
+                    consoleLog('END OF isInRow() METHOD - RESULT: ' + result);
+                    return result;
+                } else {
+                    result = checkArrayForPosition(west, coordinates);
+                    consoleLog('West?: ' + result);
+                }
+                if (result === true) {
+                    consoleLog('END OF isInRow() METHOD - RESULT: ' + result);
+                    return result;
+                } else {
+                    result = checkArrayForPosition(south, coordinates);
+                    consoleLog('South?: ' + result);
+                }
+                if (result === true) {
+                    consoleLog('END OF isInRow() METHOD - RESULT: ' + result);
+                    return result;
+                } else {
+                    result = checkArrayForPosition(east, coordinates);
+                    consoleLog('East?: ' + result);
+                }
+                if (result === true) {
+                    consoleLog('END OF isInRow() METHOD - RESULT: ' + result);
+                    return result;
+                }
+
+            }
+
+        } else {
+            consoleLog('Ln: 388 No firstPosition - result = ' + result);
+        // you can't determine the position if a there is no firstPosition, because that means a preview row has not been started
+        }
+        consoleLog('END OF isInRow() METHOD - RESULT: ' + result);
+        return result;
+
+    }
+
+
+
+
+
+
+
+
+    // see if a coordinate is listed in an array of coordinates
+    function checkArrayForPosition(array, coordinates) {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i][0] === coordinates[0] && array[i][1] === coordinates[1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // determine which direction a line of squares is going
     function getDirection(coordinates, previous) {
-        let north = [(previous[0] + 1), (previous[1])];
-        let south = [previous[0] - 1, previous[1]]
+        let north = [previous[0] + 1, previous[1]];
+        let south = [previous[0] - 1, previous[1]];
         let west = [previous[0], previous[1] + 1];
         let east = [previous[0], previous[1] - 1];
+        if (coordinates[0] === north[0] && coordinates[1] === north[1]) {
+            return 'north';
+        } else if (coordinates[0] === south[0] && coordinates[1] === south[1]) {
+            return 'south';
+        } else if (coordinates[0] === west[0] && coordinates[1] === west[1]) {
+            return 'west';
+        } else if (coordinates[0] === east[0] && coordinates[1] === east[1]) {
+            return 'east';
+        } else {
+            return null;
+        }
+    }
+
+    // determine which direction a line of squares is going - with an index reference
+    function getDirectionUsingIndex(coordinates, previous, index) {
+        let north = [(previous[0] + index), (previous[1])];
+        let south = [previous[0] - index, previous[1]];
+        let west = [previous[0], previous[1] + index];
+        let east = [previous[0], previous[1] - index];
         if (coordinates[0] === north[0] && coordinates[1] === north[1]) {
             return 'north';
         } else if (coordinates[0] === south[0] && coordinates[1] === south[1]) {
@@ -410,9 +545,22 @@ function addSquares(boardId) {
 
 }
 
+
+// TESTING METHODS
+
+// this will log the text to the console only if the showTestLogs bool is true 
+function consoleLog(text) {
+    if (showTestLogs) {
+        console.log(text);
+    }
+}
+
+
 // variables
-var VERTICAL = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-var HORIZONTAL = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+var showTestLogs = true; // Set true of false for whether to see the testing logs in the console
+
+var VERTICAL_INFO = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var BOARD_SIZE = 10;
 
 // TEMPORARY
