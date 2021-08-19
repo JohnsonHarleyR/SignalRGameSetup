@@ -143,15 +143,9 @@ function mouseOverSquare(positionString) {
         if (isSettingShips && firstPosition.length != 0 && previewPositions.length != 0 &&
             previousPosition.length != 0) {
 
-            // HACK make sure squares aren't in the previews that shouldn't be
-            eliminateExtraPreviewPositions(false);
-            errorSquareLog('elimated extra preview positions');
-
             // if it's in the line of square previews and has a preview, unset everything after it
             if (isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true') {
                 previewLog("isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true'");
-                errorSquareLog("isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true'");
-
                 // figure out position of that coordinate in the array
                 let squareIndex = getPreviewIndex(positionCoordinates);
                 // loop and unset anything after that index in the array
@@ -181,26 +175,29 @@ function mouseOverSquare(positionString) {
                 // now check that this square is next to the previous square
             } else if (isNextTo(positionCoordinates, previousPosition)) {
                 previewLog("isNextTo(positionCoordinates, previousPosition)");
-                errorSquareLog("isNextTo(positionCoordinates, previousPosition)");
 
                 // check if it's the second position (check the count) - if it is, set the direction
                 if (squareCount === 1) {
                     previewDirection = getDirection(positionCoordinates, previousPosition);
-                    errorSquareLog('setting direction');
                 }
 
                 // check that it's going in the correct direction
                 if (previewDirection === getDirection(positionCoordinates, previousPosition)) {
                     // if it is, then set the preview to visible and add to count - determine color
-                    if (!containPosition(positionCoordinates, previewPositions)) {
-                        errorSquareLog('setting direction');
-                        square.setAttribute('hasPreview', true);
-                        previewPositions.push(positionCoordinates);
-                        squareCount++;
-                    }
+                    square.setAttribute('hasPreview', true);
+                    previewPositions.push(positionCoordinates);
+                    squareCount++;
 
-                    // set the color
-                    setPreviewClass(positionCoordinates);
+                    // see if it's the final square
+                    if (square.getAttribute('hasShip') == 'true') {
+                        shipPreview.className = 'ship-preview error';
+                    } else if (isFinalPreviewSquare(positionCoordinates)) {
+                        shipPreview.className = 'ship-preview last';
+                    } else if (isBeyondFinalPreviewSquare(positionCoordinates)) { // if it's beyond the final square, show an error
+                        shipPreview.className = 'ship-preview error';
+                    } else { // otherwise set it to preview
+                        shipPreview.className = 'ship-preview';
+                    }
 
                 }
 
@@ -209,10 +206,6 @@ function mouseOverSquare(positionString) {
                 previewLog("isInRow(positionCoordinates) WAS SUCCESSFUL");
                 previewLog('********************************************');
 
-                errorSquareLog('********************************************');
-                errorSquareLog("isInRow(positionCoordinates) WAS SUCCESSFUL");
-                errorSquareLog('********************************************');
-
                 // get the row and index info of the position
                 let rowPositionInfo = getRowIndexAndDirection(positionCoordinates);
                 previewLog('positionInfo:');
@@ -220,15 +213,9 @@ function mouseOverSquare(positionString) {
                 previewLog('index: ' + rowPositionInfo.index);
                 previewLog('rowPositions: ' + rowPositionInfo.rowPositions);
 
-                errorSquareLog('positionInfo:');
-                errorSquareLog('direction: ' + rowPositionInfo.direction);
-                errorSquareLog('index: ' + rowPositionInfo.index);
-                errorSquareLog('rowPositions: ' + rowPositionInfo.rowPositions);
-
                 // set the preview direction if it hasn't been set
                 if (previewDirection === null) {
                     previewLog("(previewDirection === null)");
-                    errorSquareLog("(previewDirection === null)");
                     previewDirection = rowPositionInfo.direction;
                 }
 
@@ -238,49 +225,31 @@ function mouseOverSquare(positionString) {
                 // loop through positions and set them to preview
                 for (let i = 0; i < positions.length; i++) {
                     let newSquare = document.getElementById('square' + positions[i][0] + '-' + positions[i][1]);
+                    let newShipPreview = document.getElementById('preview' + positions[i][0] + '-' + positions[i][1]);
                     // if it is, then set the preview to visible and add to count - determine color
                     newSquare.setAttribute('hasPreview', true);
                     previewPositions.push(positions[i]);
                     squareCount++;
 
-                    // set the color of previews
-                    setPreviewClass(positions[i]);
+                    // see if it's the final square
+                    if (square.getAttribute('hasShip') == 'true') {
+                        shipPreview.className = 'ship-preview error';
+                    } else if (isFinalPreviewSquare(positions[i])) {
+                        newShipPreview.className = 'ship-preview last';
+                    } else if (isBeyondFinalPreviewSquare(positions[i])) { // if it's beyond the final square, show an error
+                        newShipPreview.className = 'ship-preview error';
+                    } else { // otherwise set it to preview
+                        newShipPreview.className = 'ship-preview';
+                    }
                 }
 
             }
 
 
         }
+        // check if it has
 
-}
-
-// sets the color and visibility of a square
-function setPreviewClass(coordinates) {
-    errorSquareLog('setPreviewClass(coordinates)');
-
-    let newSquare = document.getElementById('square' + coordinates[0] + '-' + coordinates[1]);
-    let newShipPreview = document.getElementById('preview' + coordinates[0] + '-' + coordinates[1]);
-
-    // see if it's the final square
-    if (newSquare.getAttribute('hasShip') == 'true') {
-        errorSquareLog("(newSquare.getAttribute('hasShip') == 'true')");
-        errorSquareLog("ship-preview error");
-        newShipPreview.className = 'ship-preview error';
-    } else if (isFinalPreviewSquare(coordinates)) {
-        errorSquareLog("ship-preview last")
-        newShipPreview.className = 'ship-preview last';
-    } else if (isBeyondFinalPreviewSquare(coordinates)) { // if it's beyond the final square, show an error
-        errorSquareLog("isBeyondFinalPreviewSquare(positions[i])");
-        errorSquareLog("ship-preview error")
-        newShipPreview.className = 'ship-preview error';
-    } else if (!isInPreviews(coordinates)) {
-        errorSquareLog("ship-preview hide")
-        newShipPreview.className = 'ship-preview hide';
-    } else { // otherwise set it to preview
-        errorSquareLog("ship-preview")
-        newShipPreview.className = 'ship-preview';
     }
-}
 
     // check if it should be the last position in a direction
     function isFinalPreviewSquare(coordinates) {
@@ -761,7 +730,7 @@ function setShip(positionString) {
             console.log('has red? ' + isRed);
             if (!isRed) {
                 if (currentShip.Length != previewPositions.length) {
-                    eliminateExtraPreviewPositions(true);
+                    eliminateExtraPreviewPositions();
                 }
                 placeShipOnBoard();
                 // TODO send info to the game hub to update everyone
@@ -851,7 +820,7 @@ function startSettingShips() { // only at the beginning of the game - should jus
 
 // eliminate any extra preview positions getting in the way of placing a ship
 // HACK using this method to fix problem with previewPositions - figure out what causes them in the first place
-function eliminateExtraPreviewPositions(checkForShip) {
+function eliminateExtraPreviewPositions() {
     lastShipLog('Ln 819: previewPositions before: ' + previewPositions);
 
     // first create an array without repeats
@@ -871,17 +840,13 @@ function eliminateExtraPreviewPositions(checkForShip) {
     lastShipLog('Setting new array');
     previewPositions = newArray;
 
-    if (checkForShip) {
-        // now just make sure the length is correct - if we are adding a ship
-        if (previewPositions.length != currentShip.Length) {
-            lastShipLog('splicing off unnecessary positions');
-            previewPositions = previewPositions.splice(0, currentShip.Length);
-        }
+    // now just make sure the length is correct
+    if (previewPositions.length != currentShip.Length) {
+        lastShipLog('splicing off unnecessary positions');
+        previewPositions = previewPositions.splice(0, currentShip.Length);
     }
 
-
     lastShipLog('previewPositions after: ' + previewPositions);
-    squareCount = previewPositions.length;
 }
 
 // returns a bool for if an array has a position or not
@@ -912,7 +877,7 @@ function goToNextShip() {
         let preview = document.getElementById('preview' + positionId);
 
         if (currentShip.Length != previewPositions.length) {
-            eliminateExtraPreviewPositions(true);
+            eliminateExtraPreviewPositions();
         }
 
         if (square.getAttribute('hasShip') == 'false' ||
@@ -984,19 +949,11 @@ function lastShipLog(text) {
     }
 }
 
-function errorSquareLog(text) {
-    if (showErrorLog) {
-        // determine
-        console.log(text);
-    }
-}
-
 
 // variables
 
 var showPreviewLogs = false; // Set true of false for whether to see the preview console logs in the console
-var showLastShipSquareLogs = false;
-var showErrorLog = true;
+var showLastShipSquareLogs = true;
 
 var VERTICAL_INFO = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var BOARD_SIZE = 10;
