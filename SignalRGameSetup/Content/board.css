@@ -2,14 +2,62 @@
     --squareLength: 30px;
     --backdropLength: 355px;
     --holeDiameter: 13px;
+    --pegDiameter: 18px;
+    --pegTopHoleDiameter: 9px;
     --boardColor: #256BA3;
     --darkAccent: #134165;
     --lightAccent: #60B1F2;
+    --pegMissColor: #ffffff;
+    --pegHitColor: #FF3E55;
+    --pegTopHoleHitColor: #6D0C18;
+    --pegTopHoleMissColor: #455A6B;
+    --pegHitBorderColor: #ffffff;
+    --pegMissBorderColor: #455A6B;
     --boardIndex: 1;
     --squareIndex: 2;
     --pegHoleIndex: 3;
     --pegIndex: 5;
 }
+
+.peg {
+    width: var(--pegDiameter);
+    height: var(--pegDiameter);
+    border-radius: 50%;
+    z-index: var(--pegIndex);
+    position: absolute;
+}
+    .peg.hit {
+        background: var(--pegHitColor);
+        border: 1px solid var(--pegHitBorderColor);
+    }
+        .peg.hit > .peg-top-hole {
+            background: var(--pegTopHoleHitColor);
+        }
+    .peg.miss {
+        background: var(--pegMissColor);
+        border: 1px solid var(--pegMissBorderColor);
+    }
+        .peg.miss > .peg-top-hole {
+            background: var(--pegTopHoleMissColor);
+        }
+    .peg.hide {
+        display: none;
+    }
+
+    .peg > .peg-top-hole {
+        width: var(--pegTopHoleDiameter);
+        height: var(--pegTopHoleDiameter);
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
 
 #boardDiv {
     justify-content: center;

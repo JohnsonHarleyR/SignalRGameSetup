@@ -106,6 +106,16 @@ function addSquares(boardId) {
                 shipImage.className = 'ship hide';
                 square.appendChild(shipImage);
 
+                // add a peg square
+                let peg = document.createElement('div');
+                peg.className = 'peg hide';
+                peg.id = 'preview' + r + '-' + c;
+                // add a top image to the peg
+                let pegTop = document.createElement('div');
+                pegTop.className = "peg-top-hole";
+                peg.appendChild(pegTop);
+                square.appendChild(peg);
+
             }
 
             // append it to the container
