@@ -29,9 +29,9 @@ namespace SignalRGameSetup.Helpers.Game
 
         }
 
-        public static List<BoardPosition> CreatePositions()
+        public static Dictionary<string, BoardPosition> CreatePositions()
         {
-            List<BoardPosition> positions = new List<BoardPosition>();
+            Dictionary<string, BoardPosition> positions = new Dictionary<string, BoardPosition>();
 
             // create all positions in the dictionary
             for (int r = 1; r <= BoardHelper.GetBoardSize(); r++)
@@ -39,7 +39,7 @@ namespace SignalRGameSetup.Helpers.Game
                 for (int c = 1; c <= BoardHelper.GetBoardSize(); c++)
                 {
                     BoardPosition newPosition = new BoardPosition((YPosition)r, c);
-                    positions.Add(newPosition);
+                    positions.Add(newPosition.Name, newPosition);
                 }
             }
             return positions;

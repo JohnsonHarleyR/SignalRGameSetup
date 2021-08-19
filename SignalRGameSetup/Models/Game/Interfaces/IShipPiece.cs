@@ -8,7 +8,7 @@ namespace SignalRGameSetup.Models.Game.Interfaces
         string Name { get; set; }
         int Length { get; set; }
         string Direction { get; set; }
-        List<ShipPosition> Positions { get; set; }
+        Dictionary<string, ShipPosition> Positions { get; set; }
         bool IsSet { get; set; }
         bool IsSunk { get; set; }
     }

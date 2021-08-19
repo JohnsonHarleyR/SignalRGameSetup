@@ -23,10 +23,10 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
                         _className = null;
                         break;
                     case PegColor.White:
-                        _className = "miss";
+                        _className = "peg miss";
                         break;
                     case PegColor.Red:
-                        _className = "hit";
+                        _className = "peg hit";
                         break;
                 }
             }
@@ -36,6 +36,10 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         {
             get
             {
+                if (YPos != null)
+                {
+
+                }
                 return _className;
             }
         }

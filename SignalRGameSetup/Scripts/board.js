@@ -1,4 +1,10 @@
-﻿// square functions
+﻿// HUB FUNCTIONS
+function saveBoard() {
+
+}
+
+
+// square functions
 
 // TODO if a preview is over a ship, set it to red
 
@@ -724,25 +730,34 @@ function addSquares(boardId) {
 
                     // set all the ship positions - on both the UI and in the board info
                     for (let i = 0; i < currentShip.Length; i++) {
+
+                        let positionId = previewPositions[i][0] + '-' +
+                            previewPositions[i][1];
+
                         // TODO make sure this will translate correctly to hub
                         let imageSrc = '\\Images\\Ships\\' + currentShip.Name.toLowerCase() + '-' +
                             currentShip.Direction + '-' + (i + 1) + '.png';
                         currentShip.Positions[i].XPos = previewPositions[i][0];
                         currentShip.Positions[i].YPos = previewPositions[i][1];
                         currentShip.Positions[i].Image = imageSrc;
-                        gameInformation.Board.PlayerBoard.Positions['1-1'];
+
+                        // set position on actual board so that it has a ship
+                        gameInformation.Board.PlayerBoard.Positions[positionId].HasShip = true;
+                        gameInformation.Board.PlayerBoard.Positions[positionId].Image = imagesrc;
+
                         // set image too
-                        let ship = document.getElementById('ship' + previewPositions[i][0] + '-' +
-                            previewPositions[i][1]);
+                        let ship = document.getElementById('ship' + positionId);
                         ship.className = 'ship';
                         ship.src = imageSrc;
-                        let preview = document.getElementById('preview' + previewPositions[i][0] + '-' +
-                            previewPositions[i][1]);
+                        let preview = document.getElementById('preview' + positionId);
                         preview.className = 'preview hide';
                         // set square properties
-                        let square = document.getElementById('square' + previewPositions[i][0] + '-' +
-                            previewPositions[i][1]);
+                        let square = document.getElementById('square' + positionId);
                         square.setAttribute('hasShip', true);
+
+                        // save the board through the hub and database
+                        saveBoard();
+
                     }
 
 
@@ -874,7 +889,6 @@ class TestPositionClass {
 var testShip = new TestShipClass('Carrier', 5);
 
 // ship setting variables
-// HACK First two variables are set temporarily to create functions
 var isSettingShips = true; // default = false
 var currentShip = null; // this should be null unless ships are being set
 var shipIndex = 0; // for looping through ships
