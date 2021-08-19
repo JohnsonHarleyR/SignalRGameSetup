@@ -1,4 +1,5 @@
-﻿using SignalRGameSetup.Database.Repositories;
+﻿using SignalRGameSetup.Database.Dtos;
+using SignalRGameSetup.Database.Repositories;
 using SignalRGameSetup.Enums.Game;
 using SignalRGameSetup.Models.Game.Board;
 using SignalRGameSetup.Models.Game.Board.Pieces;
@@ -46,6 +47,42 @@ namespace SignalRGameSetup.Helpers.Game
             }
             return positions;
 
+        }
+
+        // NOTE this is based on who the active user is who is retrieving the board
+        public static FullBoard GetFullBoardFromGameDto(string participantId, BattleShipsGameDto dto)
+        {
+            FullBoard fullBoard = new FullBoard(dto.GameCode);
+
+            // stuff here
+            string playerId;
+            string enemyId;
+            int playerBoardId;
+            int enemyBoardId;
+            // determine which player is which
+            if (participantId == dto.PlayerOne)
+            {
+                playerId = dto.PlayerOne;
+                playerBoardId = dto.PlayerOneBoard;
+                enemyId = dto.PlayerTwo;
+                enemyBoardId = dto.PlayerTwoBoard;
+            }
+            else
+            {
+                playerId = dto.PlayerTwo;
+                playerBoardId = dto.PlayerTwoBoard;
+                enemyId = dto.PlayerOne;
+                enemyBoardId = dto.PlayerOneBoard;
+            }
+
+            // TODO set the boards
+            EnemyBoard = new GuessBoardHalf(GameCode, enemyId);
+            PlayerBoard = new PlayerBoardHalf(GameCode, playerId);
+
+            // user the GameHelper to reach into the database and grab both player board
+            // then set the enemy and player board according to who is who
+
+            return fullBoard;
         }
 
         // This takes a guess board and updates the information on the corresponding player board

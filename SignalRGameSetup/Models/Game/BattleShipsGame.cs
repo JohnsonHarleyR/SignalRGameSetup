@@ -4,20 +4,21 @@ using SignalRGameSetup.Models.Game.Board;
 
 namespace SignalRGameSetup.Models.Game
 {
-    public class BattleShips
+    public class BattleShipsGame
     {
         public string GameCode { get; set; }
         public FullBoard Board { get; set; }
         public BattleShipsInfo Information { get; set; } // A JSON string
 
-        public BattleShips(string gameCode)
+        public BattleShipsGame() { }
+        public BattleShipsGame(string gameCode)
         {
             GameCode = gameCode;
             Board = new FullBoard(gameCode);
             Information = new BattleShipsInfo();
         }
 
-        public BattleShips(BattleShipsDto dto, string playerParticipantId)
+        public BattleShipsGame(BattleShipsGameDto dto)
         {
             GameCode = dto.GameCode;
             Board = new FullBoard(dto.GameCode);

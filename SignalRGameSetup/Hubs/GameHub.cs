@@ -36,7 +36,7 @@ namespace SignalRGameSetup.Hubs
             model.ParticipantId = "TST1";
 
             // Create fake game
-            model.Game = new BattleShips("TEST");
+            model.Game = new BattleShipsGame("TEST");
             model.Game.Information.ActivePlayerId = "TST1";
             model.Game.Board.PlayerBoard.ParticipantId = "TST1";
             model.Game.Board.EnemyBoard.ParticipantId = "TST2";
@@ -47,7 +47,7 @@ namespace SignalRGameSetup.Hubs
 
         public void GetGameInformation(GetGameInformation info)
         {
-            BattleShips battleShips = new BattleShips(info.Setup.GameCode);
+            BattleShipsGame battleShips = new BattleShipsGame(info.Setup.GameCode);
 
             // attempt to grab it from the database
 

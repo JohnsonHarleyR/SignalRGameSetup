@@ -5,7 +5,7 @@ namespace SignalRGameSetup.Models.Game
     public class TestModel
     {
         public string ParticipantId { get; set; }
-        public BattleShips Game { get; set; }
+        public BattleShipsGame Game { get; set; }
         public GameSetup TestSetup { get; set; }
     }
 }

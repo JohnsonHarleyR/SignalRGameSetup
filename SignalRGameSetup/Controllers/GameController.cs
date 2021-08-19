@@ -49,7 +49,7 @@ namespace SignalRGameSetup.Controllers
         {
             // create fake game
             TestModel model = new TestModel();
-            model.Game = new BattleShips("TEST");
+            model.Game = new BattleShipsGame("TEST");
             model.ParticipantId = "LALA";
 
             return View(model);

@@ -145,11 +145,12 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Database\Dtos\GameChatDto.cs" />
-    <Compile Include="Database\Dtos\Game\BattleShipsDto.cs" />
+    <Compile Include="Database\Dtos\Game\BattleShipsGameDto.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
     <Compile Include="Database\Dtos\Game\PlayerBoardHalfDto.cs" />
     <Compile Include="Database\Repositories\ChatRepository.cs" />
     <Compile Include="Database\Repositories\BoardRepository.cs" />
+    <Compile Include="Database\Repositories\GameRepository.cs" />
     <Compile Include="Database\Repositories\SetupRepository.cs" />
     <Compile Include="Enums\Game\GameEnums.cs" />
     <Compile Include="Enums\Setup\ActionEnums.cs" />
@@ -165,7 +166,7 @@
     <Compile Include="Hubs\SetupHub.cs" />
     <Compile Include="Logic\GameInformation.cs" />
     <Compile Include="Models\Chat\Containers\GameChat.cs" />
-    <Compile Include="Models\Game\BattleShips.cs" />
+    <Compile Include="Models\Game\BattleShipsGame.cs" />
     <Compile Include="Models\Game\BattleShipsInfo.cs" />
     <Compile Include="Models\Game\Board\FullBoard.cs" />
     <Compile Include="Models\Game\Board\GuessBoardHalf.cs" />
