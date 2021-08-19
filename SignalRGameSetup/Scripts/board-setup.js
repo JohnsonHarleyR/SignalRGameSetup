@@ -135,7 +135,7 @@ function clickSquare(positionString) {
     }
 
 function mouseOverSquare(positionString) {
-    lastShipLog('First method: mouseOverSquare');
+/*    lastShipLog('First method: mouseOverSquare');*/
         let square = document.getElementById('square' + positionString);
         let shipPreview = document.getElementById('preview' + positionString);
         let positionCoordinates = getCoordinates(positionString);
@@ -145,20 +145,29 @@ function mouseOverSquare(positionString) {
 
             // if it's in the line of square previews and has a preview, unset everything after it
             if (isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true') {
-                previewLog("isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true'");
+                //previewLog("isInPreviews(positionCoordinates) && square.getAttribute('hasPreview') == 'true'");
                 // figure out position of that coordinate in the array
                 let squareIndex = getPreviewIndex(positionCoordinates);
                 // loop and unset anything after that index in the array
                 previousPosition = positionCoordinates;
+
+                // copy previewPositions and use that to splice from - then set previewPositions to that array
+                let arrayCopy = new Array();
+                for (let i = 0; i < previewPositions.length; i++) {
+                    arrayCopy.push(previewPositions[i]);
+                }
+
                 for (let i = squareIndex + 1; i < previewPositions.length; i++) {
                     let preview = document.getElementById('preview' + previewPositions[i][0] +
                         '-' + previewPositions[i][1]);
                     preview.setAttribute('hasPreview', false);
-                    previewPositions.splice(i, 1);
+                    arrayCopy.splice(i, 1);
                     /*                    previewPositions = previewPositions[i].splice(i, 1);*/
                     preview.className = 'ship-preview hide';
                     squareCount--;
                 }
+
+                previewPositions = arrayCopy;
 
                 // if previous positions length is now only equal to one, set the direction to null
                 if (previewPositions.length == 1) {
@@ -174,7 +183,7 @@ function mouseOverSquare(positionString) {
 
                 // now check that this square is next to the previous square
             } else if (isNextTo(positionCoordinates, previousPosition)) {
-                previewLog("isNextTo(positionCoordinates, previousPosition)");
+                //previewLog("isNextTo(positionCoordinates, previousPosition)");
 
                 // check if it's the second position (check the count) - if it is, set the direction
                 if (squareCount === 1) {
@@ -215,19 +224,19 @@ function mouseOverSquare(positionString) {
 
                 // set the preview direction if it hasn't been set
                 if (previewDirection === null) {
-                    previewLog("(previewDirection === null)");
+                    //previewLog("(previewDirection === null)");
                     previewDirection = rowPositionInfo.direction;
                 }
 
                 // get the positions that are gonna have to be set to a preview
                 let positions = getPositionsToChange(firstPosition, rowPositionInfo);
-                previewLog('Preview Positions: ' + previewPositions);
-                previewLog('Positions: ' + positions);
+                //previewLog('Preview Positions: ' + previewPositions);
+                //previewLog('Positions: ' + positions);
                 if (previewPositions.length > 1) {
 /*                    previewPositions = previewPositions.splice(2, previewPositions.length - 1);*/
                     squareCount = previewPositions.length;
                 }
-                previewLog('Preview Positions after splice: ' + previewPositions);
+                //previewLog('Preview Positions after splice: ' + previewPositions);
 
                 // loop through positions and set them to preview
                 for (let i = 0; i < positions.length; i++) {
@@ -382,7 +391,7 @@ function mouseOverSquare(positionString) {
 
     // get all the positions to add preview squares to based on an index
     function getPositionsToChange(coordinates, info) {
-        previewLog("getPositionsToChange(coordinates, info)");
+        //previewLog("getPositionsToChange(coordinates, info)");
         let positions = new Array();
         let count = info.index + 1; // should be 1 more than the index
         if (info.direction === 'north') {
@@ -422,19 +431,19 @@ function mouseOverSquare(positionString) {
                 }
             }
         }
-        previewLog('Positions: ' + positions);
+        //previewLog('Positions: ' + positions);
         return positions;
     }
 
 
     // determine if a square moused over is in the same row as the original square - depending if direction has been set or not
     function isInRow(coordinates) {
-        previewLog("--------------------------------------------");
-        previewLog("isInRow(coordinates)");
-        previewLog('Coordinates: ' + coordinates[0] + ', ' + coordinates[1])
+        //previewLog("--------------------------------------------");
+        //previewLog("isInRow(coordinates)");
+        //previewLog('Coordinates: ' + coordinates[0] + ', ' + coordinates[1])
         let result = false; // it will stay as false if nothing is found
         if (firstPosition.length != 0) {
-            previewLog("(firstPosition.length != 0)");
+            //previewLog("(firstPosition.length != 0)");
             // determine north south east and west row - it doesn't matter if it has out of range indexes
             let north = new Array();
             let west = new Array();
@@ -455,26 +464,26 @@ function mouseOverSquare(positionString) {
 
             // see if a preview direction has been set - if it has only check for that. If it hasn't then any of the rows can contain that position
             if (previewDirection != null) {
-                previewLog("Ln: 343 (previewDirection != null)")
+                //previewLog("Ln: 343 (previewDirection != null)")
                 // figure out which row is set
                 if (previewDirection === 'north') {
                     result = checkArrayForPosition(north, coordinates);
-                    previewLog('North?: ' + result);
+                    //previewLog('North?: ' + result);
                 } else if (previewDirection === 'west') {
                     result = checkArrayForPosition(west, coordinates);
-                    previewLog('West?: ' + result);
+                    //previewLog('West?: ' + result);
                 } else if (previewDirection === 'south') {
                     result = checkArrayForPosition(south, coordinates);
-                    previewLog('South?: ' + result);
+                    //previewLog('South?: ' + result);
                 } else if (previewDirection === 'east') {
                     result = checkArrayForPosition(east, coordinates);
-                    previewLog('East?: ' + result);
+                    //previewLog('East?: ' + result);
                 }
 
                 // return result
                 return result;
             } else {
-                previewLog("Ln: 363 No previewDirection")
+                //previewLog("Ln: 363 No previewDirection")
                 result = checkArrayForPosition(north, coordinates);
                 previewLog('North?: ' + result);
                 if (result === true) {
@@ -516,16 +525,16 @@ function mouseOverSquare(positionString) {
 
     // grab all coordinates that are relevent to a position and index of position in that row - will only work if isInRow is true for the coordinates
     function getRowIndexAndDirection(coordinates) {
-        previewLog("--------------------------------------------");
-        previewLog("getRowIndexAndDirection(coordinates)");
-        previewLog('Coordinates: ' + coordinates[0] + ', ' + coordinates[1])
+        //previewLog("--------------------------------------------");
+        //previewLog("getRowIndexAndDirection(coordinates)");
+        //previewLog('Coordinates: ' + coordinates[0] + ', ' + coordinates[1])
         let result = {
             rowPositions: new Array(),
             direction: null,
             index: -1 // -1 indicates error
         };
         if (firstPosition.length != 0) {
-            previewLog("(firstPosition.length != 0)");
+/*            previewLog("(firstPosition.length != 0)");*/
             // determine north south east and west row - it doesn't matter if it has out of range indexes
             let north = new Array();
             let west = new Array();
@@ -546,21 +555,21 @@ function mouseOverSquare(positionString) {
 
             // see if a preview direction has not been set - it needs to set it first.
             if (result.direction === null) {
-                previewLog("Ln: 455 No result.direction")
+                //previewLog("Ln: 455 No result.direction")
                 let isInRow = checkArrayForPosition(north, coordinates);
-                previewLog('North?: ' + isInRow);
+                //previewLog('North?: ' + isInRow);
                 if (isInRow === false) {
                     isInRow = checkArrayForPosition(west, coordinates);
-                    previewLog('West?: ' + isInRow);
+                    //previewLog('West?: ' + isInRow);
                     if (isInRow === false) {
                         isInRow = checkArrayForPosition(south, coordinates);
-                        previewLog('South?: ' + isInRow);
+                        //previewLog('South?: ' + isInRow);
                         if (isInRow === false) {
                             isInRow = checkArrayForPosition(east, coordinates);
-                            previewLog('East?: ' + isInRow);
+                            //previewLog('East?: ' + isInRow);
                             if (isInRow === false) {
-                                previewLog('NO DIRECTION COULD BE FOUND - RETURNING NULL');
-                                previewLog('-----------------------------------------');
+                                //previewLog('NO DIRECTION COULD BE FOUND - RETURNING NULL');
+                                //previewLog('-----------------------------------------');
                                 return null;
                             } else {
                                 result.direction = 'east';
@@ -736,10 +745,10 @@ function setShip(positionString) {
             squareCount = 1;
 
         } else if (isFinalPreviewSquare(positionCoordinates)) { // otherwise if it's the last position that can be set - set the ship!
-            console.log('is final square');
+            //console.log('is final square');
             // make sure the previews have no red before allowing this to happen
             let isRed = checkForRed();
-            console.log('has red? ' + isRed);
+            //console.log('has red? ' + isRed);
             if (!isRed) {
                 if (currentShip.Length != previewPositions.length) {
                     eliminateExtraPreviewPositions();
@@ -748,7 +757,7 @@ function setShip(positionString) {
                 // TODO send info to the game hub to update everyone
 
                 // go to the next ship
-                console.log('Going to next');
+                //console.log('Going to next');
                 goToNextShip();
             }
 
@@ -804,21 +813,21 @@ function placeShipOnBoard() {
 }
 
 function checkForRed() {
-    console.log('checking for red');
+    //console.log('checking for red');
     for (let i = 0; i < previewPositions.length; i++) {
         let preview = document.getElementById('preview' + previewPositions[i][0] + '-' + previewPositions[i][1]);
         if (preview.className.includes('error')) {
-            console.log('yes red');
+            //console.log('yes red');
             return true;
         }
     }
-    console.log('no red');
+    //console.log('no red');
     return false;
 }
 
 // SETTING SHIPS
 function startSettingShips() { // only at the beginning of the game - should just be called once
-    console.log('settingShips');
+    //console.log('settingShips');
     isSettingShips = true;
     shipArray = new Array();
     shipArray.push(gameInformation.Board.PlayerBoard.Ships.Battleship);
@@ -896,7 +905,7 @@ function goToNextShip() {
             square.getAttribute('hasPreview') == 'true' ||
             preview.className != 'preview hide') {
 
-            console.log('found unresolved position at ' + positionId);
+            //console.log('found unresolved position at ' + positionId);
 
             placeShipPosition(positionId, i);
 
@@ -922,17 +931,17 @@ function goToNextShip() {
 
     // make sure it wasn't the last ship - if it was, stop setting ships
     if (shipIndex >= shipArray.length) {
-        console.log('index out of range');
+        //console.log('index out of range');
         stopSettingShips();
     } else {
         currentShip = shipArray[shipIndex];
-        console.log('setting next ship');
-        console.log(currentShip);
+        //console.log('setting next ship');
+        //console.log(currentShip);
     }
 }
 
 function stopSettingShips() {
-    console.log('stop setting ships');
+    //console.log('stop setting ships');
     isSettingShips = false;
     currentShip = null;
     shipIndex = 0;
