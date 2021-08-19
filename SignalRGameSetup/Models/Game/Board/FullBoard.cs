@@ -41,8 +41,8 @@ namespace SignalRGameSetup.Models.Game.Board
             }
 
             // HACK Be sure to locate the boards in the database to set them here
-            EnemyBoard = new GuessBoardHalf(enemyId);
-            PlayerBoard = new PlayerBoardHalf(playerId);
+            EnemyBoard = new GuessBoardHalf(GameCode, enemyId);
+            PlayerBoard = new PlayerBoardHalf(GameCode, playerId);
 
             // TODO set up the boards according to who is who
 

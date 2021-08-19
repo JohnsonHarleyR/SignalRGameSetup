@@ -14,6 +14,27 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         public Dictionary<string, ShipPosition> Positions { get; set; }
         public bool IsSet { get; set; }
         public bool IsSunk { get; set; }
+        public int HitsLeft
+        {
+            get
+            {
+                // loop through the positions and count how many are not sunk
+                int count = 0;
+                foreach (var pos in Positions)
+                {
+                    if (!pos.Value.IsHit)
+                    {
+                        count++;
+                    }
+                }
+                // if there are no hits left, set is sunk to true
+                if (count == 0)
+                {
+                    IsSunk = true;
+                }
+                return count;
+            }
+        }
 
         public ShipPiece(string name, int length)
         {

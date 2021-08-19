@@ -16,27 +16,27 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces.Ship
         public YPosition YPos { get; set; }
         public string Image { get; set; }
         public bool IsHit { get; set; }
-        public bool HasPeg
-        {
-            get
-            {
-                if (Peg == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-        public Peg Peg { get; set; }
+        //public bool HasPeg
+        //{
+        //    get
+        //    {
+        //        if (Peg == null)
+        //        {
+        //            return false;
+        //        }
+        //        else
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //}
+        //public Peg Peg { get; set; }
 
         public ShipPosition()
         {
             Image = null;
             IsHit = false;
-            Peg = null;
+            //Peg = null;
         }
 
         public ShipPosition(YPosition yPos, int xPos)
@@ -45,7 +45,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces.Ship
             XPos = xPos;
             Image = null;
             IsHit = false;
-            Peg = null;
+            //Peg = null;
         }
 
     }

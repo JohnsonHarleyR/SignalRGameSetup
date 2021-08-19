@@ -34,14 +34,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         private string _className = null;
         public string ClassName
         {
-            get
-            {
-                if (YPos != null)
-                {
-
-                }
-                return _className;
-            }
+            get;
         }
 
     }

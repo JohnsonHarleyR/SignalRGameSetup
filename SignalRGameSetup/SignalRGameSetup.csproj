@@ -147,8 +147,9 @@
     <Compile Include="Database\Dtos\GameChatDto.cs" />
     <Compile Include="Database\Dtos\Game\BattleShipsDto.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
+    <Compile Include="Database\Dtos\Game\PlayerBoardHalfDto.cs" />
     <Compile Include="Database\Repositories\ChatRepository.cs" />
-    <Compile Include="Database\Repositories\GameRepository.cs" />
+    <Compile Include="Database\Repositories\BoardRepository.cs" />
     <Compile Include="Database\Repositories\SetupRepository.cs" />
     <Compile Include="Enums\Game\GameEnums.cs" />
     <Compile Include="Enums\Setup\ActionEnums.cs" />
@@ -157,6 +158,7 @@
     </Compile>
     <Compile Include="Helpers\Chat\ChatHelper.cs" />
     <Compile Include="Helpers\Game\BoardHelper.cs" />
+    <Compile Include="Helpers\Game\GameHelper.cs" />
     <Compile Include="Helpers\Setup\SetupHelper.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\GameHub.cs" />
