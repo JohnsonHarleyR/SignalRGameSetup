@@ -1,4 +1,5 @@
 ﻿using SignalRGameSetup.Models.Game.Board.Pieces.Ship;
+using System.Collections.Generic;
 
 namespace SignalRGameSetup.Models.Game.Interfaces
 {
@@ -6,7 +7,9 @@ namespace SignalRGameSetup.Models.Game.Interfaces
     {
         string Name { get; set; }
         int Length { get; set; }
-        ShipPosition[] Positions { get; set; }
+        string Direction { get; set; }
+        List<ShipPosition> Positions { get; set; }
+        bool IsSet { get; set; }
         bool IsSunk { get; set; }
     }
 }

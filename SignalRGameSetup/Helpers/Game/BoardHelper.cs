@@ -1,6 +1,5 @@
 ﻿using SignalRGameSetup.Enums.Game;
 using SignalRGameSetup.Models.Game.Board.Pieces;
-using System;
 using System.Collections.Generic;
 
 namespace SignalRGameSetup.Helpers.Game
@@ -12,6 +11,10 @@ namespace SignalRGameSetup.Helpers.Game
         private static readonly string[] SHIP_NAMES = new string[]{"Carrier", // the names of each ship, matches respectively to sizes
         "Battleship", "Cruiser", "Submarine", "Destroyer"};
 
+        public static int GetBoardSize()
+        {
+            return boardSize;
+        }
 
         public static Dictionary<string, ShipPiece> CreateShips()
         {
@@ -26,20 +29,18 @@ namespace SignalRGameSetup.Helpers.Game
 
         }
 
-        public static Dictionary<string, BoardPosition> CreatePositions()
+        public static List<BoardPosition> CreatePositions()
         {
-            Dictionary<string, BoardPosition> positions = new Dictionary<string, BoardPosition>();
+            List<BoardPosition> positions = new List<BoardPosition>();
 
             // create all positions in the dictionary
-            for (int x = 1; x <= boardSize; x++)
+            for (int r = 1; r <= BoardHelper.GetBoardSize(); r++)
             {
-                for (int y = 1; y < Enum.GetNames(typeof(YPosition)).Length; y++)
+                for (int c = 1; c <= BoardHelper.GetBoardSize(); c++)
                 {
-                    BoardPosition position = new BoardPosition(x, (YPosition)y);
-                    positions.Add(position.Name, position);
-
+                    BoardPosition newPosition = new BoardPosition((YPosition)r, c);
+                    positions.Add(newPosition);
                 }
-
             }
             return positions;
 

@@ -145,7 +145,7 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Database\Dtos\GameChatDto.cs" />
-    <Compile Include="Database\Dtos\Game\BattleShipDto.cs" />
+    <Compile Include="Database\Dtos\Game\BattleShipsDto.cs" />
     <Compile Include="Database\Dtos\GameSetupDto.cs" />
     <Compile Include="Database\Repositories\ChatRepository.cs" />
     <Compile Include="Database\Repositories\GameRepository.cs" />
@@ -163,6 +163,8 @@
     <Compile Include="Hubs\SetupHub.cs" />
     <Compile Include="Logic\GameInformation.cs" />
     <Compile Include="Models\Chat\Containers\GameChat.cs" />
+    <Compile Include="Models\Game\BattleShips.cs" />
+    <Compile Include="Models\Game\BattleShipsInfo.cs" />
     <Compile Include="Models\Game\Board\FullBoard.cs" />
     <Compile Include="Models\Game\Board\GuessBoardHalf.cs" />
     <Compile Include="Models\Game\Board\Pieces\BoardPosition.cs" />
@@ -170,9 +172,11 @@
     <Compile Include="Models\Game\Board\Pieces\ShipPiece.cs" />
     <Compile Include="Models\Game\Board\Pieces\Ship\ShipPosition.cs" />
     <Compile Include="Models\Game\Board\PlayerBoardHalf.cs" />
+    <Compile Include="Models\Game\Containers\GetGameInformation.cs" />
     <Compile Include="Models\Game\Interfaces\IBoard.cs" />
     <Compile Include="Models\Game\Interfaces\IBoardHalf.cs" />
     <Compile Include="Models\Game\Interfaces\IShipPiece.cs" />
+    <Compile Include="Models\Game\TestModel.cs" />
     <Compile Include="Models\Setup\Containers\ExistingRoom.cs" />
     <Compile Include="Models\Setup\Containers\GoToGamePage.cs" />
     <Compile Include="Models\Setup\Containers\JoinAsParticipant.cs" />
@@ -245,6 +249,7 @@
     <Content Include="Images\Ships\cruiser-north-3.png" />
     <Content Include="Images\Ships\cruiser-south-1.png" />
     <Content Include="Images\Ships\cruiser-south-2.png" />
+    <Content Include="Images\Ships\cruiser-south-3.png" />
     <Content Include="Images\Ships\cruiser-west-1.png" />
     <Content Include="Images\Ships\cruiser-west-2.png" />
     <Content Include="Images\Ships\cruiser-west-3.png" />

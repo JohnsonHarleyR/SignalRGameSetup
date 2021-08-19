@@ -1,5 +1,6 @@
 ﻿using SignalRGameSetup.Models.Game.Board.Pieces.Ship;
 using SignalRGameSetup.Models.Game.Interfaces;
+using System.Collections.Generic;
 
 namespace SignalRGameSetup.Models.Game.Board.Pieces
 {
@@ -8,7 +9,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         public string Name { get; set; }
         public int Length { get; set; }
         public string Direction { get; set; } // TODO consider using an enum
-        public ShipPosition[] Positions { get; set; }
+        public List<ShipPosition> Positions { get; set; }
         public bool IsSet { get; set; }
         public bool IsSunk { get; set; }
 
@@ -17,9 +18,14 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
             Name = name;
             Length = length;
             Direction = null;
-            Positions = new ShipPosition[length];
+            Positions = new List<ShipPosition>();
             IsSet = false;
             IsSunk = false;
+
+            for (int i = 0; i < Positions.Count; i++)
+            {
+                Positions[i] = new ShipPosition();
+            }
         }
 
     }

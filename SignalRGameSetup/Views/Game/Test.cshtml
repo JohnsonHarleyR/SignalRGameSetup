@@ -25,5 +25,54 @@
 </div>
 
 
+@section Scripts {
+    @*<script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>*@
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+
+                        @*document.getElementById('chatMessages').innerHTML = @Model.Chat.ChatHtml;*@
+
+        var clientName; // this should be accessible to any needed javascript file
+        var clientId;
+        var gameSetup;
+
+
+        var gameInformation; // this should be set on page load by the game hub - it should contain ship info too
+
+
+        // Start up the hub connection for setup
+        jQuery(document).ready(function ($) {
+            gameHub = $.connection.gameHub;
+
+            // game hub
+
+            gameHub.client.setTestGame = function (model) {
+                console.log('updating game');
+                gameInformation = model.Game;
+                gameSetup = model.TestSetup;
+                clientId = model.ParticipantId;
+
+                // HACK For now the just start setting ships here
+                startSettingShips();
+
+                // TEST
+                console.log('TEST: ' + gameInformation.Board.PlayerBoard.Positions['1-1']);
+            }
+
+            // start connection
+            $.connection.hub.start().done(function () {
+                console.log('starting');
+
+                // set the game up
+                gameHub.server.getTestGame();
+            });
+
+        });
+
+    </script>
+}
+
+
+
 
 <script src="~/Scripts/board.js"></script>

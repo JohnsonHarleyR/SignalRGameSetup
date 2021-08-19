@@ -1,4 +1,5 @@
 ﻿using SignalRGameSetup.Helpers.Chat;
+using SignalRGameSetup.Models.Game;
 using SignalRGameSetup.Models.Setup;
 using SignalRGameSetup.Models.Setup.Containers;
 using System.Web.Mvc;
@@ -46,7 +47,12 @@ namespace SignalRGameSetup.Controllers
 
         public ActionResult Test()
         {
-            return View();
+            // create fake game
+            TestModel model = new TestModel();
+            model.Game = new BattleShips("TEST");
+            model.ParticipantId = "LALA";
+
+            return View(model);
         }
     }
 }

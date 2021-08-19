@@ -8,7 +8,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         {
             get
             {
-                string name = $"{YPos}{XPos.ToString()}";
+                string name = $"{(int)YPos}-{XPos}";
                 return name;
             }
         }
@@ -33,7 +33,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         }
         public Peg Peg { get; set; }
 
-        public BoardPosition(int xPos, YPosition yPos)
+        public BoardPosition(YPosition yPos, int xPos)
         {
             _xPos = xPos;
             _yPos = yPos;
