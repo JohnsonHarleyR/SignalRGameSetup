@@ -132,7 +132,25 @@ function clickSquare(positionString) {
             setShip(positionString);
         }
         // do other stuff if not setting ships
-    }
+}
+
+//function setPreviewClass(coordinates) {
+//    let positionString = coordinates[0] + '-' + coordinates[1];
+
+//    let square = document.getElementById('square' + positionString);
+//    let shipPreview = document.getElementById('preview' + positionString);
+
+//    // see if it's the final square
+//    if (square.getAttribute('hasShip') == 'true') {
+//        shipPreview.className = 'ship-preview error';
+//    } else if (isFinalPreviewSquare(coordinates)) {
+//        shipPreview.className = 'ship-preview last';
+//    } else if (isBeyondFinalPreviewSquare(coordinates)) { // if it's beyond the final square, show an error
+//        shipPreview.className = 'ship-preview error';
+//    } else { // otherwise set it to preview
+//        shipPreview.className = 'ship-preview';
+//    }
+//}
 
 function mouseOverSquare(positionString) {
 /*    lastShipLog('First method: mouseOverSquare');*/
@@ -197,11 +215,16 @@ function mouseOverSquare(positionString) {
                     previewPositions.push(positionCoordinates);
                     squareCount++;
 
+                    let previousPreview = document
+                        .getElementById('preview' + previousPosition[0] + '-' + previousPosition[1]);
+
                     // see if it's the final square
-                    if (square.getAttribute('hasShip') == 'true') {
+                    if (square.getAttribute('hasShip') == 'true' ||
+                        previousPreview.className === "ship-preview error") {
                         shipPreview.className = 'ship-preview error';
                     } else if (isFinalPreviewSquare(positionCoordinates)) {
                         shipPreview.className = 'ship-preview last';
+                        greenPreview = positionCoordinates;
                     } else if (isBeyondFinalPreviewSquare(positionCoordinates)) { // if it's beyond the final square, show an error
                         shipPreview.className = 'ship-preview error';
                     } else { // otherwise set it to preview
@@ -236,7 +259,18 @@ function mouseOverSquare(positionString) {
 /*                    previewPositions = previewPositions.splice(2, previewPositions.length - 1);*/
                     squareCount = previewPositions.length;
                 }
+                squareCount = previewPositions.length;
                 //previewLog('Preview Positions after splice: ' + previewPositions);
+
+                // first go through preview positions for errors
+                let hasError = false;
+                //for (let i = 0; i < previewPositions.length; i++) {
+                //    let p = document.getElementById('preview' + previewPositions[i][0] + '-' + previewPositions[i][1]);
+                //    if (p.className === "ship-preview error") {
+                //        hasError = true;
+                //        break;
+                //    }
+                //}
 
                 // loop through positions and set them to preview
                 for (let i = 0; i < positions.length; i++) {
@@ -250,12 +284,18 @@ function mouseOverSquare(positionString) {
                         squareCount++;
                     }
 
+                    // check for error
+                    if (!hasError && newShipPreview.className === "ship-preview error") {
+                        hasError = true;
+                    }
 
                     // see if it's the final square
-                    if (square.getAttribute('hasShip') == 'true') {
-                        shipPreview.className = 'ship-preview error';
+                    if (newSquare.getAttribute('hasShip') == 'true' || hasError) {
+                        newShipPreview.className = 'ship-preview error';
+                        hasError = true;
                     } else if (isFinalPreviewSquare(positions[i])) {
                         newShipPreview.className = 'ship-preview last';
+                        greenPreview = positions[i];
                     } else if (isBeyondFinalPreviewSquare(positions[i])) { // if it's beyond the final square, show an error
                         newShipPreview.className = 'ship-preview error';
                     } else { // otherwise set it to preview
@@ -753,6 +793,7 @@ function setShip(positionString) {
                 if (currentShip.Length != previewPositions.length) {
                     eliminateExtraPreviewPositions();
                 }
+
                 placeShipOnBoard();
                 // TODO send info to the game hub to update everyone
 
@@ -804,8 +845,26 @@ function placeShipOnBoard() {
     // set all the ship positions - on both the UI and in the board info
     for (let i = 0; i < currentShip.Length; i++) {
 
-        let positionId = previewPositions[i][0] + '-' +
-            previewPositions[i][1];
+        //console.log('ship length: ' + currentShip.Length);
+        //console.log('I: ' + i);
+        //console.log('I - 1: ' + (i - 1));
+        let positionId;
+
+        // HACK tried to fix bug with last ship square when your mouse moves too fast, not sure that it worked
+        if (i === currentShip.Length - 1 && greenPreview != null) {
+/*            console.log("LAST SQUARE");*/
+            positionId = greenPreview[0] + '-' +
+                greenPreview[1];
+            //let last = getFinalPreviewSquare();
+            //positionId = last[0] + '-' +
+            //    last[1];
+            greenPreview = null;
+        } else {
+            positionId = previewPositions[i][0] + '-' +
+                previewPositions[i][1];
+        }
+
+/*        console.log('placing ship on ' + positionId);*/
 
         placeShipPosition(positionId, i);
 
@@ -914,6 +973,18 @@ function goToNextShip() {
         }
     }
 
+    //// also double check the last position in the preview chain
+    //let lastPositionId = previousPosition[previewPositions.length - 1][0] + '-' +
+    //    previousPosition[previewPositions.length - 1][1];
+    //let lastPreview = document.getElementById('preview' + lastPositionId);
+    //let lastSquare = document.getElementById('square' + lastPositionId);
+
+    //if (lastPreview.className === "ship-preview last" ||
+    //    lastSquare.getAttribute('hasShip') == 'false') {
+    //    placeShipPosition(positionId, previewPositions.length - 1);
+    //    lastPreview.className = "ship-preview hide";
+    //}
+
     // save the board through the hub and database!
     saveBoard();
 
@@ -925,6 +996,8 @@ function goToNextShip() {
     finalPosition.length = 0;
     previewPositions.length = 0;
     previewDirection = null;
+    allowSet = true;
+    greenPreview = null;
 
     // increment the index
     shipIndex++;
@@ -973,7 +1046,7 @@ function lastShipLog(text) {
 
 // variables
 
-var showPreviewLogs = true; // Set true of false for whether to see the preview console logs in the console
+var showPreviewLogs = false; // Set true of false for whether to see the preview console logs in the console
 var showLastShipSquareLogs = false;
 
 var VERTICAL_INFO = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
@@ -1015,7 +1088,7 @@ var previewPositions = new Array(); // all positions in the current stream of pr
 var previewDirection = null;
 var shipArray = null; // for holding all the ships that are dictionary values
 var allowSet = true; // gets turned to false if a preview line runs over something
-
+var greenPreview = null; // this is to fix a bug with the last preview square
 
 
 
