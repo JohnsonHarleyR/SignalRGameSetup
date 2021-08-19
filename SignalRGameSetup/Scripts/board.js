@@ -120,17 +120,22 @@ function addSquares(boardId) {
         xPos = 5;
 
     }
+
+}
+
     // TODO fix preview square placement so that if you don't move your mouse directly in a row, it doesn't leave squares and do weird thing - make it so if it's in the same row, it works
 
     // Square clicking/mouseover functions
-    function clickSquare(positionString) {
+function clickSquare(positionString) {
+    lastShipLog('First method: clickSquare');
         if (isSettingShips && currentShip != null) {
-            setShipPosition(positionString);
+            setShip(positionString);
         }
         // do other stuff if not setting ships
     }
 
-    function mouseOverSquare(positionString) {
+function mouseOverSquare(positionString) {
+    lastShipLog('First method: mouseOverSquare');
         let square = document.getElementById('square' + positionString);
         let shipPreview = document.getElementById('preview' + positionString);
         let positionCoordinates = getCoordinates(positionString);
@@ -687,99 +692,103 @@ function addSquares(boardId) {
         }
     }
 
-    // setting ship functions
-    function setShipPosition(positionString) {
-        let square = document.getElementById('square' + positionString);
-        let shipPreview = document.getElementById('preview' + positionString);
-        let positionCoordinates = getCoordinates(positionString);
+// setting ship functions
+function setShip(positionString) {
+    let square = document.getElementById('square' + positionString);
+    let shipPreview = document.getElementById('preview' + positionString);
+    let positionCoordinates = getCoordinates(positionString);
 
-        // first make sure it doesn't have a ship or peg
-        if (square.getAttribute('hasShip') == 'false' &&
-            square.getAttribute('hasPeg') == 'false') {
+    // first make sure it doesn't have a ship or peg
+    if (square.getAttribute('hasShip') == 'false' &&
+        square.getAttribute('hasPeg') == 'false') {
 
-            // check if it has a preview already - if it does and it's the first
-            // square, then unset it
-            if (square.getAttribute('hasPreview') == 'true' &&
-                firstPosition.length != 0 && firstPosition[0] === positionCoordinates[0] &&
-                firstPosition[1] === positionCoordinates[1]) {
+        // check if it has a preview already - if it does and it's the first
+        // square, then unset it
+        if (square.getAttribute('hasPreview') == 'true' &&
+            firstPosition.length != 0 && firstPosition[0] === positionCoordinates[0] &&
+            firstPosition[1] === positionCoordinates[1]) {
 
-                shipPreview.className = 'ship-preview hide';
-                firstPosition.length = 0; // like setting them null
-                previousPosition.length = 0; // like setting it to null
-                previewPositions.length = 0;
-                square.setAttribute('hasPreview', false);
-                squareCount = 0;
+            shipPreview.className = 'ship-preview hide';
+            firstPosition.length = 0; // like setting them null
+            previousPosition.length = 0; // like setting it to null
+            previewPositions.length = 0;
+            square.setAttribute('hasPreview', false);
+            squareCount = 0;
 
-            } else if (firstPosition.length === 0) { // otherwise if a position is not set yet
-                firstPosition = positionCoordinates;
-                previousPosition = positionCoordinates;
-                previewPositions.push(positionCoordinates);
-                shipPreview.className = 'ship-preview';
-                square.setAttribute('hasPreview', true);
-                squareCount = 1;
+        } else if (firstPosition.length === 0) { // otherwise if a position is not set yet
+            firstPosition = positionCoordinates;
+            previousPosition = positionCoordinates;
+            previewPositions.push(positionCoordinates);
+            shipPreview.className = 'ship-preview';
+            square.setAttribute('hasPreview', true);
+            squareCount = 1;
 
-            } else if (isFinalPreviewSquare(positionCoordinates)) { // otherwise if it's the last position that can be set - set the ship!
-                console.log('is final square');
-                // make sure the previews have no red before allowing this to happen
-                let isRed = checkForRed();
-                console.log('has red? ' + isRed);
-                if (!isRed) {
-                    // store info
-                    currentShip.Direction = previewDirection;
-                    currentShip.IsSet = true;
-
-                    // set all the ship positions - on both the UI and in the board info
-                    for (let i = 0; i < currentShip.Length; i++) {
-
-                        let positionId = previewPositions[i][0] + '-' +
-                            previewPositions[i][1];
-
-                        // TODO make sure this will translate correctly to hub
-                        let imageSrc = '\\Images\\Ships\\' + currentShip.Name.toLowerCase() + '-' +
-                            currentShip.Direction + '-' + (i + 1) + '.png';
-                        currentShip.Positions[i].XPos = previewPositions[i][0];
-                        currentShip.Positions[i].YPos = previewPositions[i][1];
-                        currentShip.Positions[i].Image = imageSrc;
-
-                        // set position on actual board so that it has a ship
-                        gameInformation.Board.PlayerBoard.Positions[positionId].HasShip = true;
-                        gameInformation.Board.PlayerBoard.Positions[positionId].Image = imagesrc;
-
-                        // set image too
-                        let ship = document.getElementById('ship' + positionId);
-                        ship.className = 'ship';
-                        ship.src = imageSrc;
-                        let preview = document.getElementById('preview' + positionId);
-                        preview.className = 'preview hide';
-                        // set square properties
-                        let square = document.getElementById('square' + positionId);
-                        square.setAttribute('hasShip', true);
-
-                        // save the board through the hub and database
-                        saveBoard();
-
-                    }
-
-
-
-
-                    // TODO send info to the game hub to update everyone
-
-
-                    // go to the next ship
-                    console.log('Going to next');
-                    goToNextShip();
+        } else if (isFinalPreviewSquare(positionCoordinates)) { // otherwise if it's the last position that can be set - set the ship!
+            console.log('is final square');
+            // make sure the previews have no red before allowing this to happen
+            let isRed = checkForRed();
+            console.log('has red? ' + isRed);
+            if (!isRed) {
+                if (currentShip.Length != previewPositions.length) {
+                    eliminateExtraPreviewPositions();
                 }
+                placeShipOnBoard();
+                // TODO send info to the game hub to update everyone
 
-                
+                // go to the next ship
+                console.log('Going to next');
+                goToNextShip();
             }
 
 
         }
 
-    }
 
-    // TODO write method that shows a preview on adjacent squares when being dragged over them - or hides them - if first position is set
+    }
+}
+
+function placeShipPosition(positionId, previewIndex) {
+    previewLog('placeShipPosition(positionId)');
+    // the isRed boolean should already be checked by another function at this point
+    // TODO make sure this will translate correctly to hub
+    let imageSrc = '\\Images\\Ships\\' + currentShip.Name.toLowerCase() + '-' +
+        currentShip.Direction + '-' + (previewIndex + 1) + '.png';
+    currentShip.Positions[positionId].YPos = previewPositions[previewIndex][0];
+    currentShip.Positions[positionId].XPos = previewPositions[previewIndex][1];
+    currentShip.Positions[positionId].Image = imageSrc;
+
+    // set position on actual board so that it has a ship
+    gameInformation.Board.PlayerBoard.Positions[positionId].HasShip = true;
+    gameInformation.Board.PlayerBoard.Positions[positionId].Image = imageSrc;
+
+    // set image too
+    let ship = document.getElementById('ship' + positionId);
+    ship.className = 'ship';
+    ship.src = imageSrc;
+    let preview = document.getElementById('preview' + positionId);
+    preview.className = 'preview hide';
+    // set square properties
+    let square = document.getElementById('square' + positionId);
+    square.setAttribute('hasShip', true);
+    square.setAttribute('hasPreview', false);
+}
+
+function placeShipOnBoard() {
+        // the isRed boolean should already be checked by another function at this point
+    previewLog('placeShipOnBoard()');
+    // store info
+    currentShip.Direction = previewDirection;
+    currentShip.IsSet = true;
+
+    // set all the ship positions - on both the UI and in the board info
+    for (let i = 0; i < currentShip.Length; i++) {
+
+        let positionId = previewPositions[i][0] + '-' +
+            previewPositions[i][1];
+
+        placeShipPosition(positionId, i);
+
+    }
 }
 
 function checkForRed() {
@@ -809,8 +818,85 @@ function startSettingShips() { // only at the beginning of the game - should jus
     currentShip = shipArray[shipIndex];
 }
 
+// eliminate any extra preview positions getting in the way of placing a ship
+// HACK using this method to fix problem with previewPositions - figure out what causes them in the first place
+function eliminateExtraPreviewPositions() {
+    lastShipLog('Ln 819: previewPositions before: ' + previewPositions);
+
+    // first create an array without repeats
+    let newArray = new Array();
+
+    // loop through previewPositions and only add positions that aren't already in the array
+    for (let i = 0; i < previewPositions.length; i++) {
+        if (!containPosition(previewPositions[i], newArray)) {
+            lastShipLog('adding position ' + previewPositions[i] + ' to new array');
+            newArray.push(previewPositions[i]);
+        } else {
+            lastShipLog('NOT adding position ' + previewPositions[i] + ' to new array');
+        }
+    }
+
+    // set the previewPositions to the new array
+    lastShipLog('Setting new array');
+    previewPositions = newArray;
+
+    // now just make sure the length is correct
+    if (previewPositions.length != currentShip.Length) {
+        lastShipLog('splicing off unnecessary positions');
+        previewPositions = previewPositions.splice(0, currentShip.Length);
+    }
+
+    lastShipLog('previewPositions after: ' + previewPositions);
+}
+
+// returns a bool for if an array has a position or not
+function containPosition(position, array) {
+    lastShipLog('Does the array ' + array + ' contain position ' + position + '?');
+    for (let i = 0; i < array.length; i++) {
+        if (array[i][0] === position[0] &&
+            array[i][1] === position[1]) {
+            lastShipLog('true');
+            return true;
+        }
+    }
+    lastShipLog('false');
+    return false;
+}
+
 function goToNextShip() {
     console.log('****************Going to the next ship*******************');
+
+    // HACK there is a timing issue with the last square in the ship placement - this should ensure it will be resolved
+    // loop backwards through preview positions - if any of them are not set right, try setting it again
+
+    for (let i = currentShip.Length - 1; i >= 0; i--) {
+        let positionId = previewPositions[i][0] + '-' +
+            previewPositions[i][1];
+
+        let square = document.getElementById('square' + positionId);
+        let preview = document.getElementById('preview' + positionId);
+
+        if (currentShip.Length != previewPositions.length) {
+            eliminateExtraPreviewPositions();
+        }
+
+        if (square.getAttribute('hasShip') == 'false' ||
+            square.getAttribute('hasPreview') == 'true' ||
+            preview.className != 'preview hide') {
+
+            console.log('found unresolved position at ' + positionId);
+
+            placeShipPosition(positionId, i);
+
+        } else { // counting backwards - if a position is ok, we should break because all the others should be fine too
+            break;
+        }
+    }
+
+    // save the board through the hub and database!
+    saveBoard();
+
+
     // unset all the preview stuff
     squareCount = 0;
     firstPosition.length = 0;
@@ -856,10 +942,18 @@ function previewLog(text) {
     }
 }
 
+function lastShipLog(text) {
+    if (showLastShipSquareLogs) {
+        // determine
+        console.log(text);
+    }
+}
+
 
 // variables
 
 var showPreviewLogs = false; // Set true of false for whether to see the preview console logs in the console
+var showLastShipSquareLogs = true;
 
 var VERTICAL_INFO = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var BOARD_SIZE = 10;
