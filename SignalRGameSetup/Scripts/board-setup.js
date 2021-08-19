@@ -223,7 +223,11 @@ function mouseOverSquare(positionString) {
                 let positions = getPositionsToChange(firstPosition, rowPositionInfo);
                 previewLog('Preview Positions: ' + previewPositions);
                 previewLog('Positions: ' + positions);
-
+                if (previewPositions.length > 1) {
+/*                    previewPositions = previewPositions.splice(2, previewPositions.length - 1);*/
+                    squareCount = previewPositions.length;
+                }
+                previewLog('Preview Positions after splice: ' + previewPositions);
 
                 // loop through positions and set them to preview
                 for (let i = 0; i < positions.length; i++) {
@@ -231,8 +235,12 @@ function mouseOverSquare(positionString) {
                     let newShipPreview = document.getElementById('preview' + positions[i][0] + '-' + positions[i][1]);
                     // if it is, then set the preview to visible and add to count - determine color
                     newSquare.setAttribute('hasPreview', true);
-                    previewPositions.push(positions[i]);
-                    squareCount++;
+                    let coords = [positions[i][0], positions[i][1]];
+                    if (!isInPreviews(coords)) {
+                        previewPositions.push(positions[i]);
+                        squareCount++;
+                    }
+
 
                     // see if it's the final square
                     if (square.getAttribute('hasShip') == 'true') {
@@ -245,7 +253,8 @@ function mouseOverSquare(positionString) {
                         newShipPreview.className = 'ship-preview';
                     }
                 }
-
+                previewLog('Preview Positions after adding positions: ' + previewPositions);
+                previewLog('____________________________________________');
             }
 
 
