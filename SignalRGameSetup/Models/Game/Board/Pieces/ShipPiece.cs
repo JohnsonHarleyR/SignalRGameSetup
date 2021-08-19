@@ -27,11 +27,7 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
                         count++;
                     }
                 }
-                // if there are no hits left, set is sunk to true
-                if (count == 0)
-                {
-                    IsSunk = true;
-                }
+
                 return count;
             }
         }
