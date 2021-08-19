@@ -221,6 +221,9 @@ function mouseOverSquare(positionString) {
 
                 // get the positions that are gonna have to be set to a preview
                 let positions = getPositionsToChange(firstPosition, rowPositionInfo);
+                previewLog('Preview Positions: ' + previewPositions);
+                previewLog('Positions: ' + positions);
+
 
                 // loop through positions and set them to preview
                 for (let i = 0; i < positions.length; i++) {
@@ -952,8 +955,8 @@ function lastShipLog(text) {
 
 // variables
 
-var showPreviewLogs = false; // Set true of false for whether to see the preview console logs in the console
-var showLastShipSquareLogs = true;
+var showPreviewLogs = true; // Set true of false for whether to see the preview console logs in the console
+var showLastShipSquareLogs = false;
 
 var VERTICAL_INFO = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 var BOARD_SIZE = 10;
