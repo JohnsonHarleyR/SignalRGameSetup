@@ -6,8 +6,6 @@ function saveBoard() {
 
 // square functions
 
-// TODO if a preview is over a ship, set it to red
-
 // get the position of a square based on a string
 function getCoordinates(positionString) {
     let row;
@@ -32,7 +30,6 @@ function addSquares(boardId) {
 
     // test adding one row
     let squareLength = 30
-    let insideSquareLength = 30;
     let xPos = 5; // starting spot
     let yPos = 5;
 
@@ -879,6 +876,8 @@ function placeShipOnBoard() {
         placeShipPosition(positionId, i);
 
     }
+    // store info that the ship has been set
+    currentShip.IsSet = true;
 }
 
 function checkForRed() {
@@ -905,7 +904,16 @@ function startSettingShips() { // only at the beginning of the game - should jus
     shipArray.push(gameInformation.Board.PlayerBoard.Ships.Destroyer);
     shipArray.push(gameInformation.Board.PlayerBoard.Ships.Submarine);
     shipIndex = 0;
-    currentShip = shipArray[shipIndex];
+    let keepGoing = true;
+    do { // do while ensures that a ship is chosen which still needs to be set
+        currentShip = shipArray[shipIndex];
+        if (!currentShip.IsSet) {
+            keepGoing = false;
+        } else {
+            shipIndex++;
+        }
+    } while (keepGoing);
+
 }
 
 // eliminate any extra preview positions getting in the way of placing a ship
@@ -1009,18 +1017,29 @@ function goToNextShip() {
     allowSet = true;
     greenPreview = null;
 
-    // increment the index
-    shipIndex++;
+    // find a ship to place
+    let keepLooking = true;
+    do {
 
-    // make sure it wasn't the last ship - if it was, stop setting ships
-    if (shipIndex >= shipArray.length) {
-        //console.log('index out of range');
-        stopSettingShips();
-    } else {
-        currentShip = shipArray[shipIndex];
-        //console.log('setting next ship');
-        //console.log(currentShip);
-    }
+        // increment the index
+        shipIndex++;
+
+        // make sure it wasn't the last ship - if it was, stop setting ships
+        if (shipIndex >= shipArray.length) {
+            //console.log('index out of range');
+            keepLooking = false;
+            stopSettingShips();
+        } else {
+            currentShip = shipArray[shipIndex];
+            if (!currentShip.IsSet) {
+                keepLooking = false;
+            }
+            //console.log('setting next ship');
+            //console.log(currentShip);
+        }
+
+    } while (keepLooking);
+
 }
 
 function stopSettingShips() {
