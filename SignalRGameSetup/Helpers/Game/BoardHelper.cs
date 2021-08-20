@@ -52,6 +52,7 @@ namespace SignalRGameSetup.Helpers.Game
         // NOTE this is based on who the active user is who is retrieving the board
         public static FullBoard GetFullBoardFromGameDto(string participantId, BattleShipsGameDto dto)
         {
+            BoardRepository boardRepo = new BoardRepository();
             FullBoard fullBoard = new FullBoard(dto.GameCode);
 
             // stuff here
@@ -75,18 +76,16 @@ namespace SignalRGameSetup.Helpers.Game
                 enemyBoardId = dto.PlayerOneBoard;
             }
 
-            // TODO set the boards
-            EnemyBoard = new GuessBoardHalf(GameCode, enemyId);
-            PlayerBoard = new PlayerBoardHalf(GameCode, playerId);
-
-            // user the GameHelper to reach into the database and grab both player board
-            // then set the enemy and player board according to who is who
+            // Get player boards based on information and store it accordingly
+            PlayerBoardHalf enemyPlayerBoard = boardRepo.GetPlayerBoardById(enemyBoardId);
+            fullBoard.EnemyBoard = new GuessBoardHalf(enemyPlayerBoard);
+            fullBoard.PlayerBoard = boardRepo.GetPlayerBoardById(playerBoardId);
 
             return fullBoard;
         }
 
         // This takes a guess board and updates the information on the corresponding player board
-        public static PlayerBoardHalf UpdatePlayerBoardFromGuessBoard(GuessBoardHalf guessBoard)
+        public static PlayerBoardHalf GetUpdatedPlayerBoardFromGuessBoard(GuessBoardHalf guessBoard)
         {
             BoardRepository repo = new BoardRepository();
 
@@ -126,8 +125,7 @@ namespace SignalRGameSetup.Helpers.Game
                 }
             }
 
-            // now update the player board and then return it
-            repo.UpdatePlayerBoard(playerBoard);
+            // return it
             return playerBoard;
 
         }

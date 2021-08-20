@@ -19,6 +19,8 @@ namespace SignalRGameSetup.Database.Repositories
 
         public void AddBattleShipsGame(BattleShipsGameDto dto)
         {
+
+
             using (var connection = new SqlConnection(ConnectionString))
             {
                 string sql = $"{Schema}.AddBattleShipsGame";
@@ -40,6 +42,8 @@ namespace SignalRGameSetup.Database.Repositories
 
         public void UpdateBattleShipsGame(BattleShipsGameDto dto)
         {
+
+
             using (var connection = new SqlConnection(ConnectionString))
             {
                 string sql = $"{Schema}.UpdateBattleShipsGame";

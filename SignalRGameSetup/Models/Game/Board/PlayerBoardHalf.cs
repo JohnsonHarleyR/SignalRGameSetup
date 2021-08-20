@@ -9,7 +9,7 @@ namespace SignalRGameSetup.Models.Game.Board
 {
     public class PlayerBoardHalf : IBoardHalf
     {
-        public int BoardId { get; set; }
+        public int? BoardId { get; set; }
         public string ParticipantId { get; set; }
         public string GameCode { get; set; }
         public Dictionary<string, BoardPosition> Positions { get; set; }

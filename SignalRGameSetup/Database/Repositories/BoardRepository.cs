@@ -83,7 +83,7 @@ namespace SignalRGameSetup.Database.Repositories
             return boardHalf;
         }
 
-        public PlayerBoardHalf GetPlayerBoardById(string boardId)
+        public PlayerBoardHalf GetPlayerBoardById(int boardId)
         {
             PlayerBoardHalf boardHalf;
             PlayerBoardHalfDto dto;

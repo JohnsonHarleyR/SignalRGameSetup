@@ -7,7 +7,7 @@ namespace SignalRGameSetup.Models.Game.Board
     public class GuessBoardHalf : IBoardHalf
     {
         // This should be basically the same as a player board except the ships are not identified
-        public int BoardId { get; set; }
+        public int? BoardId { get; set; }
         public string ParticipantId { get; set; }
         public string GameCode { get; set; }
         public Dictionary<string, BoardPosition> Positions { get; set; }
