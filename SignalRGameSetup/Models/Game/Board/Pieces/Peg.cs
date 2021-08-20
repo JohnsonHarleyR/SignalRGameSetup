@@ -6,7 +6,6 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
     {
         public int XPos { get; set; }
         public YPosition YPos { get; set; }
-        private PegColor? _color = null;
         public PegColor? Color { get; set; }
         public string ClassName
         {
