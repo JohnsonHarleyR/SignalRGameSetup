@@ -7,34 +7,22 @@ namespace SignalRGameSetup.Models.Game.Board.Pieces
         public int XPos { get; set; }
         public YPosition YPos { get; set; }
         private PegColor? _color = null;
-        public PegColor? Color
+        public PegColor? Color { get; set; }
+        public string ClassName
         {
             get
             {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-                switch (value)
+                switch (Color)
                 {
                     default:
                     case null:
-                        _className = null;
-                        break;
+                        return null;
                     case PegColor.White:
-                        _className = "peg miss";
-                        break;
+                        return "peg miss";
                     case PegColor.Red:
-                        _className = "peg hit";
-                        break;
+                        return "peg hit";
                 }
             }
-        }
-        private string _className = null;
-        public string ClassName
-        {
-            get;
         }
 
     }
