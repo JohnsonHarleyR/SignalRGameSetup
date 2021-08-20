@@ -2,6 +2,7 @@
 using SignalRGameSetup.Models.Game;
 using SignalRGameSetup.Models.Setup;
 using SignalRGameSetup.Models.Setup.Containers;
+using SignalRGameSetup.Py;
 using System.Web.Mvc;
 
 namespace SignalRGameSetup.Controllers
@@ -51,6 +52,12 @@ namespace SignalRGameSetup.Controllers
             TestModel model = new TestModel();
             model.Game = new BattleShipsGame("TEST");
             model.ParticipantId = "LALA";
+
+            // Test python creator
+            PythonEngine engine = new PythonEngine();
+            var testCalculator = engine.CreateInstance("testCalculator");
+
+            var testAddition = testCalculator.add(3, 7);
 
             return View(model);
         }
