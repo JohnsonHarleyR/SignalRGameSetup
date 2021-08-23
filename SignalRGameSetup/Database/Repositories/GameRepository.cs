@@ -100,7 +100,7 @@ namespace SignalRGameSetup.Database.Repositories
             return dtos;
         }
 
-        public void DeleteBattleShipsGame(int gameCode)
+        public void DeleteBattleShipsGame(string gameCode)
         {
             using (var connection = new SqlConnection(ConnectionString))
             {

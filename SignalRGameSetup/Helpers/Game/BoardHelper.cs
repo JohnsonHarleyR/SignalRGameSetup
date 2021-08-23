@@ -91,11 +91,11 @@ namespace SignalRGameSetup.Helpers.Game
 
             // First grab the corresponding player board from the repo
             PlayerBoardHalf playerBoard =
-                repo.GetPlayerBoardByInfo(guessBoard.ParticipantId, guessBoard.GameCode);
+                repo.GetPlayerBoardByInfo(guessBoard.GameCode, guessBoard.ParticipantId);
 
             if (playerBoard == null)
             {
-                return null;
+                playerBoard = new PlayerBoardHalf(guessBoard.GameCode, guessBoard.ParticipantId);
             }
 
             // start updating
@@ -129,6 +129,8 @@ namespace SignalRGameSetup.Helpers.Game
             return playerBoard;
 
         }
+
+
 
     }
 }

@@ -6,10 +6,16 @@ using SignalRGameSetup.Models.Game.Board;
 
 namespace SignalRGameSetup.Helpers.Game
 {
-    public class GameHelper
+    public static class GameHelper
     {
 
-        public bool AddGame(BattleShipsGame game)
+        public static void DeleteGame(string gameCode)
+        {
+            GameRepository gameRepo = new GameRepository();
+            gameRepo.DeleteBattleShipsGame(gameCode);
+        }
+
+        public static bool AddGame(BattleShipsGame game)
         {
             if (game == null)
             {
@@ -17,6 +23,26 @@ namespace SignalRGameSetup.Helpers.Game
             }
 
             GameRepository gameRepo = new GameRepository();
+            BoardRepository boardRepo = new BoardRepository();
+
+
+            // also save the player boards
+            if (game.Board.PlayerBoard.BoardId == null)
+            {
+                boardRepo.AddPlayerBoard(game.Board.PlayerBoard);
+                PlayerBoardHalf tempPlayerBoard =
+                    boardRepo.GetPlayerBoardByInfo(game.Board.PlayerBoard.GameCode, game.Board.PlayerBoard.ParticipantId);
+                game.Board.PlayerBoard = tempPlayerBoard;
+            }
+            if (game.Board.EnemyBoard.BoardId == null)
+            {
+                PlayerBoardHalf enemyBoard =
+                    BoardHelper.GetUpdatedPlayerBoardFromGuessBoard(game.Board.EnemyBoard);
+                boardRepo.AddPlayerBoard(enemyBoard);
+                PlayerBoardHalf tempEnemyBoard =
+    boardRepo.GetPlayerBoardByInfo(game.Board.EnemyBoard.GameCode, game.Board.EnemyBoard.ParticipantId);
+                game.Board.EnemyBoard = new GuessBoardHalf(tempEnemyBoard);
+            }
 
             // store info in a new dto
             BattleShipsGameDto dto = new BattleShipsGameDto()
@@ -34,7 +60,7 @@ namespace SignalRGameSetup.Helpers.Game
             return true;
         }
 
-        public BattleShipsGame GetGameFromInfo(string gameCode, string participantId)
+        public static BattleShipsGame GetGameFromInfo(string gameCode, string participantId)
         {
             GameRepository gameRepo = new GameRepository();
             BoardRepository boardRepo = new BoardRepository();
@@ -75,6 +101,7 @@ namespace SignalRGameSetup.Helpers.Game
             FullBoard fullBoard = new FullBoard(gameCode);
             fullBoard.EnemyBoard = enemyBoard;
             fullBoard.PlayerBoard = playerBoard;
+            game.Board = fullBoard;
 
             // add information
             game.Information = JsonConvert.DeserializeObject<BattleShipsInfo>(gameDto.Information);
@@ -83,7 +110,7 @@ namespace SignalRGameSetup.Helpers.Game
         }
 
         // Update the participant boards as well as the game information in the databases
-        public bool UpdateGame(BattleShipsGame game)
+        public static bool UpdateGame(BattleShipsGame game)
         {
             GameRepository gameRepo = new GameRepository();
             BoardRepository boardRepo = new BoardRepository();

@@ -1,4 +1,5 @@
-﻿using SignalRGameSetup.Models.Game.Board.Pieces;
+﻿using SignalRGameSetup.Helpers.Game;
+using SignalRGameSetup.Models.Game.Board.Pieces;
 using SignalRGameSetup.Models.Game.Interfaces;
 using System.Collections.Generic;
 
@@ -14,11 +15,15 @@ namespace SignalRGameSetup.Models.Game.Board
         private int _shipsLeft;
         public int ShipsLeft { get { return _shipsLeft; } }
 
-        public GuessBoardHalf() { }
+        public GuessBoardHalf()
+        {
+            Positions = BoardHelper.CreatePositions();
+        }
         public GuessBoardHalf(string gameCode, string participantId)
         {
             GameCode = gameCode;
             ParticipantId = participantId;
+            Positions = BoardHelper.CreatePositions();
         }
 
         // This one will be useful for converting a player board into a guess board
@@ -27,8 +32,17 @@ namespace SignalRGameSetup.Models.Game.Board
             BoardId = board.BoardId;
             ParticipantId = board.ParticipantId;
             GameCode = board.GameCode;
-            Positions = board.Positions;
             _shipsLeft = board.ShipsLeft;
+
+            if (board.Positions == null)
+            {
+                Positions = BoardHelper.CreatePositions();
+            }
+            else
+            {
+                Positions = board.Positions;
+            }
+
         }
 
     }

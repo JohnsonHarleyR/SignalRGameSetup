@@ -45,18 +45,27 @@
             gameHub = $.connection.gameHub;
 
             // game hub
+            gameHub.client.setGame = function (game) {
+                console.log('setting game');
+                gameInformation = game;
 
-            gameHub.client.setTestGame = function (model) {
-                console.log('updating game');
-                gameInformation = model.Game;
-                gameSetup = model.TestSetup;
-                clientId = model.ParticipantId;
-
-                // HACK For now the just start setting ships here
+                // For now start setting ships here
                 startSettingShips();
+
+                // Now update the board according to positions
+                // TODO write function for this
 
                 // TEST
                 console.log('TEST: ' + gameInformation.Board.PlayerBoard.Positions['1-1']);
+            }
+
+            gameHub.client.setTestGame = function (model) {
+                console.log('setting test information');
+                gameSetup = model.TestSetup;
+                clientId = model.ParticipantId;
+
+                // after supplying the setup to the test, call the hub to actually start the game
+                gameHub.server.connectGame(gameSetup);
             }
 
             // start connection

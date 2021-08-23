@@ -60,7 +60,7 @@ namespace SignalRGameSetup.Database.Repositories
             }
         }
 
-        public PlayerBoardHalf GetPlayerBoardByInfo(string participantId, string gameCode)
+        public PlayerBoardHalf GetPlayerBoardByInfo(string gameCode, string participantId)
         {
             PlayerBoardHalf boardHalf;
             PlayerBoardHalfDto dto;
@@ -79,6 +79,10 @@ namespace SignalRGameSetup.Database.Repositories
 
             }
 
+            if (dto == null)
+            {
+                return null;
+            }
             boardHalf = new PlayerBoardHalf(dto);
             return boardHalf;
         }
